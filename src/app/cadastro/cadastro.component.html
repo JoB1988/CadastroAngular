@@ -1,0 +1,99 @@
+<div class="group">
+  <h1 class="group__title">Bem-vindo</h1>
+  <form
+    action=""
+    class="group__form"
+    [formGroup]="cadastroForm$ | async"
+    (ngSubmit)="onSubmit()"
+  >
+    <div formGroupName="pessoa" class="group__form__pessoa">
+      <div class="group__form__pessoa__div">
+        <label class="group__form__pessoa__div__label" for="inputname"
+          >Nome</label
+        >
+        <input
+          class="input"
+          id="inputname"
+          type="text"
+          placeholder="nome"
+          formControlName="nome"
+          autofocus
+          #nameInput
+        />
+        <span class="span"></span>
+      </div>
+      <div class="group__form__pessoa__div">
+        <label class="group__form__pessoa__div__label" for="inputname"
+          >Cep</label
+        >
+        <input
+          class="input"
+          id="inputname"
+          type="text"
+          placeholder="Cep"
+          formControlName="cep"
+          (blur)="getAddress()"
+        />
+        <span class="span"></span>
+      </div>
+      <div class="group__form__pessoa__div">
+        <label class="group__form__pessoa__div__label" for="inputname"
+          >Rua</label
+        >
+        <input
+          class="input"
+          id="inputname"
+          type="text"
+          placeholder="Rua"
+          formControlName="rua"
+        />
+        <span class="span"></span>
+      </div>
+      <div class="group__form__pessoa__div">
+        <label class="group__form__pessoa__div__label" for="inputname"
+          >Numero</label
+        >
+        <input
+          class="input"
+          id="inputname"
+          type="text"
+          placeholder="Numero"
+          formControlName="numero"
+        />
+        <span class="span"></span>
+      </div>
+    </div>
+    <div class="group__form__buttons">
+      <button
+        type="reset"
+        class="group__form__buttons__clean"
+        (click)="cleanForm()"
+      >
+        Limpar
+      </button>
+      <button type="submit" class="group__form__buttons__submit">Enviar</button>
+    </div>
+  </form>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Cep</th>
+      <th>Rua</th>
+      <th>Numero</th>
+      <th>...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cadastro of (cadastros$ | async), let i = index ">
+      <td>{{ cadastro?.nome }}</td>
+      <td>{{ cadastro?.cep }}</td>
+      <td>{{ cadastro?.rua }}</td>
+      <td>{{ cadastro?.numero }}</td>
+      <td><button (click)="edit(cadastro)">E</button>
+      <button (click)="remove(cadastro.id, i)">D</button></td>
+    </tr>
+  </tbody>
+</table>

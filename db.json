@@ -1,0 +1,32 @@
+{
+  "cadastro": [
+    {
+      "nome": "Flávio",
+      "cep": "09790000",
+      "rua": "Av. Albert Schweitzer",
+      "numero": "490",
+      "id": 4
+    },
+    {
+      "nome": "Jonathan",
+      "cep": "09890430",
+      "rua": "Rua Professor Rubião Meira",
+      "numero": "266",
+      "id": 9
+    },
+    {
+      "nome": "Silvia",
+      "cep": "09890430",
+      "rua": "Rua Professor Rubião Meira",
+      "numero": "266",
+      "id": 10
+    },
+    {
+      "nome": "Antonia",
+      "cep": "09790000",
+      "rua": "Av. Albert Schweitzer",
+      "numero": "490",
+      "id": 11
+    }
+  ]
+}

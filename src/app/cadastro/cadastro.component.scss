@@ -1,0 +1,111 @@
+.group {
+  display: flex;
+  margin: 0 auto;
+  flex-wrap: wrap;
+
+  &__title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__form {
+    width: 100%;
+
+    &__pessoa {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      width: 100%;
+
+      &__div {
+        display: flex;
+        flex-wrap: wrap;
+        width: 25%;
+
+        &__label {
+          width: 100%;
+          font-size: 14px;
+          font-family: Arial, Helvetica, sans-serif;
+          text-transform: uppercase;
+          margin-bottom: 5px;
+        }
+      }
+    }
+
+    &__buttons {
+      padding: 20px;
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        width: 75px;
+        height: 30px;
+        border-radius: 4px;
+        background-color: white;
+        outline: none;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+
+        &:active {
+          box-shadow: none;
+        }
+      }
+
+      &__submit {
+        border: 1px solid green;
+        color: green;
+
+        &:hover {
+          background-color: green !important;
+          color: white !important;
+        }
+      }
+
+      &__clean {
+        border: 1px solid gray;
+        color: #252525;
+
+        &:hover {
+          background-color: gray !important;
+          color: white !important;
+        }
+      }
+    }
+  }
+}
+
+.table {
+  margin: 0 auto;
+  width: 100%;
+  border-spacing: 0;
+  thead {
+    tr {
+      height:25px;
+      th {
+        text-transform: uppercase;
+        width: calc(25% - 5px);
+        border: 1px solid;
+        &:last-of-type() {
+          width: 30px;
+        }
+      }
+    }
+  }
+  
+  tbody {
+    tr {
+      height:25px;
+      td {
+        text-align: center;
+        width: calc(25% - 5px);
+        border: 1px solid;
+        border-top: none;
+        &:last-of-type() {
+          width: 30px;
+        }
+      }
+    }
+  }
+}
