@@ -86,7 +86,7 @@ describe("CadastroService Success", () => {
 
 });
 
-fdescribe("CadastroService Error", () => {
+xdescribe("CadastroService Error", () => {
   
   let httpClientSpy;
   let service: CadastroService;
@@ -104,7 +104,7 @@ fdescribe("CadastroService Error", () => {
     service = new CadastroService(httpClientSpy as any);
   });
 
-  xit("should be created", () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 
@@ -120,7 +120,7 @@ fdescribe("CadastroService Error", () => {
       };
   });
 
-  xit(`should test getAddress error`, () => {
+  it(`should test getAddress error`, () => {
     httpClientSpy.get.and.returnValue(throwError(ERRORRESPONSE));
     service.getAddress(`09890430`).subscribe(response => {
       fail("error expected");
@@ -131,7 +131,7 @@ fdescribe("CadastroService Error", () => {
       };
   });
 
-  xit(`should test saveForm error`, () => {
+  it(`should test saveForm error`, () => {
     httpClientSpy.post.and.returnValue(throwError(ERRORRESPONSE));
     service.saveForm(CADASTRO).subscribe(response => {
       fail("error expected");
@@ -142,7 +142,7 @@ fdescribe("CadastroService Error", () => {
       };
   });
 
-  xit(`should test updateForm error`, () => {
+  it(`should test updateForm error`, () => {
     httpClientSpy.put.and.returnValue(throwError(ERRORRESPONSE));
     service.updateForm(CADASTRO).subscribe(response => {
       fail("error expected");
@@ -153,7 +153,7 @@ fdescribe("CadastroService Error", () => {
       };
   });
 
-  xit(`should test delete error`, () => {
+  it(`should test delete error`, () => {
     httpClientSpy.delete.and.returnValue(throwError(ERRORRESPONSE));
     service.delete(`1234`).subscribe(response => {
       fail("error expected");

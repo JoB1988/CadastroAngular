@@ -33,7 +33,7 @@ export class CadastroComponent implements OnInit {
   constructor(
     public readonly formBuilder: FormBuilder,
     private readonly cadastroService: CadastroService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cleanForm();
@@ -59,7 +59,7 @@ export class CadastroComponent implements OnInit {
   }
 
   public setForm(
-    cadastro: Cadastro = { nome: "", cep: "", rua: "", numero: null, id:null }
+    cadastro: Cadastro = { nome: "", cep: "", rua: "", numero: null, id: null }
   ) {
     this.cadastroForm$.value.controls.pessoa.setValue({
       nome: cadastro.nome,
@@ -87,12 +87,12 @@ export class CadastroComponent implements OnInit {
     );
   }
 
-  public updateTable(oldValue, newCadastro) {
-    if(this.option$.getValue() === 'updateForm') {
+  public updateTable(oldValue?: Cadastro, newCadastro?: Cadastro) {
+    if (this.option$.getValue() === 'updateForm') {
       let arrayPosition = undefined;
-      this.cadastros$.value.filter((cadastro, index)=> {
-        cadastro.id === oldValue.id ? arrayPosition = index : arrayPosition = undefined;
-      })
+      this.cadastros$.value.filter((cadastro, index) => {
+        cadastro.id === oldValue.id ? arrayPosition = index : undefined;
+      });
       this.cadastros$.value[arrayPosition] = newCadastro;
     } else {
       this.cadastros$.value.push(newCadastro);
@@ -120,5 +120,5 @@ export class CadastroComponent implements OnInit {
       error => console.log(error)
     );
   }
-  
+
 }
