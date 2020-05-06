@@ -1,77 +1,32 @@
 <div class="group">
   <h1 class="group__title">Bem-vindo</h1>
-  <form
-    action=""
-    class="group__form"
-    [formGroup]="cadastroForm$ | async"
-    (ngSubmit)="onSubmit()"
-  >
+  <form action="" class="group__form" [formGroup]="cadastroForm$ | async" (ngSubmit)="onSubmit()">
     <div formGroupName="pessoa" class="group__form__pessoa">
       <div class="group__form__pessoa__div">
-        <label class="group__form__pessoa__div__label" for="inputname"
-          >Nome</label
-        >
-        <input
-          class="input"
-          id="inputname"
-          type="text"
-          placeholder="nome"
-          formControlName="nome"
-          autofocus
-          #nameInput
-        />
+        <label class="group__form__pessoa__div__label" for="inputname">Nome</label>
+        <input class="input" id="inputname" type="text" placeholder="nome" formControlName="nome" autofocus
+          #nameInput />
         <span class="span"></span>
       </div>
       <div class="group__form__pessoa__div">
-        <label class="group__form__pessoa__div__label" for="inputname"
-          >Cep</label
-        >
-        <input
-          class="input"
-          id="inputname"
-          type="text"
-          placeholder="Cep"
-          formControlName="cep"
-          (blur)="getAddress()"
-        />
+        <label class="group__form__pessoa__div__label" for="inputcep">Cep</label>
+        <input class="input" id="inputcep" type="text" placeholder="cep" formControlName="cep" (blur)="getAddress()" />
         <span class="span"></span>
       </div>
       <div class="group__form__pessoa__div">
-        <label class="group__form__pessoa__div__label" for="inputname"
-          >Rua</label
-        >
-        <input
-          class="input"
-          id="inputname"
-          type="text"
-          placeholder="Rua"
-          formControlName="rua"
-        />
+        <label class="group__form__pessoa__div__label" for="inputrua">Rua</label>
+        <input class="input" id="inputrua" type="text" placeholder="logradouro" formControlName="rua" />
         <span class="span"></span>
       </div>
       <div class="group__form__pessoa__div">
-        <label class="group__form__pessoa__div__label" for="inputname"
-          >Numero</label
-        >
-        <input
-          class="input"
-          id="inputname"
-          type="text"
-          placeholder="Numero"
-          formControlName="numero"
-        />
+        <label class="group__form__pessoa__div__label" for="inputnum">Numero</label>
+        <input class="input" id="inputnum" type="text" minlength="1" maxlength="5" placeholder="numero" formControlName="numero" />
         <span class="span"></span>
       </div>
     </div>
     <div class="group__form__buttons">
-      <button
-        type="reset"
-        class="group__form__buttons__clean"
-        (click)="cleanForm()"
-      >
-        Limpar
-      </button>
-      <button type="submit" class="group__form__buttons__submit">Enviar</button>
+      <button type="reset" class="group__form__buttons__clean" (click)="cleanForm()">Limpar</button>
+      <button type="submit" [disabled]="(cadastroForm$ | async).invalid" class="group__form__buttons__submit">Enviar</button>
     </div>
   </form>
 </div>
@@ -92,8 +47,8 @@
       <td>{{ cadastro?.cep }}</td>
       <td>{{ cadastro?.rua }}</td>
       <td>{{ cadastro?.numero }}</td>
-      <td><button (click)="edit(cadastro)">E</button>
-      <button (click)="remove(cadastro.id, i)">D</button></td>
+      <td><button (click)="edit(cadastro)"><i class="fas fa-edit"></i></button>
+        <button (click)="remove(cadastro.id, i)"><i class="fas fa-times"></i></button></td>
     </tr>
   </tbody>
 </table>

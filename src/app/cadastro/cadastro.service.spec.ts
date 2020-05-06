@@ -1,8 +1,8 @@
-import { TestBed, inject } from "@angular/core/testing";
-import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
-import { CadastroService } from "./cadastro.service";
-import { of, throwError } from "rxjs";
-import { HttpErrorResponse } from "@angular/common/http";
+import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { CadastroService } from './cadastro.service';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { throws } from 'assert';
 
 const ERRORRESPONSE = new HttpErrorResponse({
@@ -12,13 +12,13 @@ const ERRORRESPONSE = new HttpErrorResponse({
 });
 
 const CADASTRO = {
-  nome: "Antonia",
-  cep: "09790000",
-  rua: "Av. Albert Schweitzer",
+  nome: 'Antonia',
+  cep: '09790000',
+  rua: 'Av. Albert Schweitzer',
   numero: 490
 }
 
-describe("CadastroService Success", () => {
+describe('CadastroService Success', () => {
   let httpClientSpy;
   let service: CadastroService;
 
@@ -35,7 +35,7 @@ describe("CadastroService Success", () => {
     service = new CadastroService(httpClientSpy as any);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
@@ -86,7 +86,7 @@ describe("CadastroService Success", () => {
 
 });
 
-xdescribe("CadastroService Error", () => {
+xdescribe('CadastroService Error', () => {
   
   let httpClientSpy;
   let service: CadastroService;
@@ -104,7 +104,7 @@ xdescribe("CadastroService Error", () => {
     service = new CadastroService(httpClientSpy as any);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
@@ -112,7 +112,7 @@ xdescribe("CadastroService Error", () => {
   it(`should test getCadastro error`, () => {
     httpClientSpy.get.and.returnValue(throwError(ERRORRESPONSE));
     service.getCadastro().subscribe(response => {
-      fail("error expected");
+      fail('error expected');
     }),
       (error: HttpErrorResponse) => {
         expect(error.status).toEqual(404);
@@ -123,7 +123,7 @@ xdescribe("CadastroService Error", () => {
   it(`should test getAddress error`, () => {
     httpClientSpy.get.and.returnValue(throwError(ERRORRESPONSE));
     service.getAddress(`09890430`).subscribe(response => {
-      fail("error expected");
+      fail('error expected');
     }),
       (error: HttpErrorResponse) => {
         expect(error.status).toEqual(404);
@@ -134,7 +134,7 @@ xdescribe("CadastroService Error", () => {
   it(`should test saveForm error`, () => {
     httpClientSpy.post.and.returnValue(throwError(ERRORRESPONSE));
     service.saveForm(CADASTRO).subscribe(response => {
-      fail("error expected");
+      fail('error expected');
     }),
       (error: HttpErrorResponse) => {
         expect(error.status).toEqual(404);
@@ -145,7 +145,7 @@ xdescribe("CadastroService Error", () => {
   it(`should test updateForm error`, () => {
     httpClientSpy.put.and.returnValue(throwError(ERRORRESPONSE));
     service.updateForm(CADASTRO).subscribe(response => {
-      fail("error expected");
+      fail('error expected');
     }),
       (error: HttpErrorResponse) => {
         expect(error.status).toEqual(404);
@@ -156,7 +156,7 @@ xdescribe("CadastroService Error", () => {
   it(`should test delete error`, () => {
     httpClientSpy.delete.and.returnValue(throwError(ERRORRESPONSE));
     service.delete(`1234`).subscribe(response => {
-      fail("error expected");
+      fail('error expected');
     }),
       (error: HttpErrorResponse) => {
         expect(error.status).toEqual(404);
