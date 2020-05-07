@@ -1,27 +1,35 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
 import { Cadastro } from './cadastro';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cadastro',
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
 })
-export class CadastroComponent implements OnInit {
+export class CadastroComponent implements OnInit, OnDestroy {
 
-  private cepRegex = new RegExp(/\d{5}-?\d{3}/);
-  private numeroRegex = new RegExp(/\d{1,5}/);
-  private nomeRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ ]*$/);
-  private ruaRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ0-9ºª ]*$/);
-  public errorMessages$: BehaviorSubject<any> = new BehaviorSubject({
+  // objeto inicial dos erros
+  private errorMessage = {
     nome: undefined,
     cep: undefined,
     rua: undefined,
     numero: undefined
-  });
+  };
 
+  // regex
+  private cepRegex = new RegExp(/\d{5}-?\d{3}/);
+  private numeroRegex = new RegExp(/\d{1,5}/);
+  private nomeRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
+  private ruaRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ0-9ºª ]*$/);
+
+  // array de mensagens de erro, um para cada campo
+  public errorMessages$: BehaviorSubject<any> = new BehaviorSubject(this.errorMessage);
+
+  // formulário com a composição dos validadores
   public cadastroForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       pessoa: this.formBuilder.group({
@@ -33,21 +41,39 @@ export class CadastroComponent implements OnInit {
       })
     })
   );
-  
+
+  // inscrição do formulário
+  public formSubscription = this.cadastroForm$.value.statusChanges.pipe(debounceTime(200)).subscribe(valid => {
+    if (!this.cadastroForm$.value.valid) {
+      return;
+    }
+    this.errorMessages$.next(this.errorMessage);
+  });
+
   public cadastros$ = new BehaviorSubject([]);
   public option$: BehaviorSubject<string> = new BehaviorSubject(undefined);
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
+  @ViewChild('myForm', { static: true }) form: NgForm;
 
   constructor(
     public readonly formBuilder: FormBuilder,
     private readonly cadastroService: CadastroService
   ) { }
 
+  // inicia chamando o método para pegar os cadastros e focando input nome
   ngOnInit(): void {
-    this.cleanForm();
     this.getCadastro();
+    this.nameInput.nativeElement.focus();
   }
 
+  // se desinscreve do observable
+  ngOnDestroy(): void {
+    this.formSubscription.unsubscribe();
+  }
+
+  /*chama o serviço que pega um cadastro por id, no success se for um array, ele preenche o array
+  de cadastros, se não for uma array e sim um objeto, ele chama o método edit, pois a resposta é
+  fruto de uma busca de um objeto especifico, no erro não faz nada*/
   public getCadastro(id?: string) {
     this.cadastroService.getCadastro(id).subscribe(
       response => {
@@ -61,11 +87,14 @@ export class CadastroComponent implements OnInit {
     );
   }
 
+  /*dá a opção de updateForm à variavel e chama o método setForm com o valor passado por parametro*/
   public edit(response) {
     this.option$.next('updateForm');
     this.setForm(response);
   }
 
+  /*método que preenche os inputs do formulário coms os valores recebidos por parametros,
+  depois foca no input de nome e limpa todas as mensagens de erro*/
   public setForm(
     cadastro: Cadastro = { nome: '', cep: '', rua: '', numero: null, id: null }
   ) {
@@ -76,14 +105,23 @@ export class CadastroComponent implements OnInit {
       numero: cadastro.numero || '',
       id: cadastro.id
     });
+    this.nameInput.nativeElement.focus();
+    this.errorMessages$.next(this.errorMessage);
   }
 
+  /*esse método foca o input nome, da a opção de saveForm, reseta os valores do form e dá aos
+  spans de erro os valores iniciais do objeto, undefined
+  */
   public cleanForm() {
     this.nameInput.nativeElement.focus();
     this.option$.next('saveForm');
-    this.setForm();
+    this.form.resetForm();
+    this.errorMessages$.next(this.errorMessage);
   }
 
+  /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar
+  existente passando por parametro o objeto, no success, ele chama o método de updateTable e 
+  chama o método cleanForm, no error não faz nada*/
   public onSubmit() {
     const formcadastrovalue = this.cadastroForm$.value.controls.pessoa.value;
     this.cadastroService[this.option$.getValue()](formcadastrovalue).subscribe(
@@ -95,6 +133,11 @@ export class CadastroComponent implements OnInit {
     );
   }
 
+  /*verifica se a opção é de edição do objeto, se sim, percorre o array com filter, se o id do
+  objeto cadastro for igual ao id do objeto antigo, o arrayposition recebe esse index, depois
+  no array, vai lá no index que quer alterar e dá o valor do newCadastro, caso a opção não seja 
+  atualizar o form, o array recebe um novo cadastro
+  */
   public updateTable(oldValue?: Cadastro, newCadastro?: Cadastro) {
     if (this.option$.getValue() === 'updateForm') {
       let arrayPosition;
@@ -107,6 +150,10 @@ export class CadastroComponent implements OnInit {
     }
   }
 
+  /* chama o serviço de remoção do objeto, se der success, no array de objetos removemos o objeto
+  desejado usando splice, que remove do arrayIndex até quanto quiser, indicado pelo 1, se der erro,
+  não faz nada.
+  */
   public remove(id, arrayIndex) {
     this.cadastroService.delete(id).subscribe(
       response => {
@@ -116,26 +163,38 @@ export class CadastroComponent implements OnInit {
     );
   }
 
+  /* ao sair de cada campo, ele chama o método nullInputVerify, que devolve uma string ou null,
+  se o retorno for null, o método não faz nada, se o retorno for uma string, esse método chama
+  outros métodos validadores, através do switch que validou o inputFieldName.
+  */
   public blurInput(inputFieldName) {
+    let value = this.nullInputVerify(inputFieldName);
+    if (!value) {
+      return;
+    }
+    value = value.trim();
     switch (inputFieldName) {
       case 'cep':
-        this.cepValidation();
+        this.cepValidation(value);
         break;
       case 'nome':
-        this.nomeValidation();
+        this.nomeValidation(value);
         break;
       case 'rua':
-        this.ruaValidation();
+        this.ruaValidation(value);
         break;
       case 'numero':
-        this.numeroValidation();
+        this.numeroValidation(value);
         break;
-
       default:
         break;
     }
   }
 
+  /* chama o serviço de busca de cep, se tiver sucesso mas a resposta for erro, dá o valor ao span
+  de erro de 'cep não encontrado', se não, ele preenche o input de rua com o valor devolvido, se 
+  cair em algum erro, ele dá o valor ao span de erro de 'erro ao buscar cep'
+  */
   private getAddress(cep: string) {
     this.cadastroService.getAddress(cep).subscribe(
       direction => {
@@ -149,54 +208,70 @@ export class CadastroComponent implements OnInit {
         );
       },
       error => {
-        this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'cep não encontrado' });
+        this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'erro ao buscar cep' });
       });
   }
 
-  private cepValidation() {
-    const cep = this.cadastroForm$.value.controls.pessoa['controls'].cep.value.trim();
-    if (!cep) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'campo obrigatório' });
-    } else if (cep.length !== 9) {
+  /* valida campo cep, se o tamanho do cep for diferente de 9, dá o valor ao span de erro de
+  'digite 8 números', se o padrão estiver errado, dá o valor ao span de erro de 'formato inválido',
+  qualquer outra coisa, chama a busca na api do cep
+  */
+  private cepValidation(value) {
+    if (value.length !== 9) {
       this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'digite 8 números' });
-    } else if (!this.cepRegex.test(cep)) {
+    } else if (!this.cepRegex.test(value)) {
       this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'formato inválido' });
     } else {
-      this.getAddress(cep);
+      this.getAddress(value);
     }
   }
 
-  private numeroValidation() {
-    const numero = this.cadastroForm$.value.controls.pessoa['controls'].numero.value.trim();
-    if (!numero) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, numero: 'campo obrigatório' });
-    } else if (!this.numeroRegex.test(numero)) {
+  /* valida campo numero, se o padrão estiver errado, dá o valor ao span de erro de 'formato inválido',
+  qualquer outra coisa, dá o valor ao spand de erro de undefined
+  */
+  private numeroValidation(value) {
+    if (!this.numeroRegex.test(value)) {
       this.errorMessages$.next({ ...this.errorMessages$.value, numero: 'apenas números' });
     } else {
-      this.errorMessages$.next({ ...this.errorMessages$.value, numero: undefined});
+      this.errorMessages$.next({ ...this.errorMessages$.value, numero: undefined });
     }
   }
 
-  private ruaValidation() {
-    const rua = this.cadastroForm$.value.controls.pessoa['controls'].rua.value.trim();
-    if (!rua) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, rua: 'campo obrigatório' });
-    } else if (!this.ruaRegex.test(rua)) {
+  /* valida campo rua, se o padrão estiver errado, dá o valor ao span de erro de 'formato inválido',
+  qualquer outra coisa, dá o valor ao spand de erro de undefined
+  */
+  private ruaValidation(value) {
+    if (!this.ruaRegex.test(value)) {
       this.errorMessages$.next({ ...this.errorMessages$.value, rua: 'formato inválido' });
     } else {
       this.errorMessages$.next({ ...this.errorMessages$.value, rua: undefined });
     }
   }
 
-  private nomeValidation() {
-    const nome = this.cadastroForm$.value.controls.pessoa['controls'].nome.value.trim();
-    if (!nome) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'campo obrigatório' });
-    } else if (!this.nomeRegex.test(nome)) {
+  /* valida campo nome, se menor que 2, dá o valor ao span de erro de 'mínimo de duas letras',
+  se não tiver o padrão correto, dá o valor ao span de erro de 'somente letras',
+  se nada disso acima, dá o valor de undefined ao span de erro
+  */
+  private nomeValidation(value) {
+    if (value.length < 2) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'mínimo de duas letras' });
+    } else if (!this.nomeRegex.test(value)) {
       this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'somente letras' });
     } else {
       this.errorMessages$.next({ ...this.errorMessages$.value, nome: undefined });
     }
+  }
+
+  /* esse método valida se o valor do input é válido,
+  se sim, não faz nada, se não, dá o valor de 'campo obrigatório'
+  no span
+  */
+  private nullInputVerify(inputName) {
+    const VALUE = this.cadastroForm$.value.controls.pessoa['controls'][inputName].value;
+    if (!VALUE) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, [inputName]: '*campo obrigatório' });
+    }
+    return VALUE;
   }
 
 }
