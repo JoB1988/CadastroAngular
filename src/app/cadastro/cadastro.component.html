@@ -1,6 +1,6 @@
 <div class="group">
-  <h1 class="group__title">Bem-vindo</h1>
-  <form action="" class="group__form" [formGroup]="cadastroForm$ | async" (ngSubmit)="onSubmit()">
+  <h1 class="group__title">bem vindo</h1>
+  <form action="" class="group__form" [formGroup]="cadastroForm$ | async" #myForm="ngForm" (ngSubmit)="onSubmit()">
     <div formGroupName="pessoa" class="group__form__pessoa">
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputname">Nome</label>
