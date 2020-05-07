@@ -1,11 +1,22 @@
-body{
+body {
     margin: 0;
     display: block;
     justify-content: center;
 }
-a, button{
+a,
+button {
     text-decoration: none;
-    &:hover{
+    &:hover {
         cursor: pointer;
     }
+}
+
+p,tr, tbody, thead, ul, ol, label, a, button {
+    font-family: 'roboto-medium' !important;
+}
+h1, h2, h3 {
+    font-family: 'roboto-medium' !important;
+}
+td, th, input {
+    font-family: 'roboto-regular' !important;
 }
