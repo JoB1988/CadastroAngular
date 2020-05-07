@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
 import { Cadastro } from './cadastro';
 import { debounceTime } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-cadastro',
@@ -28,6 +29,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   // array de mensagens de erro, um para cada campo
   public errorMessages$: BehaviorSubject<any> = new BehaviorSubject(this.errorMessage);
+
+  public carregando$: BehaviorSubject<string> = new BehaviorSubject('valor inicial');
 
   // formulário com a composição dos validadores
   public cadastroForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
@@ -57,7 +60,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   constructor(
     public readonly formBuilder: FormBuilder,
-    private readonly cadastroService: CadastroService
+    private readonly cadastroService: CadastroService,
+    private spinner: NgxSpinnerService
   ) { }
 
   // inicia chamando o método para pegar os cadastros e focando input nome
@@ -75,6 +79,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
   de cadastros, se não for uma array e sim um objeto, ele chama o método edit, pois a resposta é
   fruto de uma busca de um objeto especifico, no erro não faz nada*/
   public getCadastro(id?: string) {
+    this.carregando$.next('carregando cadastro...');
+    this.spinner.show();
     this.cadastroService.getCadastro(id).subscribe(
       response => {
         if (response.length) {
@@ -82,8 +88,9 @@ export class CadastroComponent implements OnInit, OnDestroy {
         } else {
           this.edit(response);
         }
+        this.spinner.hide();
       },
-      error => console.log(error)
+      error => { console.log(error); this.spinner.hide(); }
     );
   }
 
@@ -123,13 +130,16 @@ export class CadastroComponent implements OnInit, OnDestroy {
   existente passando por parametro o objeto, no success, ele chama o método de updateTable e 
   chama o método cleanForm, no error não faz nada*/
   public onSubmit() {
+    this.carregando$.next('salvando...');
+    this.spinner.show();
     const formcadastrovalue = this.cadastroForm$.value.controls.pessoa.value;
     this.cadastroService[this.option$.getValue()](formcadastrovalue).subscribe(
       response => {
+        this.spinner.hide();
         this.updateTable(formcadastrovalue, response);
         this.cleanForm();
       },
-      error => console.log(error)
+      error => { console.log(error); this.spinner.hide(); }
     );
   }
 
@@ -155,11 +165,14 @@ export class CadastroComponent implements OnInit, OnDestroy {
   não faz nada.
   */
   public remove(id, arrayIndex) {
+    this.carregando$.next('removendo...');
+    this.spinner.show();
     this.cadastroService.delete(id).subscribe(
       response => {
+        this.spinner.hide();
         this.cadastros$.value.splice(arrayIndex, 1);
       },
-      error => console.log(error)
+      error => { console.log(error); this.spinner.hide(); }
     );
   }
 
@@ -196,6 +209,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
   cair em algum erro, ele dá o valor ao span de erro de 'erro ao buscar cep'
   */
   private getAddress(cep: string) {
+    this.carregando$.next('buscando cep...');
+    this.spinner.show();
     this.cadastroService.getAddress(cep).subscribe(
       direction => {
         if (direction.erro === true) {
@@ -206,9 +221,11 @@ export class CadastroComponent implements OnInit, OnDestroy {
         this.cadastroForm$.value.controls.pessoa['controls'].rua.setValue(
           direction.logradouro
         );
+        this.spinner.hide();
       },
       error => {
         this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'erro ao buscar cep' });
+        this.spinner.hide();
       });
   }
 
