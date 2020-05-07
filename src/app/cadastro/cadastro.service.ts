@@ -26,7 +26,6 @@ export class CadastroService {
   constructor(private http: HttpClient) {}
 
   public getAddress(cepAddress: string): Observable<any> {
-    console.log(cepAddress)
     return this.http
       .get<any>(`${URL + cepAddress}/json/`)
       .pipe(

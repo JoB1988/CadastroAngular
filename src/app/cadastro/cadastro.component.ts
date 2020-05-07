@@ -11,27 +11,29 @@ import { Cadastro } from './cadastro';
 })
 export class CadastroComponent implements OnInit {
 
+  private cepRegex = new RegExp(/\d{5}-?\d{3}/);
+  private numeroRegex = new RegExp(/\d{1,5}/);
+  private nomeRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ ]*$/);
+  private ruaRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ0-9ºª ]*$/);
+  public errorMessages$: BehaviorSubject<any> = new BehaviorSubject({
+    nome: undefined,
+    cep: undefined,
+    rua: undefined,
+    numero: undefined
+  });
+
   public cadastroForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
-      // tslint:disable-next-line: max-line-length
       pessoa: this.formBuilder.group({
-        nome: [
-          '',
-          Validators.compose(
-            [
-              Validators.required,
-              Validators.minLength(2),
-              Validators.pattern(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ ]*$/)
-            ]
-          )
-        ],
-        cep: ['', Validators.compose([Validators.required, Validators.pattern(/\d{5}-\d{3}/)])],
-        rua: ['', Validators.compose([Validators.required])],
-        numero: ['', Validators.compose([Validators.required, Validators.pattern(/\d{1,5}/)])],
+        nome: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(this.nomeRegex)])],
+        cep: ['', Validators.compose([Validators.required, Validators.pattern(this.cepRegex), Validators.maxLength(9)])],
+        rua: ['', Validators.compose([Validators.required, Validators.pattern(this.ruaRegex)])],
+        numero: ['', Validators.compose([Validators.required, Validators.pattern(this.numeroRegex)])],
         id: ['']
       })
     })
   );
+  
   public cadastros$ = new BehaviorSubject([]);
   public option$: BehaviorSubject<string> = new BehaviorSubject(undefined);
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
@@ -71,7 +73,7 @@ export class CadastroComponent implements OnInit {
       nome: cadastro.nome,
       cep: cadastro.cep,
       rua: cadastro.rua,
-      numero: cadastro.numero,
+      numero: cadastro.numero || '',
       id: cadastro.id
     });
   }
@@ -105,18 +107,6 @@ export class CadastroComponent implements OnInit {
     }
   }
 
-  public getAddress() {
-    const cep = this.cadastroForm$.value.controls.pessoa.value.cep;
-    this.cadastroService.getAddress(cep).subscribe(
-      direction => {
-        this.cadastroForm$.value.controls.pessoa['controls'].rua.setValue(
-          direction.logradouro
-        );
-      },
-      error => console.log(error)
-    );
-  }
-
   public remove(id, arrayIndex) {
     this.cadastroService.delete(id).subscribe(
       response => {
@@ -124,6 +114,89 @@ export class CadastroComponent implements OnInit {
       },
       error => console.log(error)
     );
+  }
+
+  public blurInput(inputFieldName) {
+    switch (inputFieldName) {
+      case 'cep':
+        this.cepValidation();
+        break;
+      case 'nome':
+        this.nomeValidation();
+        break;
+      case 'rua':
+        this.ruaValidation();
+        break;
+      case 'numero':
+        this.numeroValidation();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private getAddress(cep: string) {
+    this.cadastroService.getAddress(cep).subscribe(
+      direction => {
+        if (direction.erro === true) {
+          this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'cep não encontrado' });
+        } else {
+          this.errorMessages$.next({ ...this.errorMessages$.value, cep: undefined, rua: undefined });
+        }
+        this.cadastroForm$.value.controls.pessoa['controls'].rua.setValue(
+          direction.logradouro
+        );
+      },
+      error => {
+        this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'cep não encontrado' });
+      });
+  }
+
+  private cepValidation() {
+    const cep = this.cadastroForm$.value.controls.pessoa['controls'].cep.value.trim();
+    if (!cep) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'campo obrigatório' });
+    } else if (cep.length !== 9) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'digite 8 números' });
+    } else if (!this.cepRegex.test(cep)) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'formato inválido' });
+    } else {
+      this.getAddress(cep);
+    }
+  }
+
+  private numeroValidation() {
+    const numero = this.cadastroForm$.value.controls.pessoa['controls'].numero.value.trim();
+    if (!numero) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, numero: 'campo obrigatório' });
+    } else if (!this.numeroRegex.test(numero)) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, numero: 'apenas números' });
+    } else {
+      this.errorMessages$.next({ ...this.errorMessages$.value, numero: undefined});
+    }
+  }
+
+  private ruaValidation() {
+    const rua = this.cadastroForm$.value.controls.pessoa['controls'].rua.value.trim();
+    if (!rua) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, rua: 'campo obrigatório' });
+    } else if (!this.ruaRegex.test(rua)) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, rua: 'formato inválido' });
+    } else {
+      this.errorMessages$.next({ ...this.errorMessages$.value, rua: undefined });
+    }
+  }
+
+  private nomeValidation() {
+    const nome = this.cadastroForm$.value.controls.pessoa['controls'].nome.value.trim();
+    if (!nome) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'campo obrigatório' });
+    } else if (!this.nomeRegex.test(nome)) {
+      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'somente letras' });
+    } else {
+      this.errorMessages$.next({ ...this.errorMessages$.value, nome: undefined });
+    }
   }
 
 }
