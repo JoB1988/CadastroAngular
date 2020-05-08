@@ -10,7 +10,7 @@
       </div>
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputcep">Cep</label>
-        <input class="input" id="inputcep" type="text" placeholder="cep" maxlength="9" formControlName="cep" (blur)="blurInput('cep')" />
+        <input class="input" id="inputcep" type="text" placeholder="cep" maxlength="9" formControlName="cep" mask="00000-000" [dropSpecialCharacters]="false" (blur)="blurInput('cep')" />
         <span class="group__form__pessoa__div__error">{{(errorMessages$ | async).cep}}</span>
       </div>
       <div class="group__form__pessoa__div">
@@ -48,7 +48,7 @@
       <td>{{ cadastro?.rua }}</td>
       <td>{{ cadastro?.numero }}</td>
       <td><button (click)="edit(cadastro)"><i class="fas fa-edit"></i></button>
-        <button (click)="remove(cadastro.id, i)"><i class="fas fa-times"></i></button></td>
+        <button (click)="remove(cadastro.id, i)" [disabled]="(option$ | async) === 'updateForm'"><i class="fas fa-times"></i></button></td>
     </tr>
   </tbody>
 </table>
