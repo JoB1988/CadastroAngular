@@ -1,3 +1,5 @@
+@import '../shared/colors.scss';
+
 .group {
   display: flex;
   margin: 0 auto;
@@ -88,7 +90,7 @@
         }
 
         &__error {
-          color:#C82333;
+          color:$error-color;
           font-size: 12px;
           font-family: 'roboto-medium-italic';
         }
@@ -112,26 +114,26 @@
         }
 
         &:disabled {
-          background-color: #a7a7a7;
+          background-color: $disabled-color;
           color: white;
-          border: 1px solid #a7a7a7;
+          border: 1px solid $disabled-color;
         }
       }
 
       &__submit {
-        border: 1px solid #28A745;
-        background-color: #28A745;
+        border: 1px solid $success-color;
+        background-color: $success-color;
         color: white;
       }
 
       &__clean {
         background-color: white;
-        border: 1px solid rgb(255, 148, 26);
-        color: rgb(255, 148, 26);
+        border: 1px solid $warning-color;
+        color: $warning-color;
         margin-right: 20px;
 
         &:hover {
-          background-color: rgb(255, 148, 26);
+          background-color: $warning-color;
           color: white;
         }
       }
@@ -175,13 +177,13 @@
           background-color: transparent;
           border: none;
           &:first-child {
-            color:rgb(255, 148, 26);
+            color:$warning-color;
           }
           &:last-child {
             &:disabled{
-              color: #a7a7a7;
+              color: $disabled-color;
             }
-            color:#cc0000;
+            color:$error-color;
           }
         }
       }
