@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
 import { RouterModule } from '@angular/router';
 import { CadastroModule } from './cadastro/cadastro.module';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ToastComponent],
   imports: [AppRoutingModule, RouterModule, BrowserModule, HeaderModule, CadastroModule],
   providers: [],
   bootstrap: [AppComponent]
