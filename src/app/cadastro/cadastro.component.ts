@@ -77,7 +77,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   /*chama o serviço que pega um cadastro por id, no success se for um array, ele preenche o array
   de cadastros, se não for uma array e sim um objeto, ele chama o método edit, pois a resposta é
-  fruto de uma busca de um objeto especifico, no erro não faz nada*/
+  fruto de uma busca de um objeto especifico, no erro não faz nada. No inicio da chamada do método,
+  o spinner é mostrado na tela, no fim das requisições é escondido*/
   public getCadastro(id?: string) {
     this.carregando$.next('carregando cadastro...');
     this.spinner.show();
@@ -128,7 +129,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar
   existente passando por parametro o objeto, no success, ele chama o método de updateTable e 
-  chama o método cleanForm, no error não faz nada*/
+  chama o método cleanForm, no error não faz nada. No inicio da chamada do método,
+  o spinner é mostrado na tela, no fim das requisições é escondido*/
   public onSubmit() {
     this.carregando$.next('salvando...');
     this.spinner.show();
@@ -162,7 +164,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   /* chama o serviço de remoção do objeto, se der success, no array de objetos removemos o objeto
   desejado usando splice, que remove do arrayIndex até quanto quiser, indicado pelo 1, se der erro,
-  não faz nada.
+  não faz nada. No inicio da chamada do método, o spinner é mostrado na tela,
+  no fim das requisições é escondido.
   */
   public remove(id, arrayIndex) {
     this.carregando$.next('removendo...');
@@ -205,8 +208,9 @@ export class CadastroComponent implements OnInit, OnDestroy {
   }
 
   /* chama o serviço de busca de cep, se tiver sucesso mas a resposta for erro, dá o valor ao span
-  de erro de 'cep não encontrado', se não, ele preenche o input de rua com o valor devolvido, se 
-  cair em algum erro, ele dá o valor ao span de erro de 'erro ao buscar cep'
+  de erro de 'cep não encontrado', se não, ele preenche o input de rua com o valor devolvido, se
+  cair em algum erro, ele dá o valor ao span de erro de 'erro ao buscar cep'. No inicio da chamada
+  do método, o spinner é mostrado na tela, no fim das requisições é escondido.
   */
   private getAddress(cep: string) {
     this.carregando$.next('buscando cep...');
