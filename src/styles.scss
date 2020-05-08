@@ -9,14 +9,31 @@ button {
     &:hover {
         cursor: pointer;
     }
+    &:disabled {
+        &:hover {
+            cursor: default;
+        }
+    }
 }
 
-p,tr, tbody, thead, ul, ol, label, a, button {
-    font-family: 'roboto-medium' !important;
+p,
+tr,
+tbody,
+thead,
+ul,
+ol,
+label,
+a,
+button {
+    font-family: "roboto-medium" !important;
 }
-h1, h2, h3 {
-    font-family: 'roboto-medium' !important;
+h1,
+h2,
+h3 {
+    font-family: "roboto-medium" !important;
 }
-td, th, input {
-    font-family: 'roboto-regular' !important;
+td,
+th,
+input {
+    font-family: "roboto-regular" !important;
 }
