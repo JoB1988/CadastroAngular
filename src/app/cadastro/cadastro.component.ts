@@ -5,6 +5,7 @@ import { CadastroService } from './cadastro.service';
 import { Cadastro } from './cadastro';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastService } from '../shared/toast/toast.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -54,14 +55,15 @@ export class CadastroComponent implements OnInit, OnDestroy {
   });
 
   public cadastros$ = new BehaviorSubject([]);
-  public option$: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  public option$: BehaviorSubject<string> = new BehaviorSubject('saveForm');
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
   @ViewChild('myForm', { static: true }) form: NgForm;
 
   constructor(
     public readonly formBuilder: FormBuilder,
     private readonly cadastroService: CadastroService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private toast: ToastService
   ) { }
 
   // inicia chamando o método para pegar os cadastros e focando input nome
@@ -130,7 +132,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
   /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar
   existente passando por parametro o objeto, no success, ele chama o método de updateTable e 
   chama o método cleanForm, no error não faz nada. No inicio da chamada do método,
-  o spinner é mostrado na tela, no fim das requisições é escondido*/
+  o spinner é mostrado na tela, no fim das requisições é escondido. o Toast é chamado ao fim de
+  cada operação.*/
   public onSubmit() {
     this.carregando$.next('salvando...');
     this.spinner.show();
@@ -138,10 +141,15 @@ export class CadastroComponent implements OnInit, OnDestroy {
     this.cadastroService[this.option$.getValue()](formcadastrovalue).subscribe(
       response => {
         this.spinner.hide();
+        this.toast.toast$.next({ message: 'Salvo com sucesso', show: true, type: 'success' });
         this.updateTable(formcadastrovalue, response);
         this.cleanForm();
       },
-      error => { console.log(error); this.spinner.hide(); }
+      error => { 
+        console.log(error);
+        this.spinner.hide();
+        this.toast.toast$.next({ message: 'Erro ao salvar', show: true, type: 'error' });
+      }
     );
   }
 
@@ -165,17 +173,21 @@ export class CadastroComponent implements OnInit, OnDestroy {
   /* chama o serviço de remoção do objeto, se der success, no array de objetos removemos o objeto
   desejado usando splice, que remove do arrayIndex até quanto quiser, indicado pelo 1, se der erro,
   não faz nada. No inicio da chamada do método, o spinner é mostrado na tela,
-  no fim das requisições é escondido.
-  */
+  no fim das requisições é escondido. o Toast é chamado ao fim de cada operação.*/
   public remove(id, arrayIndex) {
     this.carregando$.next('removendo...');
     this.spinner.show();
     this.cadastroService.delete(id).subscribe(
       response => {
         this.spinner.hide();
+        this.toast.toast$.next({ message: 'Removido com sucesso', show: true, type: 'success' });
         this.cadastros$.value.splice(arrayIndex, 1);
       },
-      error => { console.log(error); this.spinner.hide(); }
+      error => { 
+        console.log(error);
+        this.spinner.hide();
+        this.toast.toast$.next({ message: 'Erro ao remover', show: true, type: 'error' });
+      }
     );
   }
 

@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
 import { RouterModule } from '@angular/router';
 import { CadastroModule } from './cadastro/cadastro.module';
-import { ToastComponent } from './toast/toast.component';
+import { ToastComponent } from './shared/toast/toast.component';
 
 @NgModule({
   declarations: [AppComponent, ToastComponent],
