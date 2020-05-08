@@ -2,8 +2,8 @@
   "cadastro": [
     {
       "nome": "Flávio",
-      "cep": "09790000",
-      "rua": "Av. Albert Schweitzer",
+      "cep": "09790-000",
+      "rua": "Avenida Albert Schweitzer",
       "numero": "490",
       "id": 4
     },
@@ -23,8 +23,8 @@
     },
     {
       "nome": "Antonia",
-      "cep": "09790000",
-      "rua": "Av. Albert Schweitzer",
+      "cep": "09790-000",
+      "rua": "Avenida Albert Schweitzer",
       "numero": "490",
       "id": 11
     }
