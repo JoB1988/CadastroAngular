@@ -7,6 +7,7 @@ import { Toast } from '../app.model';
 })
 export class ToastService {
 
+  // váriavel que recebe o valor do componente para montar o toast
   public toast$: BehaviorSubject<Toast> = new BehaviorSubject(undefined);
 
 }

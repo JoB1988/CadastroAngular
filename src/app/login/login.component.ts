@@ -19,12 +19,15 @@ export class LoginComponent {
     })
   );
 
-  constructor(public readonly formBuilder: FormBuilder, private appService: AppService, private router: Router) { }
+  constructor(
+    public readonly formBuilder: FormBuilder,
+    private appService: AppService,
+    private router: Router) { }
 
+  // método que envia o formulário para o back-end e após isso redireciona para a página 'home'
   public onSubmit() {
     this.appService.user$.next({ nome: 'Jonathan', perfil: 5 });
     this.router.navigate(['/home']);
-
   }
 
 }
