@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppService } from '../app.service';
 import { BehaviorSubject } from 'rxjs';
-import { Usuario } from '../shared/models/usuario';
+import { Usuario } from '../shared/app.model';
 
 @Component({
   selector: 'app-header',

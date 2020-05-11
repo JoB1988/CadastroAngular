@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Usuario } from './shared/models/usuario';
+import { Usuario } from './shared/app.model';
 
 @Injectable({
   providedIn: 'root'
