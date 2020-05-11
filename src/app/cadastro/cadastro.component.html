@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="group__form__buttons">
-      <button type="reset" class="group__form__buttons__clean" (click)="cleanForm()">Limpar</button>
+      <button type="reset" class="group__form__buttons__clean" (click)="cleanForm()">{{(option$ | async) === 'updateForm' ? 'Cancelar' : 'Limpar'}}</button>
       <button type="submit" [disabled]="(cadastroForm$ | async).invalid" class="group__form__buttons__submit">Enviar</button>
     </div>
   </form>
@@ -47,8 +47,9 @@
       <td>{{ cadastro?.cep }}</td>
       <td>{{ cadastro?.rua }}</td>
       <td>{{ cadastro?.numero }}</td>
-      <td><button (click)="edit(cadastro)"><i class="fas fa-edit"></i></button>
-        <button (click)="remove(cadastro.id, i)" [disabled]="(option$ | async) === 'updateForm'"><i class="fas fa-times"></i></button></td>
+      <td>
+        <button (click)="edit(cadastro)" class="edit"><span>editar</span><i class="fas fa-edit"></i></button>
+        <button (click)="remove(cadastro.id, i)" [disabled]="(option$ | async) === 'updateForm'"><span>excluir</span><i class="fas fa-trash"></i></button></td>
     </tr>
   </tbody>
 </table>

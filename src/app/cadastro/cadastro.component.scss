@@ -1,4 +1,4 @@
-@import '../shared/colors.scss';
+@import "../shared/colors.scss";
 
 .group {
   display: flex;
@@ -33,7 +33,7 @@
           width: 100%;
         }
 
-        input[type=text] {
+        input[type="text"] {
           width: 100%;
           padding: 10px 10px;
           margin: 8px 0;
@@ -43,7 +43,7 @@
           box-sizing: border-box;
           &:focus {
             outline: none;
-            border-color:rgb(138, 5, 190)
+            border-color: rgb(138, 5, 190);
           }
         }
 
@@ -90,9 +90,9 @@
         }
 
         &__error {
-          color:$error-color;
+          color: $error-color;
           font-size: 12px;
-          font-family: 'roboto-medium-italic';
+          font-family: "roboto-medium-italic";
         }
       }
     }
@@ -160,7 +160,7 @@
       }
     }
   }
-  
+
   tbody {
     tr {
       height: 25px;
@@ -176,23 +176,51 @@
         button {
           background-color: transparent;
           border: none;
+          span {
+            background-color: #494949;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-top: -5px;
+          }
           &:first-child {
-            color:$warning-color;
+            color: $warning-color;
+            span {
+              margin-left: -60px;
+            }
           }
           &:last-child {
-            &:disabled{
-              color: $disabled-color;
+            span {
+              @media (min-width: 1006px) {
+                margin-left: 15px;
+              }
+              @media (min-width: 468px) and (max-width: 1005px) {
+                margin-top: -30px;
+                right: 20px;
+              }
+              @media (max-width: 467px) { 
+                margin-left: -65px;
+              }
             }
-            color:$error-color;
+            &:disabled {
+              color: $disabled-color;
+              span {
+                display: none;
+              }
+            }
+            color: $error-color;
+          }
+          span {
+            visibility: hidden;
+            position: absolute;
+          }
+          &:hover {
+            span {
+              visibility: visible;
+            }
           }
         }
       }
     }
   }
-
-}
-
-.spinner-msg {
-  margin-top: 40px;
-  color:white;
 }
