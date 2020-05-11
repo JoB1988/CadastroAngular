@@ -1,1 +1,14 @@
-<p>login works!</p>
+<div>
+    <form class="form" [formGroup]="loginForm$ | async" (ngSubmit)="onSubmit()">
+        <div class="form__inputs">
+            <label for="user">Usuário</label>
+            <input type="text" id="user" formControlName="user" autofocus>
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" formControlName="password">
+        </div>
+        <div class="form__buttons">
+            <button type="reset">Limpar</button>
+            <button>Entrar</button>
+        </div>
+    </form>
+</div>

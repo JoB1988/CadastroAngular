@@ -1,0 +1,22 @@
+div {
+    display: flex;
+    .form {
+        margin: auto;
+        &__inputs {
+            display: inline-grid;
+            label {
+                margin-bottom: 5px;
+            }
+            input {
+                margin-bottom: 15px;
+            }
+        }
+        &__buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        div {
+            width: 100%;
+        }
+    }
+}

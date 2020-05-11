@@ -22,14 +22,13 @@
     </ul>
   </div>
   <div>
-    <ul>
+    <ul *ngIf="!(isLogged$ | async)">
       <li>
-        <!-- <a [routerLink]="['/login']">Login</a> -->
-        <a (click)="logar()">Login</a>
+        <a [routerLink]="['/login']">Login</a>
       </li>
     </ul>
     <div class="navbar__login__user">
-      Fulano
+      {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
     </div>
   </div>
 </nav>

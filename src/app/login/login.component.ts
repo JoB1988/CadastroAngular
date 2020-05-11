@@ -1,15 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { AppService } from '../app.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-  constructor() { }
+  // formulário com a composição dos validadores
+  public loginForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
+    this.formBuilder.group({
+      user: [''],
+      password: ['']
+    })
+  );
 
-  ngOnInit(): void {
+  constructor(public readonly formBuilder: FormBuilder, private appService: AppService, private router: Router) { }
+
+  public onSubmit() {
+    this.appService.user$.next({ nome: 'Jonathan', perfil: 5 });
+    this.router.navigate(['/home']);
+
   }
 
 }
