@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
   HttpErrorResponse
-} from "@angular/common/http";
-import { Observable, of, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
-import { Cadastro } from "./cadastro";
+} from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Cadastro } from '../shared/app.model';
 
 const PRAGMA = `pragma`;
 const NO_CACHE = `no-cache`;
@@ -23,7 +23,7 @@ const HEADERS = new HttpHeaders({
   providedIn: `root`
 })
 export class CadastroService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public getAddress(cepAddress: string): Observable<any> {
     return this.http

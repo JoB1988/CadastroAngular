@@ -11,7 +11,7 @@ export class AppService implements OnDestroy {
   public user$: BehaviorSubject<Usuario> = new BehaviorSubject(undefined);
 
   private userSubscription = this.user$.subscribe(user => {
-    if(!user) {
+    if (!user) {
       return;
     }
     if (user.nome && user.perfil) {

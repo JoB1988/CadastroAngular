@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
-import { Cadastro } from './cadastro';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from '../shared/toast/toast.service';
+import { Cadastro } from '../shared/app.model';
 
 @Component({
   selector: 'app-cadastro',

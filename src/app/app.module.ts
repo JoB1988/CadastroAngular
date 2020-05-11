@@ -6,20 +6,29 @@ import { AppComponent } from './app.component';
 import { HeaderModule } from './header/header.module';
 import { RouterModule } from '@angular/router';
 import { CadastroModule } from './cadastro/cadastro.module';
-import { ToastComponent } from './shared/toast/toast.component';
-import { MoradorComponent } from './morador/morador.component';
-import { ModalComponent } from './shared/modal/modal.component';
-import { LoginComponent } from './login/login.component';
-import { AreasComumComponent } from './areas-comum/areas-comum.component';
-import { ReservasComponent } from './reservas/reservas.component';
-import { InventarioComponent } from './inventario/inventario.component';
-import { LogReservasComponent } from './log-reservas/log-reservas.component';
 import { LoginModule } from './login/login.module';
+import { AppGuardService } from './app.guard.service';
+import { ReservasModule } from './reservas/reservas.module';
+import { MoradorModule } from './morador/morador.module';
+import { ToastModule } from './shared/toast/toast.module';
+import { InventarioModule } from './inventario/inventario.module';
+import { AreasComumModule } from './areas-comum/areas-comum.module';
 
 @NgModule({
-  declarations: [AppComponent, ToastComponent, MoradorComponent, ModalComponent, AreasComumComponent, ReservasComponent, InventarioComponent, LogReservasComponent],
-  imports: [AppRoutingModule, RouterModule, BrowserModule, HeaderModule, CadastroModule, LoginModule],
-  providers: [],
+  declarations: [AppComponent],
+  imports: [
+    AppRoutingModule,
+    RouterModule,
+    BrowserModule,
+    HeaderModule,
+    CadastroModule,
+    LoginModule,
+    ReservasModule,
+    MoradorModule,
+    ToastModule,
+    InventarioModule,
+    AreasComumModule],
+  providers: [AppGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

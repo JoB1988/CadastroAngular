@@ -2,30 +2,30 @@
   "cadastro": [
     {
       "nome": "Flávio",
-      "cep": "09790-000",
-      "rua": "Avenida Albert Schweitzer",
-      "numero": "490",
+      "cep": "09890-430",
+      "rua": "Rua Professor Rubião Meira",
+      "numero": "270",
       "id": 4
     },
     {
       "nome": "Jonathan",
-      "cep": "09890-430",
-      "rua": "Rua Professor Rubião Meira",
-      "numero": "266",
+      "cep": "09725-780",
+      "rua": "Rua Rui Barbosa",
+      "numero": "184",
       "id": 9
     },
     {
       "nome": "Silvia",
-      "cep": "09890-430",
-      "rua": "Rua Professor Rubião Meira",
-      "numero": "266",
+      "cep": "09725-780",
+      "rua": "Rua Rui Barbosa",
+      "numero": "184",
       "id": 10
     },
     {
       "nome": "Antonia",
-      "cep": "09790-000",
-      "rua": "Avenida Albert Schweitzer",
-      "numero": "490",
+      "cep": "09890-430",
+      "rua": "Rua Professor Rubião Meira",
+      "numero": "270",
       "id": 11
     }
   ]

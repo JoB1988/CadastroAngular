@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastService } from './toast.service';
 import { BehaviorSubject } from 'rxjs';
-import { Toast } from './toast';
+import { Toast } from '../app.model';
 
 @Component({
   selector: 'app-toast',

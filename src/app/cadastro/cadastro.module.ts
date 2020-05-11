@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { ToastService } from '../shared/toast/toast.service';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = undefined;
 
@@ -22,6 +23,6 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = undefined;
     NgxMaskModule.forRoot(options),
   ],
   exports: [CadastroComponent],
-  providers: [CadastroService]
+  providers: [CadastroService, ToastService]
 })
 export class CadastroModule {}
