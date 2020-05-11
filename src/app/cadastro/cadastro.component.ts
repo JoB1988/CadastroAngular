@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { FormBuilder, FormGroup, Validators, NgForm, ValidationErrors, FormControl, AbstractControl } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -14,30 +14,32 @@ import { Cadastro } from '../shared/app.model';
 })
 export class CadastroComponent implements OnInit, OnDestroy {
 
-  // objeto inicial dos erros
-  private errorMessage = {
-    nome: undefined,
-    cep: undefined,
-    rua: undefined,
-    numero: undefined
-  };
-
   // regex
   private cepRegex = new RegExp(/\d{5}-?\d{3}/);
   private numeroRegex = new RegExp(/\d{1,5}/);
   private nomeRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
   private ruaRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ0-9ºª ]*$/);
 
-  // array de mensagens de erro, um para cada campo
-  public errorMessages$: BehaviorSubject<any> = new BehaviorSubject(this.errorMessage);
-
+  // variável do loading
   public carregando$: BehaviorSubject<string> = new BehaviorSubject('valor inicial');
 
   // formulário com a composição dos validadores
   public cadastroForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       pessoa: this.formBuilder.group({
-        nome: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(this.nomeRegex)])],
+        nome: [
+          '',
+          {
+            validators: [
+              Validators.compose([
+                Validators.required, Validators.minLength(2),
+                Validators.pattern(this.nomeRegex)
+              ])
+            ],
+            asyncValidators: this.nomeValidation.bind(this),
+            updateOn: 'blur'
+          }
+        ],
         cep: ['', Validators.compose([Validators.required, Validators.pattern(this.cepRegex), Validators.maxLength(9)])],
         rua: ['', Validators.compose([Validators.required, Validators.pattern(this.ruaRegex)])],
         numero: ['', Validators.compose([Validators.required, Validators.pattern(this.numeroRegex)])],
@@ -51,7 +53,6 @@ export class CadastroComponent implements OnInit, OnDestroy {
     if (!this.cadastroForm$.value.valid) {
       return;
     }
-    this.errorMessages$.next(this.errorMessage);
   });
 
   public cadastros$ = new BehaviorSubject([]);
@@ -116,7 +117,6 @@ export class CadastroComponent implements OnInit, OnDestroy {
       id: cadastro.id
     });
     this.nameInput.nativeElement.focus();
-    this.errorMessages$.next(this.errorMessage);
   }
 
   /*esse método foca o input nome, da a opção de saveForm, reseta os valores do form e dá aos
@@ -126,7 +126,6 @@ export class CadastroComponent implements OnInit, OnDestroy {
     this.nameInput.nativeElement.focus();
     this.option$.next('saveForm');
     this.form.resetForm();
-    this.errorMessages$.next(this.errorMessage);
   }
 
   /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar
@@ -145,7 +144,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
         this.updateTable(formcadastrovalue, response);
         this.cleanForm();
       },
-      error => { 
+      error => {
         console.log(error);
         this.spinner.hide();
         this.toast.toast$.next({ message: 'Erro ao salvar', show: true, type: 'error' });
@@ -183,7 +182,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
         this.toast.toast$.next({ message: 'Removido com sucesso', show: true, type: 'success' });
         this.cadastros$.value.splice(arrayIndex, 1);
       },
-      error => { 
+      error => {
         console.log(error);
         this.spinner.hide();
         this.toast.toast$.next({ message: 'Erro ao remover', show: true, type: 'error' });
@@ -230,9 +229,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
     this.cadastroService.getAddress(cep).subscribe(
       direction => {
         if (direction.erro === true) {
-          this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'cep não encontrado' });
-        } else {
-          this.errorMessages$.next({ ...this.errorMessages$.value, cep: undefined, rua: undefined });
+          this.cadastroForm$.value.controls.pessoa['controls'].cep.errors = 'cep não encontrado';
         }
         this.cadastroForm$.value.controls.pessoa['controls'].rua.setValue(
           direction.logradouro
@@ -240,7 +237,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
         this.spinner.hide();
       },
       error => {
-        this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'erro ao buscar cep' });
+        this.cadastroForm$.value.controls.pessoa['controls'].cep.errors = 'erro ao buscar cep';
         this.spinner.hide();
       });
   }
@@ -251,9 +248,9 @@ export class CadastroComponent implements OnInit, OnDestroy {
   */
   private cepValidation(value) {
     if (value.length !== 9) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'digite 8 números' });
+      this.cadastroForm$.value.controls.pessoa['controls'].cep.errors = 'digite 8 números';
     } else if (!this.cepRegex.test(value)) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, cep: 'formato inválido' });
+      this.cadastroForm$.value.controls.pessoa['controls'].cep.errors = 'formato inválido';
     } else {
       this.getAddress(value);
     }
@@ -264,9 +261,9 @@ export class CadastroComponent implements OnInit, OnDestroy {
   */
   private numeroValidation(value) {
     if (!this.numeroRegex.test(value)) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, numero: 'apenas números' });
-    } else {
-      this.errorMessages$.next({ ...this.errorMessages$.value, numero: undefined });
+      this.cadastroForm$.value.controls.pessoa['controls'].numero.errors = 'apenas números';
+    } else if (value == 0) {
+      this.cadastroForm$.value.controls.pessoa['controls'].numero.errors = 'deve ser maior que 0';
     }
   }
 
@@ -275,9 +272,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
   */
   private ruaValidation(value) {
     if (!this.ruaRegex.test(value)) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, rua: 'formato inválido' });
-    } else {
-      this.errorMessages$.next({ ...this.errorMessages$.value, rua: undefined });
+      this.cadastroForm$.value.controls.pessoa['controls'].rua.errors = 'formato inválido';
     }
   }
 
@@ -287,11 +282,9 @@ export class CadastroComponent implements OnInit, OnDestroy {
   */
   private nomeValidation(value) {
     if (value.length < 2) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'mínimo de duas letras' });
+      this.cadastroForm$.value.controls.pessoa['controls'].nome.errors = 'mínimo de duas letras';
     } else if (!this.nomeRegex.test(value)) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, nome: 'somente letras' });
-    } else {
-      this.errorMessages$.next({ ...this.errorMessages$.value, nome: undefined });
+      this.cadastroForm$.value.controls.pessoa['controls'].nome.errors = 'somente letras';
     }
   }
 
@@ -302,9 +295,16 @@ export class CadastroComponent implements OnInit, OnDestroy {
   private nullInputVerify(inputName) {
     const VALUE = this.cadastroForm$.value.controls.pessoa['controls'][inputName].value;
     if (!VALUE) {
-      this.errorMessages$.next({ ...this.errorMessages$.value, [inputName]: '*campo obrigatório' });
+      this.cadastroForm$.value.controls.pessoa['controls'][inputName].errors = '*campo obrigatório';
     }
     return VALUE;
   }
 
+  // método que lança o error no span de erro
+  public getError(controlName: string): string | undefined {
+    const value = this.cadastroForm$.value.controls.pessoa['controls'][controlName].errors;
+    if (typeof value === 'string') {
+      return value;
+    }
+  }
 }

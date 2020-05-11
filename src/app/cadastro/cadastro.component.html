@@ -6,22 +6,22 @@
         <label class="group__form__pessoa__div__label" for="inputname">Nome</label>
         <input class="input" id="inputname" type="text" placeholder="nome" formControlName="nome" autofocus
           #nameInput (blur)="blurInput('nome')">
-        <span class="group__form__pessoa__div__error">{{ (errorMessages$ | async).nome}}</span>
+        <span class="group__form__pessoa__div__error">{{ getError('nome') }}</span>
       </div>
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputcep">Cep</label>
         <input class="input" id="inputcep" type="text" placeholder="cep" maxlength="9" formControlName="cep" mask="00000-000" [dropSpecialCharacters]="false" (blur)="blurInput('cep')" />
-        <span class="group__form__pessoa__div__error">{{(errorMessages$ | async).cep}}</span>
+        <span class="group__form__pessoa__div__error">{{ getError('cep') }}</span>
       </div>
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputrua">Rua</label>
         <input class="input" id="inputrua" type="text" placeholder="logradouro" formControlName="rua" (blur)="blurInput('rua')" />
-        <span class="group__form__pessoa__div__error">{{(errorMessages$ | async).rua}}</span>
+        <span class="group__form__pessoa__div__error">{{ getError('rua') }}</span>
       </div>
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputnum">Numero</label>
-        <input class="input" id="inputnum" type="text" minlength="1" maxlength="5" placeholder="numero" formControlName="numero" (blur)="blurInput('numero')" />
-        <span class="group__form__pessoa__div__error">{{(errorMessages$ | async).numero}}</span>
+        <input class="input" id="inputnum" type="text" minlength="1" maxlength="5" placeholder="numero" formControlName="numero" (blur)="blurInput('numero')" mask="00000"/>
+        <span class="group__form__pessoa__div__error">{{ getError('numero') }}</span>
       </div>
     </div>
     <div class="group__form__buttons">
