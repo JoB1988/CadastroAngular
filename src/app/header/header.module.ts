@@ -6,6 +6,6 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [HeaderComponent],
   imports: [CommonModule, RouterModule],
-  exports:[HeaderComponent]
+  exports: [HeaderComponent]
 })
 export class HeaderModule { }

@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { MoradorComponent } from './morador/morador.component';
 import { ReservasComponent } from './reservas/reservas.component';
 import { LogReservasComponent } from './log-reservas/log-reservas.component';
+import { AppGuardService } from './app.guard.service';
 
 const routes: Routes = [
   {
@@ -22,15 +23,18 @@ const routes: Routes = [
   },
   {
     path: 'cadastro',
-    component: CadastroComponent
+    component: CadastroComponent,
+    canActivate: [AppGuardService]
   },
   {
     path: 'areas-comum',
-    component: AreasComumComponent
+    component: AreasComumComponent,
+    canActivate: [AppGuardService]
   },
   {
     path: 'inventario',
-    component: InventarioComponent
+    component: InventarioComponent,
+    canActivate: [AppGuardService]
   },
   {
     path: 'login',
@@ -38,15 +42,18 @@ const routes: Routes = [
   },
   {
     path: 'moradores',
-    component: MoradorComponent
+    component: MoradorComponent,
+    canActivate: [AppGuardService]
   },
   {
     path: 'reservas',
-    component: ReservasComponent
+    component: ReservasComponent,
+    canActivate: [AppGuardService]
   },
   {
     path: 'historico-reservas',
-    component: LogReservasComponent
+    component: LogReservasComponent,
+    canActivate: [AppGuardService]
   },
   { path: '**', component: NotFoundComponent }
 ];
