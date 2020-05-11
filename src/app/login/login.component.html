@@ -1,14 +1,15 @@
 <div>
-    <form class="form" [formGroup]="loginForm$ | async" (ngSubmit)="onSubmit()">
+    <form class="form" [formGroup]="loginForm$ | async" #myForm="ngForm" (ngSubmit)="onSubmit()">
         <div class="form__inputs">
             <label for="user">Usuário</label>
-            <input type="text" id="user" formControlName="user" autofocus>
+            <input type="text" #nameInput id="user" formControlName="user">
             <label for="senha">Senha</label>
             <input type="password" id="senha" formControlName="password">
         </div>
         <div class="form__buttons">
-            <button type="reset">Limpar</button>
-            <button>Entrar</button>
+            <button type="reset" class="btn__default btn__clean" (click)="cleanForm()">Limpar</button>
+            <button class="btn__default btn__submit" [disabled]="(loginForm$ | async).invalid">Entrar</button>
         </div>
     </form>
 </div>
+<ngx-spinner type='timer'></ngx-spinner>

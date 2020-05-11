@@ -34,17 +34,9 @@
         }
 
         input[type="text"] {
-          width: 100%;
-          padding: 10px 10px;
           margin: 8px 0;
           display: inline-block;
-          border: 2px solid #ccc;
-          border-radius: 4px;
           box-sizing: border-box;
-          &:focus {
-            outline: none;
-            border-color: rgb(138, 5, 190);
-          }
         }
 
         @media (min-width: 881px) {
@@ -101,24 +93,6 @@
       padding: 20px 0;
       display: flex;
       justify-content: flex-end;
-
-      button {
-        width: 75px;
-        height: 30px;
-        border-radius: 4px;
-        outline: none;
-        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-
-        &:active {
-          box-shadow: none;
-        }
-
-        &:disabled {
-          background-color: $disabled-color;
-          color: white;
-          border: 1px solid $disabled-color;
-        }
-      }
 
       &__submit {
         border: 1px solid $success-color;

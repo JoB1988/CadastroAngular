@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { FormBuilder, FormGroup, Validators, NgForm, ValidationErrors, FormControl, AbstractControl } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from '../shared/toast/toast.service';
 import { Cadastro } from '../shared/app.model';
+import { Important } from '../shared/methods';
 
 @Component({
   selector: 'app-cadastro',
@@ -27,19 +28,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
   public cadastroForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       pessoa: this.formBuilder.group({
-        nome: [
-          '',
-          {
-            validators: [
-              Validators.compose([
-                Validators.required, Validators.minLength(2),
-                Validators.pattern(this.nomeRegex)
-              ])
-            ],
-            asyncValidators: this.nomeValidation.bind(this),
-            updateOn: 'blur'
-          }
-        ],
+        nome: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(this.nomeRegex)])],
         cep: ['', Validators.compose([Validators.required, Validators.pattern(this.cepRegex), Validators.maxLength(9)])],
         rua: ['', Validators.compose([Validators.required, Validators.pattern(this.ruaRegex)])],
         numero: ['', Validators.compose([Validators.required, Validators.pattern(this.numeroRegex)])],
@@ -57,6 +46,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   public cadastros$ = new BehaviorSubject([]);
   public option$: BehaviorSubject<string> = new BehaviorSubject('saveForm');
+
+  // variáveis do DOM
   @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
   @ViewChild('myForm', { static: true }) form: NgForm;
 
@@ -123,9 +114,8 @@ export class CadastroComponent implements OnInit, OnDestroy {
   spans de erro os valores iniciais do objeto, undefined
   */
   public cleanForm() {
-    this.nameInput.nativeElement.focus();
+    Important.cleanForm(this.nameInput, this.form);
     this.option$.next('saveForm');
-    this.form.resetForm();
   }
 
   /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar

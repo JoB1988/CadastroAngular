@@ -20,13 +20,13 @@
       </div>
       <div class="group__form__pessoa__div">
         <label class="group__form__pessoa__div__label" for="inputnum">Numero</label>
-        <input class="input" id="inputnum" type="text" minlength="1" maxlength="5" placeholder="numero" formControlName="numero" (blur)="blurInput('numero')" mask="00000"/>
+        <input class="input" id="inputnum" type="text" minlength="1" maxlength="5" placeholder="numero" formControlName="numero" (blur)="blurInput('numero')" mask="99999"/>
         <span class="group__form__pessoa__div__error">{{ getError('numero') }}</span>
       </div>
     </div>
     <div class="group__form__buttons">
-      <button type="reset" class="group__form__buttons__clean" (click)="cleanForm()">{{(option$ | async) === 'updateForm' ? 'Cancelar' : 'Limpar'}}</button>
-      <button type="submit" [disabled]="(cadastroForm$ | async).invalid" class="group__form__buttons__submit">Enviar</button>
+      <button type="reset" class="group__form__buttons__clean btn__default" (click)="cleanForm()">{{(option$ | async) === 'updateForm' ? 'Cancelar' : 'Limpar'}}</button>
+      <button type="submit" [disabled]="(cadastroForm$ | async).invalid" class="group__form__buttons__submit btn__default">Enviar</button>
     </div>
   </form>
 </div>

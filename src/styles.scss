@@ -1,3 +1,5 @@
+@import "app/shared/colors.scss";
+
 body {
     margin: 0;
     display: block;
@@ -6,6 +8,7 @@ body {
 a,
 button {
     text-decoration: none;
+    outline: none;
     &:hover {
         cursor: pointer;
     }
@@ -13,6 +16,55 @@ button {
         &:hover {
             cursor: default;
         }
+    }
+}
+button {
+    &:active {
+        box-shadow: none;
+    }
+}
+
+.btn__default {
+    width: 75px;
+    height: 30px;
+    outline: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+    &:active {
+        box-shadow: none;
+    }
+    &:disabled {
+        background-color: $disabled-color !important;
+        color: white;
+        border: 1px solid $disabled-color !important;
+    }
+}
+
+.btn__submit {
+    border: 1px solid $success-color;
+    background-color: $success-color;
+    color: white;
+}
+
+.btn__clean {
+    background-color: white;
+    border: 1px solid $warning-color;
+    color: $warning-color;
+    margin-right: 20px;
+
+    &:hover {
+        background-color: $warning-color;
+        color: white;
+    }
+}
+
+input {
+    padding: 10px 10px;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+    outline: none;
+    &:focus {
+        border-color: rgb(138, 5, 190);
     }
 }
 
