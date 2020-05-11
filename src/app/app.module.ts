@@ -13,9 +13,10 @@ import { LoginComponent } from './login/login.component';
 import { AreasComumComponent } from './areas-comum/areas-comum.component';
 import { ReservasComponent } from './reservas/reservas.component';
 import { InventarioComponent } from './inventario/inventario.component';
+import { LogReservasComponent } from './log-reservas/log-reservas.component';
 
 @NgModule({
-  declarations: [AppComponent, ToastComponent, MoradorComponent, ModalComponent, LoginComponent, AreasComumComponent, ReservasComponent, InventarioComponent],
+  declarations: [AppComponent, ToastComponent, MoradorComponent, ModalComponent, LoginComponent, AreasComumComponent, ReservasComponent, InventarioComponent, LogReservasComponent],
   imports: [AppRoutingModule, RouterModule, BrowserModule, HeaderModule, CadastroModule],
   providers: [],
   bootstrap: [AppComponent]
