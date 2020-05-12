@@ -1,4 +1,4 @@
-@import "app/shared/colors.scss";
+@import 'app/shared/colors.scss';
 
 body {
     margin: 0;
@@ -19,6 +19,8 @@ button {
     }
 }
 button {
+    background-color: transparent;
+    border: none;
     &:active {
         box-shadow: none;
     }
@@ -58,7 +60,7 @@ button {
     }
 }
 
-input {
+input, select {
     padding: 10px 10px;
     border-radius: 4px;
     border: 2px solid #ccc;

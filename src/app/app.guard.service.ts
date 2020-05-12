@@ -13,10 +13,11 @@ export class AppGuardService implements CanActivate {
     /* verifica se o usuário está logado, se sim devolve true, caso contrário false e redireciona
     para a página de login*/
     canActivate() {
+        return true;
         if (!this.appService.islogged$.value) {
             this.router.navigate(['/login']);
         }
-        return this.appService.islogged$.value;
+        // return this.appService.islogged$.value;
     }
 
 }

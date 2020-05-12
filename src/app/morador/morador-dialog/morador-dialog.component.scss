@@ -1,0 +1,51 @@
+section {
+    z-index: 1;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.25);
+    top: 0;
+    left: 0;
+    form {
+        max-width: 800px;
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: flex-end;
+        width: calc(100% - 40px);
+        box-sizing: border-box;
+        margin: auto;
+        border-radius: 4px;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
+        .form {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            justify-content: space-between;
+            div {
+                display: inline-grid;
+                height: 90px;
+                input {
+                    margin: 5px 0;
+                }
+            }
+            &__nome {
+                width: calc(75% - 20px);
+            }
+            &__data {
+                input {
+                    height: 16px;
+                }
+            }
+            &__tm25 {
+                width: 25%;
+            }
+            &__tm50 {
+                width: calc(50% - 40px);
+            }
+        }
+    }
+}
