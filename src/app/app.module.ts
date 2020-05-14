@@ -13,6 +13,7 @@ import { MoradorModule } from './morador/morador.module';
 import { ToastModule } from './shared/toast/toast.module';
 import { InventarioModule } from './inventario/inventario.module';
 import { AreasComumModule } from './areas-comum/areas-comum.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +28,8 @@ import { AreasComumModule } from './areas-comum/areas-comum.module';
     MoradorModule,
     ToastModule,
     InventarioModule,
-    AreasComumModule],
+    AreasComumModule,
+    NgbModule],
   providers: [AppGuardService],
   bootstrap: [AppComponent]
 })

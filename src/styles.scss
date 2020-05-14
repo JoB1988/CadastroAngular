@@ -7,7 +7,7 @@ body {
 }
 a,
 button {
-    text-decoration: none;
+    text-decoration: none !important;
     outline: none;
     &:hover {
         cursor: pointer;
@@ -19,6 +19,7 @@ button {
     }
 }
 button {
+    outline: none !important;
     background-color: transparent;
     border: none;
     &:active {
@@ -28,7 +29,7 @@ button {
 
 .btn__default {
     width: 75px;
-    height: 30px;
+    height: 35px;
     outline: none;
     border-radius: 4px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
@@ -96,3 +97,6 @@ input {
     margin-top: 40px;
     color: white;
 }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

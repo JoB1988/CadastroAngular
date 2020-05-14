@@ -1,3 +1,4 @@
+@import "../../shared/colors.scss";
 section {
     z-index: 1;
     width: 100%;
@@ -16,7 +17,7 @@ section {
         box-sizing: border-box;
         margin: auto;
         border-radius: 4px;
-        padding: 20px;
+        padding: 20px 20px 10px 20px;
         background-color: white;
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
         .form {
@@ -26,10 +27,46 @@ section {
             width: 100%;
             justify-content: space-between;
             div {
-                display: inline-grid;
-                height: 90px;
-                input {
+                &:not(:last-child) {
+                    height: 90px;
+                }
+                margin-bottom: 10px;
+                &:last-child {
+                    display: flex;
+                    justify-content: flex-end;
+                    button {
+                        margin-left: 20px;
+                        &:first-child {
+                            background-color: white;
+                            border: 1px solid $warning-color;
+                            color: $warning-color;
+                            &:hover {
+                                background-color: $warning-color;
+                                color: white;
+                            }
+                            color: $warning-color;
+                        }
+                        &:last-child {
+                            border: 1px solid $success-color;
+                            background-color: $success-color;
+                            color: white;
+                        }
+                    }
+                }
+                display: flex;
+                flex-wrap: wrap;
+                input,
+                select {
                     margin: 5px 0;
+                }
+                input,
+                span,
+                label,
+                select {
+                    width: 100%;
+                }
+                label {
+                    height: 20px;
                 }
             }
             &__nome {
@@ -43,8 +80,17 @@ section {
             &__tm25 {
                 width: 25%;
             }
+            &__tm20 {
+                width: 20%;
+            }
+            &__prof {
+                width: calc(40% - 60px);
+            }
             &__tm50 {
                 width: calc(50% - 40px);
+            }
+            &__tm100 {
+                width: 100%;
             }
         }
     }

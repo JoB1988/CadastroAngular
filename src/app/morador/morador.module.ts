@@ -4,6 +4,8 @@ import { MoradorComponent } from './morador.component';
 import { MoradorDialogComponent } from './morador-dialog/morador-dialog.component';
 import { MoradorTableComponent } from './morador-table/morador-table.component';
 import { MoradorDialogService } from './morador-dialog/morador-dialog.service';
+import { MoradorService } from './morador.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -12,9 +14,11 @@ import { MoradorDialogService } from './morador-dialog/morador-dialog.service';
     MoradorTableComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [MoradorComponent],
-  providers: [MoradorDialogService]
+  providers: [MoradorDialogService, MoradorService]
 })
 export class MoradorModule { }

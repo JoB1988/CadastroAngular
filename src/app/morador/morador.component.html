@@ -1,3 +1,2 @@
-<button (click)="show()">show</button>
-<button (click)="hide()">hide</button>
-<app-morador-dialog></app-morador-dialog>
+<button (click)="showDialog()">Novo Morador</button>
+<app-morador-table (someChange)="action($event)"></app-morador-table>

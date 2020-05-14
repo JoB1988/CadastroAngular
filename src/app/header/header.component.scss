@@ -1,11 +1,14 @@
 .navbar {
+    z-index: 1;
     top: 0;
     min-height: 50px;
     width: 100%;
     background-color: #a9a9a9;
+    padding: 0;
     position: fixed;
     display: flex;
     justify-content: space-between;
+    align-items: unset;
     div {
         display: flex;
         ul {

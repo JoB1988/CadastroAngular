@@ -1,12 +1,12 @@
-<section *ngIf="showComponent$ | async" (click)="hide()">
+<section (click)="endModal()">
     <!-- $event.stopPropagation() faz com que ao clicar no form, nada aconteça, mas se clicar na
     section, ele sair do modal, sem ele, mesmo clicando sobre o form, o modal fecha -->
-    <form action="" (click)="$event.stopPropagation()">
-        <button (click)="hide()"><i class="fas fa-times"></i></button>
-        <div class="form">
+    <form action="" [formGroup]="moradorForm$ | async" #myForm="ngForm" (click)="$event.stopPropagation()" (ngSubmit)="endModal()">
+        <button (click)="endModal()"><i class="fas fa-times"></i></button>
+        <div formGroupName="morador" class="form">
             <div class="form__nome">
                 <label for="nome">nome</label>
-                <input id="nome" type="text">
+                <input id="nome" type="text" formControlName="nome" #nameInput>
                 <span>erro</span>
             </div>
             <div class="form__data form__tm25">
@@ -14,17 +14,27 @@
                 <input id="nascimento" type="date">
                 <span>erro</span>
             </div>
-            <div class="form__tm50">
+            <div class="form__prof">
                 <label for="prof">profissão</label>
                 <input id="prof" type="text">
                 <span>erro</span>
             </div>
-            <div class="form__tm25">
+            <div class="form__tm20">
+                <label for="" id="civil">estado civil</label>
+                <select name="" id="civil">
+                    <option value="solteiro">solteiro(a)</option>
+                    <option value="casado">casado(a)</option>
+                    <option value="divorciado">divorciado(a)</option>
+                    <option value="viuvo">viúvo(a)</option>
+                </select>
+                <span>erro</span>
+            </div>
+            <div class="form__tm20">
                 <label for="cpf">cpf</label>
                 <input id="cpf" type="text">
                 <span>erro</span>
             </div>
-            <div class="form__tm25">
+            <div class="form__tm20">
                 <label for="rg">rg</label>
                 <input id="rg" type="text">
                 <span>erro</span>
@@ -44,15 +54,24 @@
                 <input id="email" type="email">
                 <span>erro</span>
             </div>
+            <div class="form__tm100">
+                <div class="form__tm25" style="margin-right:20px">
+                    <label for="bloco">bloco</label>
+                    <input id="bloco" type="text">
+                    <span>erro</span>
+                </div>
+                <div class="form__tm25">
+                    <label for="unidade">apartamento</label>
+                    <input id="unidade" type="text">
+                    <span>erro</span>
+                </div>
+            </div>
+            <div class="form__tm100">
+                <button type="button" class="btn__default"
+                    (click)="cleanForm()">Cancelar</button>
+                <button type="submit" [disabled]="(moradorForm$ | async).invalid"
+                    class="btn__default">Enviar</button>
+            </div>
         </div>
     </form>
 </section>
-<!-- Nome -->
-<!-- Nascimento -->
-<!-- CPF -->
-<!-- RG -->
-<!-- Estado Civil -->
-<!-- Profissão -->
-<!-- Telefone -->
-<!-- Celular -->
-<!-- Email -->
