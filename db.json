@@ -28,5 +28,63 @@
       "numero": "270",
       "id": 11
     }
+  ],
+  "morador": [
+    {
+      "nome": "Flávio Benevides",
+      "nascimento": "Tue May 12 2020 16:30:10 GMT-0300 (Horário Padrão de Brasília)",
+      "profissao": "aposentado",
+      "cpf": "12884626891",
+      "rg": "111111111",
+      "tel": "1141279338",
+      "cel": null,
+      "email": null,
+      "civil": "casado(a)",
+      "bloco":"A",
+      "unidade":201,
+      "id": 1
+    },
+    {
+      "nome": "Jonathan Fernandes Benevides",
+      "nascimento": "Tue May 12 2020 16:30:10 GMT-0300 (Horário Padrão de Brasília)",
+      "profissao": "Analista de Sistemas",
+      "cpf": "36419155894",
+      "rg": "479062870",
+      "tel": null,
+      "cel": "11953564438",
+      "email": "jonathanfbenevides@gmail.com",
+      "civil": "casado(a)",
+      "bloco":"B",
+      "unidade":1110,
+      "id": 2
+    },
+    {
+      "nome": "Silvia Cristiane Rosa Benevides",
+      "nascimento": "Tue May 12 2020 16:30:10 GMT-0300 (Horário Padrão de Brasília)",
+      "profissao": "Analista de Recursos Humanos",
+      "cpf": "31311796860",
+      "rg": "2222222222",
+      "tel": null,
+      "cel": "11983602192",
+      "email": "silvia@sekrondigital.com.br",
+      "civil": "casado(a)",
+      "bloco":"B",
+      "unidade":1110,
+      "id": 3
+    },
+    {
+      "nome": "Antonia Fernandes Benevides",
+      "nascimento": "Tue May 12 2020 16:30:10 GMT-0300 (Horário Padrão de Brasília)",
+      "profissao": "Aposentada",
+      "cpf": "93281404804",
+      "rg": "333333333",
+      "tel": "1141279338",
+      "cel": "11964490114",
+      "email": "silvia@sekrondigital.com.br",
+      "civil": "casado(a)",
+      "bloco":"A",
+      "unidade":201,
+      "id": 4
+    }
   ]
 }
