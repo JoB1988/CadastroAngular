@@ -16,3 +16,18 @@ export interface Cadastro {
     rua: string;
     numero: number;
 }
+
+export interface Morador {
+    id?: number;
+    nome: string;
+    nascimento: Date;
+    profissao: string;
+    cpf: string;
+    rg: string;
+    tel: string;
+    cel: string;
+    email: string;
+    civil: string;
+    bloco: string;
+    unidade: number;
+}
