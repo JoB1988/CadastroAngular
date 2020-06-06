@@ -1,17 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { CadastroComponent } from './cadastro/cadastro.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { AreasComumComponent } from './areas-comum/areas-comum.component';
-import { InventarioComponent } from './inventario/inventario.component';
 import { LoginComponent } from './login/login.component';
-import { MoradorComponent } from './morador/morador.component';
-import { ReservasComponent } from './reservas/reservas.component';
-import { LogReservasComponent } from './log-reservas/log-reservas.component';
-import { AppGuardService } from './app.guard.service';
 
-const routes: Routes = [
+const ROUTES: Routes = [
   {
     path: '',
     redirectTo: 'home',
@@ -23,18 +16,15 @@ const routes: Routes = [
   },
   {
     path: 'cadastro',
-    component: CadastroComponent,
-    canActivate: [AppGuardService]
+    loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule)
   },
   {
     path: 'areas-comum',
-    component: AreasComumComponent,
-    canActivate: [AppGuardService]
+    loadChildren: () => import('./areas-comum/areas-comum.module').then(m => m.AreasComumModule)
   },
   {
     path: 'inventario',
-    component: InventarioComponent,
-    canActivate: [AppGuardService]
+    loadChildren: () => import('./inventario/inventario.module').then(m => m.InventarioModule),
   },
   {
     path: 'login',
@@ -42,25 +32,17 @@ const routes: Routes = [
   },
   {
     path: 'moradores',
-    component: MoradorComponent,
-    canActivate: [AppGuardService]
+    loadChildren: () => import('./morador/morador.module').then(m => m.MoradorModule)
   },
   {
     path: 'reservas',
-    component: ReservasComponent,
-    canActivate: [AppGuardService]
-  },
-  {
-    path: 'historico-reservas',
-    component: LogReservasComponent,
-    canActivate: [AppGuardService],
-    data: { path: 'Histórico', lastPath: '/reservas'}
+    loadChildren: () => import('./reservas/reservas.module').then(m => m.ReservasModule)
   },
   { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

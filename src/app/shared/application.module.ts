@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HeaderModule } from '../header/header.module';
 import { CadastroModule } from '../cadastro/cadastro.module';
 import { ReservasModule } from '../reservas/reservas.module';
@@ -25,4 +25,11 @@ const COMPONENTS_MODULES = [
     imports: [...COMPONENTS_MODULES],
     exports: [...COMPONENTS_MODULES]
 })
-export class ApplicationModule { }
+export class ApplicationModule {
+    static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: ApplicationModule,
+            providers: []
+        };
+    }
+}

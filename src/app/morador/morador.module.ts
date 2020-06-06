@@ -4,7 +4,17 @@ import { MoradorDialogComponent } from './morador-dialog/morador-dialog.componen
 import { MoradorTableComponent } from './morador-table/morador-table.component';
 import { MoradorDialogService } from './morador-dialog/morador-dialog.service';
 import { MoradorService } from './morador.service';
-import { SharedModule } from '../shared/modules.module';
+import { SharedModule } from '../shared/shared.module';
+import { AppGuardService } from '../app.guard.service';
+import { Routes, RouterModule } from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: MoradorComponent,
+    canActivate: [AppGuardService]
+  }
+];
 
 @NgModule({
   declarations: [
@@ -12,7 +22,7 @@ import { SharedModule } from '../shared/modules.module';
     MoradorDialogComponent,
     MoradorTableComponent
   ],
-  imports: [SharedModule],
+  imports: [SharedModule, RouterModule.forChild(routes)],
   exports: [MoradorComponent],
   providers: [MoradorDialogService, MoradorService]
 })

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { HeaderComponent } from './header.component';
 import { AppService } from '../app.service';
-import { SharedModule } from '../shared/modules.module';
+import { SharedModule } from '../shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [HeaderComponent],
