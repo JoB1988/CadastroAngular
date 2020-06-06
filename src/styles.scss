@@ -1,4 +1,4 @@
-@import 'app/shared/colors.scss';
+@import "app/shared/colors.scss";
 
 body {
     margin: 0;
@@ -61,13 +61,17 @@ button {
     }
 }
 
-input, select {
-    padding: 10px 10px;
-    border-radius: 4px;
-    border: 2px solid #ccc;
+input,
+select {
+    padding: 10px 10px !important;
+    border-radius: 4px !important;
+    border: 2px solid #ccc !important;
     outline: none;
+    height: unset !important;
+    width: unset;
     &:focus {
-        border-color: rgb(138, 5, 190);
+        border-color: rgb(138, 5, 190) !important;
+        box-shadow: none !important;
     }
 }
 
@@ -97,4 +101,3 @@ input {
     margin-top: 40px;
     color: white;
 }
-
