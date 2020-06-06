@@ -8,6 +8,7 @@ import { InventarioModule } from '../inventario/inventario.module';
 import { AreasComumModule } from '../areas-comum/areas-comum.module';
 import { LoginModule } from '../login/login.module';
 import { HomeModule } from '../home/home.module';
+import { BreadcrumbModule } from './breadcrumb/breadcrumb.module';
 
 const COMPONENTS_MODULES = [
     HeaderModule,
@@ -18,7 +19,8 @@ const COMPONENTS_MODULES = [
     InventarioModule,
     AreasComumModule,
     LoginModule,
-    HomeModule
+    HomeModule,
+    BreadcrumbModule
 ];
 
 @NgModule({

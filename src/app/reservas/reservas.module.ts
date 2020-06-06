@@ -5,11 +5,14 @@ import { LogReservasComponent } from './log-reservas/log-reservas.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AppGuardService } from '../app.guard.service';
 
+
+
 const routes: Routes = [
   {
     path: '',
     component: ReservasComponent,
-    canActivate: [AppGuardService]
+    canActivate: [AppGuardService],
+    data: { stepName: 'reservas', stepUrl: '/reservas', lastStepUrl: '' }
   },
   {
     path: 'historico',
@@ -18,7 +21,7 @@ const routes: Routes = [
         path: '',
         component: LogReservasComponent,
         canActivate: [AppGuardService],
-        data: { path: 'Histórico', lastPath: '/reservas' }
+        data: { stepName: 'historico', stepUrl: '/historico', lastPath: '/reservas' }
       }
     ]
   }
