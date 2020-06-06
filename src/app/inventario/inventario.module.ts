@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { InventarioComponent } from './inventario.component';
-
-
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [InventarioComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [SharedModule],
   exports: [InventarioComponent]
 })
 export class InventarioModule { }

@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LogReservasComponent } from './log-reservas.component';
-
-
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [LogReservasComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [SharedModule],
   exports: [LogReservasComponent]
 })
 export class LogReservasModule { }

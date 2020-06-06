@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MoradorComponent } from './morador.component';
 import { MoradorDialogComponent } from './morador-dialog/morador-dialog.component';
 import { MoradorTableComponent } from './morador-table/morador-table.component';
 import { MoradorDialogService } from './morador-dialog/morador-dialog.service';
 import { MoradorService } from './morador.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [
@@ -13,11 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MoradorDialogComponent,
     MoradorTableComponent
   ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
+  imports: [SharedModule],
   exports: [MoradorComponent],
   providers: [MoradorDialogService, MoradorService]
 })

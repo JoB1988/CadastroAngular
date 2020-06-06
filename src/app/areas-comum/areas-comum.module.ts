@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AreasComumComponent } from './areas-comum.component';
-
-
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [AreasComumComponent],
   imports: [
-    CommonModule
+    SharedModule
   ],
   exports: [AreasComumComponent]
 })

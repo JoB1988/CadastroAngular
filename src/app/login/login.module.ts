@@ -1,18 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
 import { AppService } from '../app.service';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [LoginComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxSpinnerModule
-  ],
+  imports: [SharedModule],
   providers: [AppService],
   exports: [LoginComponent]
 })

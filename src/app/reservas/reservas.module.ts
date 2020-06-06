@@ -1,14 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReservasComponent } from './reservas.component';
-
-
+import { SharedModule } from '../shared/modules.module';
 
 @NgModule({
   declarations: [ReservasComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [SharedModule],
   exports: [ReservasComponent]
 })
 export class ReservasModule { }

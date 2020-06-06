@@ -8,18 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { ToastService } from '../shared/toast/toast.service';
+import { SharedModule } from '../shared/modules.module';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = undefined;
 
 @NgModule({
   declarations: [CadastroComponent],
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    NgxSpinnerModule,
+    SharedModule,
     NgxMaskModule.forRoot(options),
   ],
   exports: [CadastroComponent],
