@@ -53,7 +53,8 @@ const routes: Routes = [
   {
     path: 'historico-reservas',
     component: LogReservasComponent,
-    canActivate: [AppGuardService]
+    canActivate: [AppGuardService],
+    data: { path: 'Histórico', lastPath: '/reservas'}
   },
   { path: '**', component: NotFoundComponent }
 ];
