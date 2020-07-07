@@ -14,7 +14,7 @@
       <tr>
         <th *ngFor="let th of thead, let i = index ">{{th?.name}}<button *ngIf="i !== 6"
             [ngStyle]="{'opacity': th.arrowType !== 'fa-circle' ? '1' : null}" (click)="sort(th)">
-            <i class="fa {{th.arrowType}}" aria-hidden="true"></i>
+            <i class="fa {{th.arrowType}}" [ngStyle]="{'font-size': th.arrowType === 'fa-circle' ? '12px' : '14px' }" aria-hidden="true"></i>
           </button>
         </th>
       </tr>
