@@ -1,2 +1,40 @@
-<button (click)="showDialog()">Novo Morador</button>
-<app-morador-table (someChange)="action($event)"></app-morador-table>
+<section>
+  <div class="banner">
+    <div>
+      <h1>Moradores</h1>
+      <input type="text" (input)="intpuValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
+        [patterns]="pattern" #searchInput>
+    </div>
+    <button mat-button (click)="showDialog()"><i class="fas fa-user-plus"></i></button>
+  </div>
+  <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">
+  </mat-progress-bar>
+  <table class="table" *ngIf="(morador$ | async)">
+    <thead>
+      <tr>
+        <th *ngFor="let th of thead, let i = index ">{{th?.name}}<button *ngIf="i !== 6"
+            [ngStyle]="{'opacity': th.arrowType !== 'fa-circle' ? '1' : null}" (click)="sort(th)">
+            <i class="fa {{th.arrowType}}" aria-hidden="true"></i>
+          </button>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let morador of (morador$ | async), let i = index ">
+        <td>{{ morador?.nome }}</td>
+        <td>{{ morador?.cpf | mask: '000.000.000-00'}}</td>
+        <td>{{ morador?.tel ? (morador?.tel | mask: '(00) 0000-0000') : 'N/A' }}</td>
+        <td>{{ morador?.cel ? (morador?.cel| mask: '(00) 90000-0000') : 'N/A' }}</td>
+        <td>{{ morador?.bloco }}</td>
+        <td>{{ morador?.unidade }}</td>
+        <td>
+          <button (click)="buttonAction('update', i)" class="edit"><i class="fas fa-edit"></i></button>
+          <button (click)="buttonAction('remove', i)"><i class="fas fa-trash"></i></button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!(morador$ | async)">
+    Não há nada aqui
+  </div>
+</section>
+<!--  [disabled]="(option$ | async) === 'updateForm'" -->

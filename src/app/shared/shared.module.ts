@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 
 const ANGULAR_MODULES = [
     CommonModule,
@@ -12,11 +15,14 @@ const ANGULAR_MODULES = [
 ];
 
 const OTHER_MODULES = [
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatDialogModule,
+    MatProgressBarModule,
+    MatButtonModule
 ];
 
 @NgModule({
     imports: [...ANGULAR_MODULES, ...OTHER_MODULES],
     exports: [...ANGULAR_MODULES, ...OTHER_MODULES]
 })
-export class SharedModule {}
+export class SharedModule { }

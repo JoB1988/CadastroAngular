@@ -1,9 +1,10 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation, Inject } from '@angular/core';
 import { MoradorDialogService } from './morador-dialog.service';
 import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
 import { Morador } from 'src/app/shared/app.model';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-morador-dialog',
@@ -40,19 +41,22 @@ export class MoradorDialogComponent implements AfterViewInit {
 
   constructor(
     private moradorDialogService: MoradorDialogService,
-    public readonly formBuilder: FormBuilder
+    public readonly formBuilder: FormBuilder,
+    public dialogRef: MatDialogRef<MoradorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {}
   ) { }
 
   public ngAfterViewInit(): void {
     this.nameInput.nativeElement.focus();
     if (this.morador) {
-      console.log('tem morador')
+      console.log('tem morador');
     }
   }
 
   public endModal() {
     const MORADOR = this.moradorForm$.value.controls.morador.value;
     this.moradorDialogService.destroy$.next(MORADOR);
+    this.dialogRef.close();
   }
 
   public cleanForm() {
