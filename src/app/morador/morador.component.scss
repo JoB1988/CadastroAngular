@@ -5,30 +5,57 @@ section {
   @include mat-elevation(8, #303030, 0.9);
   .banner {
     display: flex;
+    flex-wrap: wrap;
     padding: 20px;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+    min-height: 100px;
 
     div {
+      &:first-child {
+        height: 100%;
+      }
+      display: flex;
+      flex-wrap: wrap;
       h1 {
         font-weight: 600;
         margin: 0;
+        width: 100%;
       }
       input {
+        width: 100%;
         border-radius: unset;
         border: 0px;
         border-bottom: 2px solid;
         padding-left: 0;
       }
+      &:last-child {
+        margin-top: 15px;
+      }
     }
 
     button {
-      width: 100px;
-      height: 40px;
+      flex-wrap: wrap;
+      display: flex;
+      align-content: center;
+      &:first-child {
+        width: 95px;
+        margin-right: 10px;
+        background-color: $white;
+        color: $main-theme-color;
+        border: 1px solid $main-theme-color;
+        i {
+          color: $main-theme-color;
+        }
+      }
+      color: $white;
+      width: 150px;
+      height: 35px;
       background-color: $success-color;
-      border-radius: 4px;
+      border-radius: 2px;
       i {
-        font-size: 1.4rem;
+        margin-left: 5px;
+        font-size: 1.1rem;
         color: $white;
       }
     }
@@ -71,7 +98,7 @@ section {
           max-width: 200px;
           min-width: 125px;
         }
-        
+
         &:nth-child(6) {
           max-width: 100px;
           min-width: 100px;
@@ -124,7 +151,7 @@ section {
 
           &:last-child {
             color: $error-color;
-            
+
             &:disabled {
               color: $disabled-color;
             }
@@ -147,9 +174,7 @@ section {
   }
 
   thead {
-
     tr {
-
       th {
         align-items: center;
         box-sizing: border-box;
@@ -168,14 +193,13 @@ section {
         }
 
         &:hover {
-
           button {
             opacity: 1;
           }
         }
       }
     }
-  }  
+  }
 }
 
 mat-progress-bar {

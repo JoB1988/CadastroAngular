@@ -45,25 +45,27 @@ export class MoradorComponent implements OnInit, OnDestroy {
     { name: '...' }
   ];
 
-  public intpuValue$: BehaviorSubject<string> = new BehaviorSubject('');
+  public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
   public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
+  public morador = [];
 
   private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
     if (!data) {
       return;
     }
     this.progressBar$.next({ mode: 'determinate', value: 100 });
+    this.morador = data;
     this.morador$.next(data);
   });
 
-  private intpuValueSubscription = this.intpuValue$.pipe(debounceTime(300)).subscribe((inputValue) => {
+  private intpuValueSubscription = this.inputValue$.pipe(debounceTime(300)).subscribe((inputValue) => {
     if (!inputValue) {
       this.pattern.M.pattern = this.alphaNumericPattern;
-      this.morador$.next(this.moradorService.morador$.value);
+      this.morador$.next(this.morador);
       return;
     }
-    this.morador$.next(this.morador$.value.filter((obejct) => obejct[this.onInputChange()].includes(inputValue)));
+    this.morador$.next(this.morador.filter((obejct) => obejct[this.onInputChange()].includes(inputValue)));
   });
 
   constructor(
@@ -82,7 +84,7 @@ export class MoradorComponent implements OnInit, OnDestroy {
   }
 
   public onInputChange(): string {
-    if (this.numbersPattern.test(this.intpuValue$.value)) {
+    if (this.numbersPattern.test(this.inputValue$.value)) {
       this.pattern.M.pattern = this.numbersPattern;
       return 'cpf';
     } else {
@@ -127,6 +129,9 @@ export class MoradorComponent implements OnInit, OnDestroy {
 
   public opacityStyle(arrowType): string {
     return arrowType !== 'fa-circle' ? 'opacity: 1' : null;
+  }
+
+  public filter() {
   }
 
   public buttonAction(option, value) {

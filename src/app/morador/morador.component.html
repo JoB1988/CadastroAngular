@@ -2,10 +2,13 @@
   <div class="banner">
     <div>
       <h1>Moradores</h1>
-      <input type="text" (input)="intpuValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
+      <input type="text" (input)="inputValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
         [patterns]="pattern" #searchInput>
     </div>
-    <button mat-button (click)="showDialog()"><i class="fas fa-user-plus"></i></button>
+    <div>
+      <button mat-button (click)="filter()">Filtrar<i class="fa fa-filter"></i></button>
+      <button mat-button (click)="showDialog()">Novo Morador<i class="fas fa-user-plus"></i></button>
+    </div>
   </div>
   <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">
   </mat-progress-bar>
