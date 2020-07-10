@@ -44,47 +44,28 @@ button {
             cursor: default;
         }
     }
-}
-button {
-    outline: none !important;
     background-color: transparent;
     border: none;
-    &:active {
-        box-shadow: none;
-    }
 }
 
 .btn__default {
-    width: 75px;
     height: 35px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
     outline: none;
-    border-radius: 4px;
+    align-items: center;
+    border: 1px solid;
+    font-size: 14px;
+    border-radius: 2px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
     &:active {
         box-shadow: none;
     }
     &:disabled {
         background-color: $disabled-color !important;
-        color: white;
-        border: 1px solid $disabled-color !important;
-    }
-}
-
-.btn__submit {
-    border: 1px solid $success-color;
-    background-color: $success-color;
-    color: white;
-}
-
-.btn__clean {
-    background-color: white;
-    border: 1px solid $warning-color;
-    color: $warning-color;
-    margin-right: 20px;
-
-    &:hover {
-        background-color: $warning-color;
-        color: white;
+        color: $white;
+        border-color: $disabled-color !important;
     }
 }
 
@@ -97,7 +78,7 @@ select {
     height: unset !important;
     width: unset;
     &:focus {
-        border-color: rgb(138, 5, 190) !important;
+        border-color: $main-theme-color-green !important;
         box-shadow: none !important;
     }
 }
@@ -110,34 +91,39 @@ ul,
 ol,
 label,
 a,
+h1,
+h2,
+h3,
 button {
     font-family: "roboto-medium" !important;
 }
-h1,
-h2,
-h3 {
-    font-family: "roboto-medium" !important;
-}
-td,
-th,
+
 input {
     font-family: "roboto-regular" !important;
 }
 
+p,
+tr,
+h1,
+h2,
+h3 {
+    color: $letter-color;
+}
+
 .spinner-msg {
     margin-top: 40px;
-    color: white;
+    color: $white;
 }
 
 html,
 body {
     height: 100%;
 }
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-}
 
 .mat-progress-bar-fill::after {
-    background-color: #000000 !important;
+    background-color: $main-theme-color-orange1 !important;
+}
+
+.mat-progress-bar.mat-accent .mat-progress-bar-buffer {
+    background-color: $main-theme-color-orange2;
 }

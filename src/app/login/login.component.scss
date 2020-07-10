@@ -1,3 +1,6 @@
+@import "../shared/mixins.scss";
+@import "../shared/colors.scss";
+
 div {
     display: flex;
     .form {
@@ -15,6 +18,18 @@ div {
         &__buttons {
             display: flex;
             justify-content: space-between;
+            button {
+                width: 90px;
+                &:first-child {
+                    @include btn__color__theme($main-theme-color-orange1, $white);
+                    @include btn__color__theme__hover($white, $main-theme-color-orange1);
+                    width: 80px;
+                    margin-right: 10px;
+                }
+                &:last-child {
+                    @include btn__color__submit($main-theme-color-green, $white);
+                }
+            }
         }
         div {
             width: 100%;

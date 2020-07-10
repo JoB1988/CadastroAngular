@@ -1,13 +1,15 @@
 <section>
   <div class="banner">
-    <div>
-      <h1>Moradores</h1>
-      <input type="text" (input)="inputValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
-        [patterns]="pattern" #searchInput>
-    </div>
-    <div>
-      <button mat-button (click)="filter()">Filtrar<i class="fa fa-filter"></i></button>
-      <button mat-button (click)="showDialog()">Novo Morador<i class="fas fa-user-plus"></i></button>
+    <h1>Moradores</h1>
+    <div class="header__content">
+      <div>
+        <input type="text" (input)="inputValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
+          [patterns]="pattern" #searchInput>
+      </div>
+      <div>
+        <button class="btn__default" (click)="filter()">Filtrar<i class="fa fa-filter"></i></button>
+        <button class="btn__default btn__primary" (click)="showDialog()">Novo Morador<i class="fas fa-user-plus"></i></button>
+      </div>
     </div>
   </div>
   <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">

@@ -1,63 +1,85 @@
 @import "~@angular/material/theming";
 @import "../shared/colors.scss";
+@import "../shared/mixins.scss";
 
 section {
   @include mat-elevation(8, #303030, 0.9);
+
   .banner {
     display: flex;
     flex-wrap: wrap;
-    padding: 20px;
-    justify-content: space-between;
-    align-items: flex-end;
     min-height: 100px;
+    padding: 20px;
 
-    div {
+    button {
+      @include btn__color__theme($main-theme-color-green, $white);
+      @include btn__color__theme__hover($white, $main-theme-color-green);
+
       &:first-child {
-        height: 100%;
+        margin-right: 10px;
+        width: 80px;
       }
-      display: flex;
-      flex-wrap: wrap;
-      h1 {
-        font-weight: 600;
-        margin: 0;
-        width: 100%;
-      }
-      input {
-        width: 100%;
-        border-radius: unset;
-        border: 0px;
-        border-bottom: 2px solid;
-        padding-left: 0;
-      }
+
       &:last-child {
-        margin-top: 15px;
+        width: 150px;
+      }
+
+      i {
+        font-size: 1.1rem;
+        margin-left: 5px;
       }
     }
 
-    button {
-      flex-wrap: wrap;
+    .header__content {
+      align-items: flex-end;
       display: flex;
-      align-content: center;
-      &:first-child {
-        width: 95px;
-        margin-right: 10px;
-        background-color: $white;
-        color: $main-theme-color;
-        border: 1px solid $main-theme-color;
-        i {
-          color: $main-theme-color;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      width: 100%;
+      div {
+        &:first-child {
+          width: 250px;
+          input {
+            border: 0px;
+            border-bottom: 2px solid $main-theme-color-green;
+            border-radius: unset;
+            box-sizing: border-box;
+            padding-left: 0;
+            width: 100%;
+          }
+        }
+
+        &:last-child {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          width: calc(100% - 270px);
+          @media (min-width: 320px) and (max-width: 589px) {
+            margin-top: 20px;
+          }
+          @media (max-width: 319px) {
+            margin-top: 20px;
+            button {
+              margin: 0;
+              width: 100%;
+              &:last-child {
+                margin-top: 10px;
+              }
+            }
+          }
+        }
+
+        @media (max-width: 589px) {
+          width: 100% !important;
         }
       }
-      color: $white;
-      width: 150px;
-      height: 35px;
-      background-color: $success-color;
-      border-radius: 2px;
-      i {
-        margin-left: 5px;
-        font-size: 1.1rem;
-        color: $white;
-      }
+    }
+
+    h1 {
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      margin: 0;
+      width: 100%;
     }
   }
 }
@@ -75,7 +97,6 @@ section {
 
     tr {
       display: flex;
-
       td,
       th {
         font-size: 14px;
@@ -110,10 +131,9 @@ section {
   tbody tr,
   thead tr th {
     &:hover {
-      font-weight: 600;
-      color: $main-theme-color;
+      color: $main-theme-color-orange1 !important;
       button {
-        color: $main-theme-color;
+        color: $main-theme-color-orange1;
       }
     }
   }

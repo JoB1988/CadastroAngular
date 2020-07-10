@@ -1,0 +1,29 @@
+@import "./colors.scss";
+
+@mixin btn__color__theme($primary, $secondary) {
+    border-color: $primary;
+    color: $primary;
+    background-color: $secondary;
+    i {
+        color: $primary;
+    }
+}
+
+@mixin btn__color__theme__hover($primary, $secondary) {
+    &:hover {
+        color: $primary;
+        background-color: $secondary;
+        i {
+            color: $primary;
+        }
+    }
+}
+
+@mixin btn__color__submit($primary, $secondary) {
+    border-color: $primary;
+    background-color: $primary;
+    color: $secondary;
+    i {
+        color: $secondary;
+    }
+}

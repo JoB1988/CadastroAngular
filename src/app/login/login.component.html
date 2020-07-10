@@ -7,8 +7,8 @@
             <input type="password" id="senha" formControlName="password">
         </div>
         <div class="form__buttons">
-            <button type="reset" class="btn__default btn__clean" (click)="cleanForm()">Limpar</button>
-            <button class="btn__default btn__submit" [disabled]="(loginForm$ | async).invalid">Entrar</button>
+            <button type="reset" class="btn__default" (click)="cleanForm()">Limpar</button>
+            <button class="btn__default" [disabled]="(loginForm$ | async).invalid">Entrar</button>
         </div>
     </form>
 </div>
