@@ -36,16 +36,27 @@ section {
       flex-wrap: wrap;
       justify-content: space-between;
       width: 100%;
+
       div {
         &:first-child {
           width: 250px;
           input {
             border: 0px;
-            border-bottom: 2px solid $main-theme-color-green;
+            border-bottom: 2px solid;
+            border-color: $unfocus-color;
             border-radius: unset;
             box-sizing: border-box;
             padding-left: 0;
             width: 100%;
+            &::placeholder {
+              color: $unfocus-color;
+              font-size: 14px;
+            }
+            &:focus {
+              &::placeholder {
+                color: transparent;
+              }
+            }
           }
         }
 
@@ -77,8 +88,8 @@ section {
 
     h1 {
       font-weight: 600;
-      letter-spacing: 0.7px;
       margin: 0;
+      letter-spacing: 0.7px;
       width: 100%;
     }
   }

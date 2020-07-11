@@ -171,5 +171,4 @@ export class MoradorComponent implements OnInit, OnDestroy {
         break;
     }
   }
-
 }
