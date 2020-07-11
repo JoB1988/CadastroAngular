@@ -140,7 +140,9 @@ export class MoradorComponent implements OnInit, OnDestroy {
 
   public showDialog(morador?: Morador) {
     const dialogRef = this.dialog.open(MoradorDialogComponent, {
-      width: '250px',
+      minWidth: 250,
+      maxWidth: 800,
+      width: '100%',
       data: {}
     });
     dialogRef.afterClosed().subscribe(result => {
