@@ -16,7 +16,7 @@
   </div>
   <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">
   </mat-progress-bar>
-  <table class="table">
+  <table class="table" [ngClass]="{ 'table__empty' : !(morador$ | async) }">
     <thead [attr.disabled]="!(morador$ | async)">
       <tr [ngClass]="{ 'table__th__disabled' : !(morador$ | async) }">
         <th *ngFor="let th of thead, let i = index">{{th?.name}}<button *ngIf="i !== 6 && (morador$ | async)"

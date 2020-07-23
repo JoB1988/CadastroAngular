@@ -16,7 +16,7 @@ section {
 
       &:first-child {
         margin-right: 10px;
-        width: 80px;
+        width: 90px;
       }
 
       &:last-child {
@@ -66,12 +66,24 @@ section {
         &:last-child {
           @include display-flex();
           justify-content: flex-end;
-          width: calc(100% - 270px);
-          @media (min-width: 320px) and (max-width: 589px) {
+          width: calc(100% - 275px);
+
+          @media (max-width: 604px) {
             margin-top: 20px;
           }
-          @media (max-width: 319px) {
-            margin-top: 20px;
+
+          @media (min-width: 380px) and (max-width: 604px) {
+            button {
+              &:first-child {
+                width: 33%;
+              }
+              &:last-child {
+                width: calc(67% - 10px);
+              }
+            }
+          }
+
+          @media (max-width: 379px) {
             button {
               margin: 0;
               width: 100%;
@@ -82,7 +94,7 @@ section {
           }
         }
 
-        @media (max-width: 589px) {
+        @media (max-width: 604px) {
           margin-top: 15px;
           width: 100% !important;
         }
@@ -102,8 +114,11 @@ section {
   border-spacing: 0;
   display: block;
   overflow: auto;
-  @media (max-width: 964px) {
-    height: 450px;
+
+  &__empty {
+    @media (max-width: 964px) {
+      height: 450px;
+    }
   }
 
   // Estilos Compartilhados
