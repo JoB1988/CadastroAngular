@@ -83,6 +83,7 @@ section {
         }
 
         @media (max-width: 589px) {
+          margin-top: 15px;
           width: 100% !important;
         }
       }
@@ -101,6 +102,9 @@ section {
   border-spacing: 0;
   display: block;
   overflow: auto;
+  @media (max-width: 964px) {
+    height: 450px;
+  }
 
   // Estilos Compartilhados
   tbody,
@@ -163,7 +167,24 @@ section {
     align-content: center;
     color: $unfocus-color;
     height: 400px;
+    margin: 0 auto;
+    max-width: 310px;
+    width: 100%;
     @include display-flex(center, center);
+
+    @media (max-width: 964px) {
+      height: 393.5px;
+      position: absolute;
+    }
+
+    @media (min-width: 400px) and (max-width: 964px) {
+      left: calc(50% - 155px);
+    }
+
+    @media (max-width: 399px) {
+      max-width: 250px;
+      left: calc(50% - 125px);
+    }
 
     i {
       font-size: 8rem;
