@@ -48,19 +48,21 @@ export class MoradorComponent implements OnDestroy {
   public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
   public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
-  public morador = [];
+  public morador = undefined;
 
   private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
     if (!data) {
-      this.moradorService.getMorador().subscribe();
-      return;
+      this.moradorService.getMorador().subscribe((response) => {
+        this.setArray(response);
+      }, (error) => {
+        this.progressBar$.next({ mode: 'determinate', value: 100 });
+      });
+    } else {
+      this.setArray(data);
     }
-    this.progressBar$.next({ mode: 'determinate', value: 100 });
-    this.morador = data;
-    this.morador$.next(data);
   });
 
-  private intpuValueSubscription = this.inputValue$.pipe(debounceTime(300)).subscribe((inputValue) => {
+  private inputValueSubscription = this.inputValue$.pipe(debounceTime(300)).subscribe((inputValue) => {
     if (!inputValue) {
       this.pattern.M.pattern = this.alphaNumericPattern;
       this.morador$.next(this.morador);
@@ -77,7 +79,7 @@ export class MoradorComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.moradorSubscription.unsubscribe();
-    this.intpuValueSubscription.unsubscribe();
+    this.inputValueSubscription.unsubscribe();
   }
 
   public onInputChange(): string {
@@ -176,5 +178,11 @@ export class MoradorComponent implements OnDestroy {
         console.log(event);
         break;
     }
+  }
+
+  private setArray(value) {
+    this.progressBar$.next({ mode: 'determinate', value: 100 });
+    this.morador = value;
+    this.morador$.next(value);
   }
 }

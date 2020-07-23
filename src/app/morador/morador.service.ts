@@ -32,20 +32,8 @@ export class MoradorService {
     if (id) {
       urlget += `/${id}`;
     }
-    return this.http
-      .get<any>(urlget, { headers: HEADERS })
-      .pipe(
-        map((response: any) => {
-          if (id) {
-            return response;
-          } else {
-            return this.morador$.next(response);
-          }
-        }),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(error);
-        })
-      );
+    return this.http.get<any>(urlget, { headers: HEADERS })
+      .pipe(map((response: any) => response), catchError((error: HttpErrorResponse) => throwError(error)));
   }
 
   public saveForm(morador: Morador): Observable<any> {

@@ -6,8 +6,7 @@ section {
   @include mat-elevation(8, #303030, 0.9);
 
   .banner {
-    display: flex;
-    flex-wrap: wrap;
+    @include display-flex();
     min-height: 100px;
     padding: 20px;
 
@@ -31,10 +30,7 @@ section {
     }
 
     .header__content {
-      align-items: flex-end;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
+      @include display-flex(flex-end, space-between);
       width: 100%;
 
       div {
@@ -43,13 +39,13 @@ section {
           input {
             border: 0px;
             border-bottom: 2px solid;
-            border-color: $unfocus-color;
+            border-color: $main-theme-color-green;
             border-radius: unset;
             box-sizing: border-box;
             padding-left: 0;
             width: 100%;
             &::placeholder {
-              color: $unfocus-color;
+              color: $main-theme-color-green;
               font-size: 14px;
             }
             &:focus {
@@ -57,12 +53,14 @@ section {
                 color: transparent;
               }
             }
+            &:disabled {
+              background-color: transparent;
+            }
           }
         }
 
         &:last-child {
-          display: flex;
-          flex-wrap: wrap;
+          @include display-flex();
           justify-content: flex-end;
           width: calc(100% - 270px);
           @media (min-width: 320px) and (max-width: 589px) {
@@ -139,10 +137,16 @@ section {
     }
   }
 
+  &__th__disabled {
+    th {
+      color: $disabled-color !important;
+    }
+  }
+
   tbody tr,
   thead tr th {
     &:hover {
-      color: $main-theme-color-orange1 !important;
+      color: $main-theme-color-orange1;
       button {
         color: $main-theme-color-orange1;
       }
@@ -150,6 +154,11 @@ section {
   }
 
   // Estilos Particulares
+
+  div {
+    height: 400px;
+    @include display-flex(center, center);
+  }
 
   tbody {
     padding-bottom: 30px;

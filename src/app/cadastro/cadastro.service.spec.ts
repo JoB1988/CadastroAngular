@@ -16,7 +16,7 @@ const CADASTRO = {
   cep: '09790000',
   rua: 'Av. Albert Schweitzer',
   numero: 490
-}
+};
 
 describe('CadastroService Success', () => {
   let httpClientSpy;
@@ -87,7 +87,7 @@ describe('CadastroService Success', () => {
 });
 
 xdescribe('CadastroService Error', () => {
-  
+
   let httpClientSpy;
   let service: CadastroService;
 

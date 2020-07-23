@@ -27,3 +27,11 @@
         color: $secondary;
     }
 }
+
+@mixin display-flex($vertical: unset, $horizontal: unset) {
+    align-items: $vertical;    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: $horizontal;
+}

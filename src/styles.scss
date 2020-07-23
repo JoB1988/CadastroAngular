@@ -59,13 +59,16 @@ button {
     font-size: 14px;
     border-radius: 2px;
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.1);
-    &:active {
+    &:active:not(:disabled) {
         box-shadow: none;
     }
     &:disabled {
         background-color: $disabled-color !important;
-        color: $white;
         border-color: $disabled-color !important;
+        color: $white !important;
+        i {
+            color: $white !important;
+        }
     }
 }
 

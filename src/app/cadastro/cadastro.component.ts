@@ -119,7 +119,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
   }
 
   /*ao submeter o formulário, ele chama o método conforme a opção de novo cadastro ou atualizar
-  existente passando por parametro o objeto, no success, ele chama o método de updateTable e 
+  existente passando por parametro o objeto, no success, ele chama o método de updateTable e
   chama o método cleanForm, no error não faz nada. No inicio da chamada do método,
   o spinner é mostrado na tela, no fim das requisições é escondido. o Toast é chamado ao fim de
   cada operação.*/
@@ -144,7 +144,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
 
   /*verifica se a opção é de edição do objeto, se sim, percorre o array com filter, se o id do
   objeto cadastro for igual ao id do objeto antigo, o arrayposition recebe esse index, depois
-  no array, vai lá no index que quer alterar e dá o valor do newCadastro, caso a opção não seja 
+  no array, vai lá no index que quer alterar e dá o valor do newCadastro, caso a opção não seja
   atualizar o form, o array recebe um novo cadastro
   */
   public updateTable(oldValue?: Cadastro, newCadastro?: Cadastro) {
