@@ -4,11 +4,17 @@ section {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    padding-top: 10px;
+    padding-top: 30px;
     background-color: $main-theme-color-orange1;
-    button {
-        margin-right: 4px;
-        margin-bottom: 7px;
+    > button {
+        background-color: $main-theme-color-orange1;
+        border-radius: 15px;
+        color: white;
+        height: 30px;
+        left: calc(50% + 380px);
+        margin-top: -40px;
+        position: absolute;
+        width: 30px;
         i {
             font-size: 20px;
         }
@@ -25,7 +31,8 @@ section {
             div {
                 height: 100px;
                 display: grid;
-                label, span {
+                label,
+                span {
                     display: flex;
                     align-items: center;
                 }

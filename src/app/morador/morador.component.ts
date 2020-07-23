@@ -12,7 +12,7 @@ import { debounceTime } from 'rxjs/operators';
   templateUrl: './morador.component.html',
   styleUrls: ['./morador.component.scss'],
 })
-export class MoradorComponent implements OnInit, OnDestroy {
+export class MoradorComponent implements OnDestroy {
 
   //#region mascara
 
@@ -52,6 +52,7 @@ export class MoradorComponent implements OnInit, OnDestroy {
 
   private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
     if (!data) {
+      this.moradorService.getMorador().subscribe();
       return;
     }
     this.progressBar$.next({ mode: 'determinate', value: 100 });
@@ -74,10 +75,6 @@ export class MoradorComponent implements OnInit, OnDestroy {
     private readonly toastService: ToastService,
   ) { }
 
-  public ngOnInit(): void {
-    this.moradorService.getMorador().subscribe();
-  }
-
   public ngOnDestroy(): void {
     this.moradorSubscription.unsubscribe();
     this.intpuValueSubscription.unsubscribe();
@@ -93,7 +90,29 @@ export class MoradorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public sort(th: any) {
+  // #region sort
+  /* Método que ordena de forma decrescente */
+  private sortDec(thName) {
+    this.morador$.value.sort((a, b) => {
+      if (a[thName] < b[thName]) {
+        return -1;
+      }
+      return 1;
+    });
+  }
+
+  /* Método que ordena de forma crescente */
+  private sortAsc(thName) {
+    this.morador$.value.sort((a, b) => {
+      if (a[thName] > b[thName]) {
+        return -1;
+      }
+      return 1;
+    });
+  }
+
+  /* Método que ajusta as setas da table */
+  public onSort(th: any) {
     this.thead.forEach(element => {
       if (element.name === th.name) {
         if (element.arrowType === 'fa-circle' || element.arrowType === 'fa-arrow-down') {
@@ -108,45 +127,30 @@ export class MoradorComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  private sortDec(thName) {
-    this.morador$.value.sort((a, b) => {
-      if (a[thName] < b[thName]) {
-        return -1;
-      }
-      return 1;
-    });
-  }
-
-  private sortAsc(thName) {
-    this.morador$.value.sort((a, b) => {
-      if (a[thName] > b[thName]) {
-        return -1;
-      }
-      return 1;
-    });
-  }
-
-  public opacityStyle(arrowType): string {
-    return arrowType !== 'fa-circle' ? 'opacity: 1' : null;
-  }
+  //#endregion
 
   public filter() {
   }
 
   public buttonAction(option, value) {
-    console.log(option, value);
   }
 
-  public showDialog(morador?: Morador) {
+  public showDialog(morador?: Morador, edit?: boolean) {
     const dialogRef = this.dialog.open(MoradorDialogComponent, {
       minWidth: 250,
       maxWidth: 800,
       width: '100%',
-      data: {}
+      height: '500px',
+      data: morador
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Fechou');
+    dialogRef.afterClosed().subscribe(response => {
+      if (response.modificated) {
+        if (edit) {
+          this.moradorService.updateForm(morador);
+        } else {
+          this.moradorService.saveForm(morador);
+        }
+      }
     });
   }
 

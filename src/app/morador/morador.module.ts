@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MoradorComponent } from './morador.component';
 import { MoradorDialogComponent } from './morador-dialog/morador-dialog.component';
-import { MoradorDialogService } from './morador-dialog/morador-dialog.service';
 import { MoradorService } from './morador.service';
 import { SharedModule } from '../shared/shared.module';
 import { AppGuardService } from '../app.guard.service';
@@ -25,6 +24,6 @@ const routes: Routes = [
   ],
   imports: [SharedModule, RouterModule.forChild(routes), NgxMaskModule.forRoot()],
   exports: [MoradorComponent],
-  providers: [MoradorDialogService, MoradorService]
+  providers: [MoradorService]
 })
 export class MoradorModule { }
