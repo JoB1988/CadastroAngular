@@ -3,8 +3,9 @@
     <h1>Moradores</h1>
     <div class="header__content">
       <div>
-        <input type="text" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)" (ngModelChange)="onInputChange()" [mask]="mask"
-          [patterns]="pattern" placeholder="digite sua busca aqui..." #searchInput>
+        <input type="text" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
+          (ngModelChange)="onInputChange()" [mask]="mask" [patterns]="pattern" placeholder="digite sua busca aqui..."
+          #searchInput>
       </div>
       <div>
         <button class="btn__default" [disabled]="!(morador$ | async)">Filtrar<i class="fa fa-filter"></i></button>
@@ -40,7 +41,8 @@
       </tr>
     </tbody>
     <div *ngIf="!(morador$ | async)">
-      Não há nada aqui
+      <i class="fa fa-list" aria-hidden="true"></i>
+      <span>Nenhum morador encontrado...</span>
     </div>
   </table>
 </section>

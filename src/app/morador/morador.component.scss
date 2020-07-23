@@ -55,6 +55,10 @@ section {
             }
             &:disabled {
               background-color: transparent;
+              border-color: $unfocus-color;
+              &::placeholder {
+                color: $unfocus-color;
+              }
             }
           }
         }
@@ -156,8 +160,24 @@ section {
   // Estilos Particulares
 
   div {
+    align-content: center;
+    color: $unfocus-color;
     height: 400px;
     @include display-flex(center, center);
+
+    i {
+      font-size: 8rem;
+      height: 125px;
+    }
+
+    span {
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+      text-align: center;
+      width: 100%;
+    }
   }
 
   tbody {
