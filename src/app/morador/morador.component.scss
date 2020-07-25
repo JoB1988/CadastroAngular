@@ -140,8 +140,8 @@ section {
 
         &:last-child {
           padding-right: 20px;
-          max-width: 75px;
-          min-width: 75px;
+          max-width: 125px;
+          min-width: 125px;
         }
 
         &:nth-child(2),
@@ -242,6 +242,10 @@ section {
           border: none;
 
           &:first-child {
+            color: $wine;
+          }
+
+          &:nth-child(2) {
             color: $warning-color;
           }
 

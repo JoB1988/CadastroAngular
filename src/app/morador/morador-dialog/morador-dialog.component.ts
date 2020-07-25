@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Inject, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
@@ -10,7 +10,9 @@ import { MoradorService } from '../morador.service';
   templateUrl: './morador-dialog.component.html',
   styleUrls: ['./morador-dialog.component.scss']
 })
-export class MoradorDialogComponent implements AfterViewInit {
+export class MoradorDialogComponent {
+
+  public image = null;
 
   // variáveis do DOM
   @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
@@ -20,8 +22,9 @@ export class MoradorDialogComponent implements AfterViewInit {
   public moradorForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       personal: this.formBuilder.group({
-        nome: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        nascimento: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        photo: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        name: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        born: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
         cpf: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
         rg: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
         tel: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
@@ -31,11 +34,16 @@ export class MoradorDialogComponent implements AfterViewInit {
         id: ['']
       }),
       profesional: this.formBuilder.group({
-        profissao: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        profession: [''],
+        salary: [''],
       }),
       condominium: this.formBuilder.group({
-        bloco: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        unidade: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        block: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        unit: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+      }),
+      familiar: this.formBuilder.group({
+        wife: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        children: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
       })
     })
   );
@@ -47,8 +55,17 @@ export class MoradorDialogComponent implements AfterViewInit {
     @Inject(MAT_DIALOG_DATA) private morador: {}
   ) { }
 
-  public ngAfterViewInit(): void {
-    this.nameInput.nativeElement.focus();
+  public getInputFile(event) {
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]); // Read file as data url
+      reader.onloadend = (e) => { // function call once readAsDataUrl is completed
+        if (event.target.files[0].size < 5000000) {
+          this.image = e.target.result;
+          // console.log(this.moradorForm$.value.controls.personal['controls'].photo.setValue(e.target.result))
+        }
+      };
+    }
   }
 
   public endModal() {
@@ -60,3 +77,6 @@ export class MoradorDialogComponent implements AfterViewInit {
     Important.cleanForm(this.nameInput, this.form);
   }
 }
+
+// Estorar erro quando a imagem for muito grande
+// Settar o valor no form do binario

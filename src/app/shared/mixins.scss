@@ -29,9 +29,24 @@
 }
 
 @mixin display-flex($vertical: unset, $horizontal: unset) {
-    align-items: $vertical;    
+    align-items: $vertical;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: $horizontal;
+}
+
+@mixin form-buttons() {
+    button {
+        width: 90px;
+        &:first-child {
+            @include btn__color__theme($main-theme-color-orange1, $white);
+            @include btn__color__theme__hover($white, $main-theme-color-orange1);
+            width: 80px;
+            margin-right: 10px;
+        }
+        &:last-child {
+            @include btn__color__submit($main-theme-color-green, $white);
+        }
+    }
 }

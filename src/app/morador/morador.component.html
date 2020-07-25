@@ -36,7 +36,8 @@
         <td>{{ morador?.bloco }}</td>
         <td>{{ morador?.unidade }}</td>
         <td>
-          <button (click)="showDialog(morador, true)" class="edit"><i class="fas fa-edit"></i></button>
+          <button (click)="downloadAsPDF(morador)"><i class="far fa-file-pdf"></i></button>
+          <button (click)="showDialog(morador, true)"><i class="fas fa-edit"></i></button>
           <button (click)="buttonAction('remove', i)"><i class="fas fa-trash"></i></button></td>
       </tr>
     </tbody>

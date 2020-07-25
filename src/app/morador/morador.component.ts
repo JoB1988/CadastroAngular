@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MoradorDialogComponent } from './morador-dialog/morador-dialog.component';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-morador',
@@ -184,5 +185,52 @@ export class MoradorComponent implements OnDestroy {
     this.progressBar$.next({ mode: 'determinate', value: 100 });
     this.morador = value;
     this.morador$.next(value);
+  }
+
+  public downloadAsPDF(morador: Morador) {
+
+    const moradorPdf = new jsPDF({
+      orientation: 'p',
+      align: 'center',
+      unit: 'mm',
+      format: 'a4',
+      putOnlyUsedFonts: true,
+      floatPrecision: 16,
+      lineHeightFactor: 23.15
+    });
+
+    moradorPdf.setFontSize(16);
+    moradorPdf.text([
+      'Condomínio Start SBC'
+    ], 15, 15);
+    moradorPdf.setFontSize(12);
+    moradorPdf.text([
+      'Morador: ' + morador.nome
+    ], 15, 25);
+
+    moradorPdf.save(`${morador.nome.replace(' ', '')}.pdf`);
+
+    // var doc = new jsPDF();
+
+    // doc.text(20, 20, 'This is the default font.');
+
+    // doc.setFont("courier");
+    // doc.setFontType("normal");
+    // doc.text(20, 30, 'This is courier normal.');
+
+    // doc.setFont("times");
+    // doc.setFontType("italic");
+    // doc.text(20, 40, 'This is times italic.');
+
+    // doc.setFont("helvetica");
+    // doc.setFontType("bold");
+    // doc.text(20, 50, 'This is helvetica bold.');
+
+    // doc.setFont("courier");
+    // doc.setFontType("bolditalic");
+    // doc.text(20, 60, 'This is courier bolditalic.');
+
+    // // Save the PDF
+    // doc.save('document.pdf');
   }
 }
