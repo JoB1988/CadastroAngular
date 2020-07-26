@@ -2,7 +2,7 @@
     <button (click)="endModal()" aria-label="fechar modal"><i class="fas fa-times"></i></button>
 </div>
 <section class="section__main" role="main">
-    <form [formGroup]="moradorForm$ | async" class="form" #myForm="ngForm" role="form" (ngSubmit)="endModal()">
+    <form [formGroup]="moradorForm$ | async" class="form" #myForm="ngForm" role="form" (ngSubmit)="endModal(true)">
         <section formGroupName="personal" aria-describedby="dados_pessoais" class="form__personal" tabindex="0"
             role="group">
 
@@ -30,27 +30,27 @@
                     <span role="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__date">
-                    <label for="born">data de nascimento</label>
-                    <input id="born" type="date">
+                    <label for="bornDate">data de nascimento</label>
+                    <input id="bornDate" type="date" formControlName="bornDate">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__cpf">
                     <label for="cpf">cpf</label>
-                    <input id="cpf" type="text">
+                    <input id="cpf" type="text" formControlName="cpf">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__rg">
                     <label for="rg">rg</label>
-                    <input id="rg" type="text">
+                    <input id="rg" type="text" formControlName="rg">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__civil">
-                    <label for="civil">estado civil</label>
-                    <select name="civil" id="civil">
-                        <option value="solteiro">solteiro(a)</option>
-                        <option value="casado">casado(a)</option>
-                        <option value="divorciado">divorciado(a)</option>
-                        <option value="viuvo">viúvo(a)</option>
+                    <label for="civilStatus">estado civil</label>
+                    <select name="civilStatus" id="civilStatus" #civilStatus formControlName="civilStatus" (change)="civilStateChange(civilStatus.value)">
+                        <option value="solteiro(a)">solteiro(a)</option>
+                        <option value="casado(a)">casado(a)</option>
+                        <option value="divorciado(a)">divorciado(a)</option>
+                        <option value="viuvo(a)">viúvo(a)</option>
                     </select>
                     <span roler="alert">erro</span>
                 </div>
@@ -59,23 +59,23 @@
             <div class="form__personal__group2">
                 <div class="form__control form__personal__tel">
                     <label for="tel">telefone</label>
-                    <input id="tel" type="tel">
+                    <input id="tel" type="tel" formControlName="tel">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__cel">
                     <label for="cel">celular</label>
-                    <input id="cel" type="tel">
+                    <input id="cel" type="tel" formControlName="cel">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__email">
                     <label for="email">email</label>
-                    <input id="email" type="email">
+                    <input id="email" type="email" formControlName="email">
                     <span roler="alert">erro</span>
                 </div>
             </div>
         </section>
 
-        <section formGroupName="profesional" aria-describedby="dados_profisionais" class="form__profesional"
+        <section formGroupName="professional" aria-describedby="dados_profisionais" class="form__profesional"
             role="group">
             <h2 id="dados_profisionais" aria-label="Nesta seção,
             você poderá cadastrar os dados profissionais do morador, tais como: profissão e salário respectivamente.">
@@ -113,21 +113,21 @@
             você poderá cadastrar os dados familiares do morador, tais como: Conjuge e Dependentes respectivamente.">
                 Dados Familiar</h2>
             <div class="form__control">
-                <label for="wife">Conjuge</label>
-                <input id="wife" type="text" formControlName="wife">
+                <label for="partner">Conjuge</label>
+                <input id="partner" type="text" formControlName="partner">
                 <span roler="alert">erro</span>
             </div>
             <div class="form__control">
-                <label for="children">Dependentes</label>
-                <input id="children" type="text" formControlName="children">
+                <label for="dependents">Dependentes</label>
+                <input id="dependents" type="text" formControlName="dependents">
                 <span roler="alert">erro</span>
             </div>
         </section>
 
         <div class="form__buttons">
-            <button type="button" class="btn__default" (click)="cleanForm()">{{resetButton}}</button>
+            <button type="button" class="btn__default" #btnClean (click)="cleanForm(btnClean.innerHTML)">{{ morador?.id ? 'Cancelar' : 'Limpar'}}</button>
             <button type="submit" class="btn__default" [disabled]="(moradorForm$ | async).invalid"
-                aria-label="submeter">Enviar</button>
+                aria-label="salvar registro">Enviar</button>
         </div>
     </form>
 </section>

@@ -37,10 +37,9 @@ export class MoradorService {
   }
 
   public saveForm(morador: Morador): Observable<any> {
-    return this.http.post<any>(URLMORADOR, morador).pipe(
-      map((response: any) => {
-        return response;
-      }),
+    console.log(morador)
+    return this.http.post<Morador>(URLMORADOR, morador).pipe(
+      map((response: any) => response),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       })
@@ -48,10 +47,8 @@ export class MoradorService {
   }
 
   public updateForm(morador: Morador): Observable<any> {
-    return this.http.put<any>(`${URLMORADOR}/${morador.id}`, morador).pipe(
-      map((response: any) => {
-        return response;
-      }),
+    return this.http.put<Morador>(`${URLMORADOR}/${morador.id}`, morador).pipe(
+      map((response: any) => response),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       })

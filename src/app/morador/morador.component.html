@@ -9,7 +9,7 @@
       </div>
       <div>
         <button class="btn__default" [disabled]="!(morador$ | async)">Filtrar<i class="fa fa-filter"></i></button>
-        <button class="btn__default btn__primary" (click)="showDialog()">Novo Morador<i
+        <button class="btn__default btn__primary" (click)="action()">Novo Morador<i
             class="fas fa-user-plus"></i></button>
       </div>
     </div>
@@ -29,16 +29,16 @@
     </thead>
     <tbody *ngIf="(morador$ | async)">
       <tr *ngFor="let morador of (morador$ | async), let i = index ">
-        <td>{{ morador?.nome }}</td>
-        <td>{{ morador?.cpf | mask: '000.000.000-00'}}</td>
-        <td>{{ morador?.tel ? (morador?.tel | mask: '(00) 0000-0000') : 'N/A' }}</td>
-        <td>{{ morador?.cel ? (morador?.cel| mask: '(00) 90000-0000') : 'N/A' }}</td>
-        <td>{{ morador?.bloco }}</td>
-        <td>{{ morador?.unidade }}</td>
+        <td>{{ morador?.personal?.name }}</td>
+        <td>{{ morador?.personal?.cpf | mask: '000.000.000-00'}}</td>
+        <td>{{ morador?.personal?.tel ? (morador?.personal?.tel | mask: '(00) 0000-0000') : 'N/A' }}</td>
+        <td>{{ morador?.personal?.cel ? (morador?.personal?.cel| mask: '(00) 90000-0000') : 'N/A' }}</td>
+        <td>{{ morador?.condominium?.block }}</td>
+        <td>{{ morador?.condominium?.unit }}</td>
         <td>
           <button (click)="downloadAsPDF(morador)"><i class="far fa-file-pdf"></i></button>
-          <button (click)="showDialog(morador, true)"><i class="fas fa-edit"></i></button>
-          <button (click)="buttonAction('remove', i)"><i class="fas fa-trash"></i></button></td>
+          <button (click)="action(morador, i)"><i class="fas fa-edit"></i></button>
+          <button (click)="remove(i, morador.id)"><i class="fas fa-trash"></i></button></td>
       </tr>
     </tbody>
     <div *ngIf="!(morador$ | async)">
@@ -47,4 +47,3 @@
     </div>
   </table>
 </section>
-<!--  [disabled]="(option$ | async) === 'updateForm'" -->

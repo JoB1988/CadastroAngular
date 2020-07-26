@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MoradorService } from './morador.service';
 import { Morador } from '../shared/app.model';
 import { ToastService } from '../shared/toast/toast.service';
@@ -37,12 +37,12 @@ export class MoradorComponent implements OnDestroy {
 
   // Header
   public thead = [
-    { name: 'nome', arrowType: 'fa-circle' },
-    { name: 'cpf', arrowType: 'fa-circle' },
-    { name: 'tel', arrowType: 'fa-circle' },
-    { name: 'cel', arrowType: 'fa-circle' },
-    { name: 'bloco', arrowType: 'fa-circle' },
-    { name: 'unidade', arrowType: 'fa-circle' },
+    { name: 'nome', object: 'personal', attribute: 'name', arrowType: 'fa-circle' },
+    { name: 'cpf', object: 'personal', attribute: 'cpf', arrowType: 'fa-circle' },
+    { name: 'tel', object: 'personal', attribute: 'tel', arrowType: 'fa-circle' },
+    { name: 'cel', object: 'personal', attribute: 'cel', arrowType: 'fa-circle' },
+    { name: 'bloco', object: 'condominium', attribute: 'block', arrowType: 'fa-circle' },
+    { name: 'unidade', object: 'condominium', attribute: 'unit', arrowType: 'fa-circle' },
     { name: '...' }
   ];
 
@@ -95,9 +95,9 @@ export class MoradorComponent implements OnDestroy {
 
   // #region sort
   /* Método que ordena de forma decrescente */
-  private sortDec(thName) {
+  private sortDec(object, attribute) {
     this.morador$.value.sort((a, b) => {
-      if (a[thName] < b[thName]) {
+      if (a[object][attribute] < b[object][attribute]) {
         return -1;
       }
       return 1;
@@ -105,9 +105,9 @@ export class MoradorComponent implements OnDestroy {
   }
 
   /* Método que ordena de forma crescente */
-  private sortAsc(thName) {
+  private sortAsc(object, attribute) {
     this.morador$.value.sort((a, b) => {
-      if (a[thName] > b[thName]) {
+      if (a[object][attribute] > b[object][attribute]) {
         return -1;
       }
       return 1;
@@ -119,10 +119,10 @@ export class MoradorComponent implements OnDestroy {
     this.thead.forEach(element => {
       if (element.name === th.name) {
         if (element.arrowType === 'fa-circle' || element.arrowType === 'fa-arrow-down') {
-          this.sortDec(th.name);
+          this.sortDec(th.object, th.attribute);
           element.arrowType = 'fa-arrow-up';
         } else {
-          this.sortAsc(th.name);
+          this.sortAsc(th.object, th.attribute);
           element.arrowType = 'fa-arrow-down';
         }
       } else {
@@ -135,10 +135,28 @@ export class MoradorComponent implements OnDestroy {
   public filter() {
   }
 
-  public buttonAction(option, value) {
+  public remove(arrayPosition, moradorId) {
+    this.moradorService.delete(moradorId).subscribe((data) => {
+      console.log('removido com sucesso')
+      this.morador$.value.splice(arrayPosition, 1);
+    }, (error) => {
+      console.log('erro')
+    });
   }
 
-  public showDialog(morador?: Morador, edit?: boolean) {
+  public action(morador?: Morador, index?: any) {
+    if (index) {
+      this.moradorService.getMorador(morador.id).subscribe((moradorResponse: Morador) => {
+        this.showForm(morador, index);
+      }, error => {
+        console.log('Um erro ocorreu ao buscar o morador');
+      });
+    } else {
+      this.showForm(morador);
+    }
+  }
+
+  public showForm(morador: Morador, index?) {
     const dialogRef = this.dialog.open(MoradorDialogComponent, {
       minWidth: 250,
       maxWidth: 800,
@@ -146,39 +164,26 @@ export class MoradorComponent implements OnDestroy {
       height: '500px',
       data: morador
     });
-    dialogRef.afterClosed().subscribe(response => {
-      if (response.modificated) {
-        if (edit) {
-          this.moradorService.updateForm(morador);
-        } else {
-          this.moradorService.saveForm(morador);
-        }
+    dialogRef.afterClosed().subscribe((moradorForm: Morador) => {
+      if (!moradorForm) {
+        return;
+      }
+      if (moradorForm.id) {
+        this.moradorService.updateForm(moradorForm).subscribe((moradorResponse: Morador) => {
+          this.morador$.value[index] = moradorResponse;
+          console.log('Atualizado com sucesso')
+        }, (error) => {
+          console.log(error)
+        });
+      } else {
+        this.moradorService.saveForm(moradorForm).subscribe((moradorResponse: Morador) => {
+          this.morador$.value.push(moradorResponse);
+          console.log('Salvo com sucesso')
+        }, (error) => {
+          console.log(error)
+        });
       }
     });
-  }
-
-  public action(event) {
-    const ACTION = event.action.toLowerCase();
-    const ID = this.moradorService.morador$.value[event.arrayIndex].id;
-    switch (ACTION) {
-      case 'update':
-        this.moradorService.getMorador(ID).subscribe((morador: Morador) => {
-          this.showDialog(morador);
-        }, error => {
-          this.toastService.toast$.next({ message: 'Um erro ocorreu ao buscar o morador', type: 'error', show: true });
-        });
-        break;
-      case 'remove':
-        this.moradorService.getMorador(event.arrayIndex).subscribe((response) => {
-          this.toastService.toast$.next({ message: 'Morador removido com sucesso', type: 'success', show: true });
-        }, error => {
-          this.toastService.toast$.next({ message: 'Um erro ocorreu ao remover o morador', type: 'error', show: true });
-        });
-        break;
-      case 'more':
-        console.log(event);
-        break;
-    }
   }
 
   private setArray(value) {
@@ -205,10 +210,10 @@ export class MoradorComponent implements OnDestroy {
     ], 15, 15);
     moradorPdf.setFontSize(12);
     moradorPdf.text([
-      'Morador: ' + morador.nome
+      'Morador: ' + morador.personal.name
     ], 15, 25);
 
-    moradorPdf.save(`${morador.nome.replace(' ', '')}.pdf`);
+    moradorPdf.save(`${morador.personal.name.replace(' ', '')}.pdf`);
 
     // var doc = new jsPDF();
 
@@ -234,3 +239,8 @@ export class MoradorComponent implements OnDestroy {
     // doc.save('document.pdf');
   }
 }
+
+// Exportar o pdf
+// ajustar busca
+// Ajustar filtro
+

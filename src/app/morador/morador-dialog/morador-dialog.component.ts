@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Morador } from 'src/app/shared/app.model';
 
 @Component({
   selector: 'app-morador-dialog',
@@ -12,7 +13,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class MoradorDialogComponent implements OnInit {
 
   public image = null;
-  public resetButton = '';
   public showPhotoSpinner = false;
   public labelPhoto = 'clique e escolha a imagem do morador';
 
@@ -27,16 +27,15 @@ export class MoradorDialogComponent implements OnInit {
       personal: this.formBuilder.group({
         photo: [''],
         name: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        born: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        bornDate: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
         cpf: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
         rg: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        tel: [''],
-        cel: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
+        tel: ['', Validators.compose([Validators.pattern(null)])],
+        cel: ['', Validators.compose([Validators.pattern(null)])],
         email: [''],
-        civil: ['', Validators.required],
-        id: ['']
+        civilStatus: ['', Validators.required]
       }),
-      profesional: this.formBuilder.group({
+      professional: this.formBuilder.group({
         profession: [''],
         salary: [''],
       }),
@@ -45,23 +44,39 @@ export class MoradorDialogComponent implements OnInit {
         unit: ['', Validators.compose([Validators.required, Validators.pattern(null)])],
       }),
       familiar: this.formBuilder.group({
-        wife: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        children: [''],
-      })
+        partner: [''],
+        partnerId: [''],
+        dependents: ['']
+      }),
+      id: ['']
     })
   );
 
   constructor(
     public readonly formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<MoradorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private morador: {}
+    @Inject(MAT_DIALOG_DATA) public morador: Morador
   ) { }
 
   ngOnInit(): void {
     if (this.morador) {
-      this.resetButton = 'Cancelar';
-    } else {
-      this.resetButton = 'Limpar';
+      this.moradorForm$.value.controls.personal['controls'].name.setValue(this.morador.personal.name);
+      this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.bornDate);
+      this.moradorForm$.value.controls.personal['controls'].cpf.setValue(this.morador.personal.cpf);
+      this.moradorForm$.value.controls.personal['controls'].rg.setValue(this.morador.personal.rg);
+      this.moradorForm$.value.controls.personal['controls'].civilStatus.setValue(this.morador.personal.civilStatus);
+      this.moradorForm$.value.controls.personal['controls'].tel.setValue(this.morador.personal.tel);
+      this.moradorForm$.value.controls.personal['controls'].cel.setValue(this.morador.personal.cel);
+      this.moradorForm$.value.controls.personal['controls'].email.setValue(this.morador.personal.email);
+      this.moradorForm$.value.controls.professional['controls'].profession.setValue(this.morador.professional.profession);
+      this.moradorForm$.value.controls.professional['controls'].salary.setValue(this.morador.professional.salary);
+      this.moradorForm$.value.controls.condominium['controls'].block.setValue(this.morador.condominium.block);
+      this.moradorForm$.value.controls.condominium['controls'].unit.setValue(this.morador.condominium.unit);
+      this.moradorForm$.value.controls.familiar['controls'].partner.setValue(this.morador.familiar.partner.name);
+      this.moradorForm$.value.controls.familiar['controls'].partnerId.setValue(this.morador.familiar.partner.id);
+      this.moradorForm$.value.controls.id.setValue(this.morador.id);
+      // this.moradorForm$.value.controls.familiar['controls'].dependents
+      this.civilStateChange(this.morador.personal.civilStatus);
     }
   }
 
@@ -83,13 +98,30 @@ export class MoradorDialogComponent implements OnInit {
     }
   }
 
-  public endModal() {
-    const MORADOR = this.moradorForm$.value.controls.personal.value;
-    this.dialogRef.close({ modificated: true, morador: this.morador });
+  public endModal(save?: boolean) {
+    if (!save) {
+      this.dialogRef.close();
+    } else {
+      const morador: Morador = this.moradorForm$.value.value;
+      morador.personal = this.moradorForm$.value.value.personal;
+      morador.professional.profession = this.moradorForm$.value.value.professional.profession;
+      morador.professional.salary = parseInt(this.moradorForm$.value.value.professional.salary);
+      morador.condominium.block = this.moradorForm$.value.value.condominium.block;
+      morador.condominium.unit = parseInt(this.moradorForm$.value.value.condominium.unit);
+      morador.id = this.moradorForm$.value.value.id;
+      if (morador.personal.civilStatus === 'casado(a)') {
+        morador.familiar.partner.name = this.moradorForm$.value.value.familiar.name;
+        morador.familiar.dependents = null;
+      } else {
+        morador.familiar.partner = { name: '', id: null };
+        morador.familiar.dependents = null;
+      }
+      this.dialogRef.close(morador);
+    }
   }
 
-  public cleanForm() {
-    if (this.resetButton === 'Limpar') {
+  public cleanForm(value) {
+    if (value.toLowerCase() === 'limpar') {
       this.fileInput.nativeElement.value = '';
       this.image = '';
       Important.cleanForm(this.nameInput, this.form);
@@ -97,9 +129,22 @@ export class MoradorDialogComponent implements OnInit {
       this.endModal();
     }
   }
+
+  public civilStateChange(value) {
+    if (value.toLowerCase() === 'casado(a)') {
+      this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(
+        Validators.compose([Validators.required, Validators.pattern(null)])
+      );
+      this.moradorForm$.value.controls.familiar['controls'].partner.enable();
+      return;
+    }
+    this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(null);
+    this.moradorForm$.value.controls.familiar['controls'].partner.disable();
+  }
+
 }
 
-// popular campos
 // ajustar maskara dos campos
 // ajustar erros do form
+
 

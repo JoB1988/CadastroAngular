@@ -19,15 +19,34 @@ export interface Cadastro {
 
 export interface Morador {
     id?: number;
-    nome: string;
-    nascimento: Date;
-    profissao: string;
+    personal: IPersonal;
+    professional?: IProfessional;
+    condominium: ICondominium;
+    familiar?: IFamiliar;
+}
+
+interface IPersonal {
+    name: string;
+    bornDate: Date;
     cpf: string;
     rg: string;
     tel: string;
     cel: string;
     email: string;
-    civil: string;
-    bloco: string;
-    unidade: number;
+    civilStatus: string;
+}
+
+interface IProfessional {
+    profession: string;
+    salary: number;
+}
+
+interface ICondominium {
+    block: string;
+    unit: number;
+}
+
+interface IFamiliar {
+    partner?: { name: string; id: number };
+    dependents?: [{ name: string; id: number }];
 }
