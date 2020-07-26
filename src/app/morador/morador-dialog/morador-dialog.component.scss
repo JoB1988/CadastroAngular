@@ -94,6 +94,7 @@ input[type=file]{
                 align-content: center;
                 @include display-flex(center, center);
                 img {
+                    outline: none;
                     width: 100%;
                     height: 100%;
                 }

@@ -34,6 +34,7 @@ interface IPersonal {
     cel: string;
     email: string;
     civilStatus: string;
+    photo?: Blob;
 }
 
 interface IProfessional {

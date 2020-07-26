@@ -168,6 +168,7 @@ export class MoradorComponent implements OnDestroy {
       if (!moradorForm) {
         return;
       }
+      console.log(moradorForm)
       if (moradorForm.id) {
         this.moradorService.updateForm(moradorForm).subscribe((moradorResponse: Morador) => {
           this.morador$.value[index] = moradorResponse;

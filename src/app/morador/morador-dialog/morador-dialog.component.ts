@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Morador } from 'src/app/shared/app.model';
+import { debug } from 'console';
 
 @Component({
   selector: 'app-morador-dialog',
@@ -60,6 +61,8 @@ export class MoradorDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.morador) {
+      this.image = this.morador.personal.photo;
+      this.moradorForm$.value.controls.personal['controls'].photo.setValue(this.morador.personal.photo);
       this.moradorForm$.value.controls.personal['controls'].name.setValue(this.morador.personal.name);
       this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.bornDate);
       this.moradorForm$.value.controls.personal['controls'].cpf.setValue(this.morador.personal.cpf);
@@ -102,19 +105,21 @@ export class MoradorDialogComponent implements OnInit {
     if (!save) {
       this.dialogRef.close();
     } else {
-      const morador: Morador = this.moradorForm$.value.value;
+      const morador: any = {};
       morador.personal = this.moradorForm$.value.value.personal;
-      morador.professional.profession = this.moradorForm$.value.value.professional.profession;
-      morador.professional.salary = parseInt(this.moradorForm$.value.value.professional.salary);
-      morador.condominium.block = this.moradorForm$.value.value.condominium.block;
-      morador.condominium.unit = parseInt(this.moradorForm$.value.value.condominium.unit);
+      morador.personal.photo = this.image;
+      morador.professional = this.moradorForm$.value.value.professional;
+      morador.professional.salary = parseInt(morador.professional.salary);
+      morador.condominium = this.moradorForm$.value.value.condominium;
+      morador.condominium.unit = parseInt(morador.condominium.unit);
       morador.id = this.moradorForm$.value.value.id;
+      morador.familiar = {
+        partner: { name: '', id: null },
+        dependents: []
+      };
       if (morador.personal.civilStatus === 'casado(a)') {
-        morador.familiar.partner.name = this.moradorForm$.value.value.familiar.name;
-        morador.familiar.dependents = null;
-      } else {
-        morador.familiar.partner = { name: '', id: null };
-        morador.familiar.dependents = null;
+        morador.familiar.partner.name = this.moradorForm$.value.value.familiar.partner;
+        morador.familiar.partner.id = this.moradorForm$.value.value.familiar.partnerId;
       }
       this.dialogRef.close(morador);
     }
