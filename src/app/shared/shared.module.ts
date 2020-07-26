@@ -6,6 +6,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const ANGULAR_MODULES = [
     CommonModule,
@@ -18,7 +19,8 @@ const OTHER_MODULES = [
     NgxSpinnerModule,
     MatDialogModule,
     MatProgressBarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule
 ];
 
 @NgModule({

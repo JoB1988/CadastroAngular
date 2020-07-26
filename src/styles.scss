@@ -114,6 +114,12 @@ h3 {
     color: $letter-color;
 }
 
+.mat-progress-spinner circle,
+.mat-spinner circle {
+    stroke: $main-theme-color-orange1;
+}
+
+
 .spinner-msg {
     margin-top: 40px;
     color: $white;

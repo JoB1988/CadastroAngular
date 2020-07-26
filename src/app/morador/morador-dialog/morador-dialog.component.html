@@ -3,20 +3,23 @@
 </div>
 <section class="section__main" role="main">
     <form [formGroup]="moradorForm$ | async" class="form" #myForm="ngForm" role="form" (ngSubmit)="endModal()">
-        <section formGroupName="personal" aria-describedby="dados_pessoais" class="form__personal" tabindex="0" role="group">
+        <section formGroupName="personal" aria-describedby="dados_pessoais" class="form__personal" tabindex="0"
+            role="group">
 
-            <h2 id="dados_pessoais"aria-label="Nesta seção,
+            <h2 id="dados_pessoais" aria-label="Nesta seção,
                  você poderá cadastrar os dados pessoais do morador,
                  tais como: foto, nome, data de nascimento, cpf, rg,
                  estado civil, telefone, celular e email respectivamente.">
                 Dados pessoais</h2>
             <div style="display: flex;">
                 <input id="photo" type="file" class="form__personal__image" formControlName="photo" accept="image/*"
-                    (change)="getInputFile($event)" role="document">
+                    (change)="getInputFile($event)" role="document" #fileInput>
                 <div class="form__personal__image__fake">
-                    <i *ngIf="!image" class="fas fa-plus"></i>
-                    <label *ngIf="!image" for="photo" aria-label="clique e escolha a imagem do morador">Imagem do Morador</label>
-                    <img *ngIf="image" src="{{image}}" alt="">
+                    <i *ngIf="!image && !showPhotoSpinner" class="fas fa-plus"></i>
+                    <label *ngIf="!image && !showPhotoSpinner" for="photo" attr.aria-label="{{labelPhoto}}">Imagem do
+                        Morador</label>
+                    <img *ngIf="image && !showPhotoSpinner" src="{{image}}" alt="">
+                    <mat-spinner *ngIf="showPhotoSpinner"></mat-spinner>
                 </div>
             </div>
 
@@ -72,9 +75,9 @@
             </div>
         </section>
 
-        <section formGroupName="profesional" aria-describedby="dados_profisionais" class="form__profesional" role="group">
-            <h2 id="dados_profisionais"
-                aria-label="Nesta seção,
+        <section formGroupName="profesional" aria-describedby="dados_profisionais" class="form__profesional"
+            role="group">
+            <h2 id="dados_profisionais" aria-label="Nesta seção,
             você poderá cadastrar os dados profissionais do morador, tais como: profissão e salário respectivamente.">
                 Dados profisionais</h2>
             <div class="form__control">
@@ -90,8 +93,7 @@
         </section>
 
         <section formGroupName="condominium" aria-describedby="dados_comdominio" class="form__condominium" role="group">
-            <h2 id="dados_comdominio"
-                aria-label="Nesta seção,
+            <h2 id="dados_comdominio" aria-label="Nesta seção,
             você poderá cadastrar os dados da unidade do morador, tais como: Bloco e Unidade respectivamente.">
                 Dados da Unidade</h2>
             <div class="form__control">
@@ -107,8 +109,7 @@
         </section>
 
         <section formGroupName="familiar" aria-describedby="dados_familiar" class="form__familiar" role="group">
-            <h2 id="dados_familiar"
-                aria-label="Nesta seção,
+            <h2 id="dados_familiar" aria-label="Nesta seção,
             você poderá cadastrar os dados familiares do morador, tais como: Conjuge e Dependentes respectivamente.">
                 Dados Familiar</h2>
             <div class="form__control">
@@ -124,8 +125,9 @@
         </section>
 
         <div class="form__buttons">
-            <button type="button" class="btn__default" (click)="cleanForm()">Cancelar</button>
-            <button type="submit" class="btn__default" [disabled]="(moradorForm$ | async).invalid" aria-label="submeter">Enviar</button>
+            <button type="button" class="btn__default" (click)="cleanForm()">{{resetButton}}</button>
+            <button type="submit" class="btn__default" [disabled]="(moradorForm$ | async).invalid"
+                aria-label="submeter">Enviar</button>
         </div>
     </form>
 </section>

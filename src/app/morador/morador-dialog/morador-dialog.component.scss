@@ -2,12 +2,15 @@
 @import "../../shared/mixins.scss";
 
 input::-webkit-file-upload-button {
-    &::content {
-        display: none;
-    }
+    // customiza botão do input file
+    visibility: hidden;
     &:hover {
         cursor: pointer;
     }
+}
+
+input[type=file]{
+    color:transparent;
 }
 
 .close__area {
@@ -209,4 +212,8 @@ input::-webkit-file-upload-button {
         @include form-buttons();
         margin-top: 20px;
     }
+}
+
+mat-spinner {
+    font-size: 14px;
 }
