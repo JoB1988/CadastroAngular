@@ -4,7 +4,6 @@ import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Morador } from 'src/app/shared/app.model';
-import { debug } from 'console';
 
 @Component({
   selector: 'app-morador-dialog',
@@ -22,30 +21,39 @@ export class MoradorDialogComponent implements OnInit {
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
   @ViewChild('myForm', { static: false }) form: NgForm;
 
+  // Patterns
+  private lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
+  private numberRegex = new RegExp(/^[0-9]*$/);
+  private cpfRegex = new RegExp(/^[0-9]{11}/);
+  private telRegex = new RegExp(/^[0-9]{10}/);
+  private emailRegex = new RegExp(/^[a-z0-9._-]+@[a-z0-9]+\.[a-z]+(\.[a-z]{2})?$/);
+  private salaryRegex = new RegExp(/^[0-9]+(\.[0-9]{2})?$/);
+  private dateRegex = new RegExp(/^\d{4}\-\d{2}\-\d{2}$/);
+
   // formulário com a composição dos validadores
   public moradorForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       personal: this.formBuilder.group({
         photo: [''],
-        name: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        bornDate: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        cpf: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        rg: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.pattern(null)])],
-        tel: ['', Validators.compose([Validators.pattern(null)])],
-        cel: ['', Validators.compose([Validators.pattern(null)])],
-        email: [''],
+        name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.pattern(this.lettersRegex)])],
+        bornDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
+        cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(this.cpfRegex)])],
+        rg: ['', Validators.required],
+        tel: ['', Validators.pattern(this.telRegex)],
+        cel: ['', Validators.pattern(this.cpfRegex)],
+        email: ['', Validators.pattern(this.emailRegex)],
         civilStatus: ['', Validators.required]
       }),
       professional: this.formBuilder.group({
-        profession: [''],
-        salary: [''],
+        profession: ['', Validators.pattern(this.lettersRegex)],
+        salary: ['', Validators.pattern(this.salaryRegex)],
       }),
       condominium: this.formBuilder.group({
-        block: ['', Validators.compose([Validators.required])],
-        unit: ['', Validators.compose([Validators.required, Validators.pattern(null)])],
+        block: ['', Validators.compose([Validators.required, Validators.pattern(this.lettersRegex)])],
+        unit: ['', Validators.compose([Validators.required, Validators.pattern(this.numberRegex)])],
       }),
       familiar: this.formBuilder.group({
-        partner: [''],
+        partner: ['', Validators.pattern(this.lettersRegex)],
         partnerId: [''],
         dependents: ['']
       }),
@@ -147,9 +155,33 @@ export class MoradorDialogComponent implements OnInit {
     this.moradorForm$.value.controls.familiar['controls'].partner.disable();
   }
 
+  formSubscription = this.moradorForm$.value.valueChanges.subscribe(data => {
+    console.log(this.moradorForm$.value.controls.professional['controls'].salary.errors)
+    console.log(this.moradorForm$.value.controls.professional['controls'].salary.value)
+  })
+
+  public allowNumbers($event) {
+    switch ($event.keyCode) {
+      case 48:
+      case 49:
+      case 50:
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+      case 55:
+      case 56:
+      case 57:
+      case 58:
+        break;
+      default:
+        $event.preventDefault();
+        break;
+    }
+  }
 }
 
-// ajustar maskara dos campos
+
 // ajustar erros do form
 
 

@@ -12,9 +12,9 @@
                  estado civil, telefone, celular e email respectivamente.">
                 Dados pessoais</h2>
             <div style="display: flex;">
-                <input *ngIf="!morador" id="photo" type="file" class="form__personal__image" formControlName="photo"
+                <input *ngIf="!image" id="photo" type="file" class="form__personal__image" formControlName="photo"
                     accept="image/*" (change)="getInputFile($event)" role="document" #fileInput>
-                <div class="form__personal__image__fake" [ngStyle]="{'margin-left': morador ? '0' : null }">
+                <div class="form__personal__image__fake" [ngStyle]="{'margin-left': image ? '0' : null }">
                     <i *ngIf="!image && !showPhotoSpinner" class="fas fa-plus"></i>
                     <label *ngIf="!image && !showPhotoSpinner" for="photo" attr.aria-label="{{labelPhoto}}">Imagem do
                         Morador</label>
@@ -31,12 +31,12 @@
                 </div>
                 <div class="form__control form__personal__date">
                     <label for="bornDate">data de nascimento</label>
-                    <input id="bornDate" type="date" formControlName="bornDate">
+                    <input id="bornDate" type="date" maxLength="8" formControlName="bornDate">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__cpf">
                     <label for="cpf">cpf</label>
-                    <input id="cpf" type="text" formControlName="cpf">
+                    <input id="cpf" type="text" mask="000.000.000-00" [dropSpecialCharacters]="true" formControlName="cpf">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__rg">
@@ -60,12 +60,12 @@
             <div class="form__personal__group2">
                 <div class="form__control form__personal__tel">
                     <label for="tel">telefone</label>
-                    <input id="tel" type="tel" formControlName="tel">
+                    <input id="tel" type="tel" mask="(00) 0000-0000" formControlName="tel">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__cel">
                     <label for="cel">celular</label>
-                    <input id="cel" type="tel" formControlName="cel">
+                    <input id="cel" type="tel" mask="(00) 00000-0000" formControlName="cel">
                     <span roler="alert">erro</span>
                 </div>
                 <div class="form__control form__personal__email">
@@ -88,7 +88,7 @@
             </div>
             <div class="form__control">
                 <label for="salary">Salário</label>
-                <input id="salary" type="text" formControlName="salary">
+                <input id="salary" mask="separator.2" thousandSeparator="." prefix="R$ " type="text" formControlName="salary">
                 <span roler="alert">erro</span>
             </div>
         </section>
@@ -104,7 +104,7 @@
             </div>
             <div class="form__control">
                 <label for="unit">Unidade</label>
-                <input id="unit" type="text" formControlName="unit">
+                <input id="unit" type="number" formControlName="unit" min="0" (keypress)="allowNumbers($event)">
                 <span roler="alert">erro</span>
             </div>
         </section>
