@@ -6,7 +6,7 @@ section {
   @include mat-elevation(8, #303030, 0.9);
 
   .banner {
-    @include display-flex();
+    @include flex-box();
     min-height: 100px;
     padding: 20px;
 
@@ -30,7 +30,7 @@ section {
     }
 
     .header__content {
-      @include display-flex(flex-end, space-between);
+      @include flex-box(flex-end, space-between);
       width: 100%;
 
       div {
@@ -64,7 +64,7 @@ section {
         }
 
         &:last-child {
-          @include display-flex();
+          @include flex-box();
           justify-content: flex-end;
           width: calc(100% - 275px);
 
@@ -185,7 +185,7 @@ section {
     margin: 0 auto;
     max-width: 310px;
     width: 100%;
-    @include display-flex(center, center);
+    @include flex-box(center, center);
 
     @media (max-width: 964px) {
       height: 393.5px;

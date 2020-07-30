@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Inject, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
@@ -8,7 +8,8 @@ import { Morador } from 'src/app/shared/app.model';
 @Component({
   selector: 'app-morador-dialog',
   templateUrl: './morador-dialog.component.html',
-  styleUrls: ['./morador-dialog.component.scss']
+  styleUrls: ['./morador-dialog.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MoradorDialogComponent implements OnInit {
 
@@ -22,13 +23,14 @@ export class MoradorDialogComponent implements OnInit {
   @ViewChild('myForm', { static: false }) form: NgForm;
 
   // Patterns
-  private lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
-  private numberRegex = new RegExp(/^[0-9]*$/);
-  private cpfRegex = new RegExp(/^[0-9]{11}/);
-  private telRegex = new RegExp(/^[0-9]{10}/);
-  private emailRegex = new RegExp(/^[a-z0-9._-]+@[a-z0-9]+\.[a-z]+(\.[a-z]{2})?$/);
-  private salaryRegex = new RegExp(/^[0-9]+(\.[0-9]{2})?$/);
-  private dateRegex = new RegExp(/^\d{4}\-\d{2}\-\d{2}$/);
+  public lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
+  public numberRegex = new RegExp(/^[0-9]*$/);
+  public cpfRegex = new RegExp(/^[0-9]{11}/);
+  public rgRegex = new RegExp(/^\d{8}([MXmx]|[0-9]{1})?$/);
+  public telRegex = new RegExp(/^[0-9]{10}/);
+  public emailRegex = new RegExp(/^[a-z0-9._-]+@[a-z0-9]+\.[a-z]+(\.[a-z]{2})?$/);
+  public salaryRegex = new RegExp(/^[0-9]+(\.[0-9]{2})?$/);
+  public dateRegex = new RegExp(/^\d{4}\-\d{2}\-\d{2}$/);
 
   // formulário com a composição dos validadores
   public moradorForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
@@ -37,8 +39,10 @@ export class MoradorDialogComponent implements OnInit {
         photo: [''],
         name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.pattern(this.lettersRegex)])],
         bornDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
-        cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(this.cpfRegex)])],
-        rg: ['', Validators.required],
+        cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.pattern(this.cpfRegex)])],
+        rg: ['', Validators.compose(
+          [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern(this.rgRegex)]
+        )],
         tel: ['', Validators.pattern(this.telRegex)],
         cel: ['', Validators.pattern(this.cpfRegex)],
         email: ['', Validators.pattern(this.emailRegex)],
@@ -58,11 +62,15 @@ export class MoradorDialogComponent implements OnInit {
         dependents: ['']
       }),
       id: ['']
-    })
+    }, { updateOn: 'blur' })
   );
 
+  private a = this.moradorForm$.value.valueChanges.subscribe((data) => {
+    console.log(this.moradorForm$.value.value)
+  })
   constructor(
     public readonly formBuilder: FormBuilder,
+    public readonly elementRef: ElementRef,
     public dialogRef: MatDialogRef<MoradorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public morador: Morador
   ) { }
@@ -145,20 +153,13 @@ export class MoradorDialogComponent implements OnInit {
 
   public civilStateChange(value) {
     if (value.toLowerCase() === 'casado(a)') {
-      this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(
-        Validators.compose([Validators.required, Validators.pattern(null)])
-      );
+      this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(Validators.required);
       this.moradorForm$.value.controls.familiar['controls'].partner.enable();
       return;
     }
     this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(null);
     this.moradorForm$.value.controls.familiar['controls'].partner.disable();
   }
-
-  formSubscription = this.moradorForm$.value.valueChanges.subscribe(data => {
-    console.log(this.moradorForm$.value.controls.professional['controls'].salary.errors)
-    console.log(this.moradorForm$.value.controls.professional['controls'].salary.value)
-  })
 
   public allowNumbers($event) {
     switch ($event.keyCode) {
@@ -179,9 +180,58 @@ export class MoradorDialogComponent implements OnInit {
         break;
     }
   }
+
+  public displayError(formControl: string, formControlName: string): string {
+    const error = this.moradorForm$.value.controls[formControl]['controls'][formControlName].errors;
+    const touched = this.moradorForm$.value.controls[formControl]['controls'][formControlName].touched;
+    if (!error || !touched) {
+      return '';
+    }
+    if (error.required) {
+      return 'Campo obrigatório';
+    } else if (error.minlength || error.pattern) {
+      if ((error.minlength && error.pattern) || error.pattern) {
+        return `Valor incorreto <i aria-hidden="true" class="fa fa-question"></i><span>${this.checkRegex(formControlName)}</span>`;
+      }
+      if (error.minlength) {
+        return 'Campo mínimo de ' + error.minlength.requiredLength + ' caracteres';
+      }
+    }
+  }
+
+  private checkRegex(formControl: string): string {
+    let message = '';
+    switch (formControl) {
+      case 'name':
+      case 'profession':
+      case 'block':
+      case 'partner':
+        message = 'Digite somente letras.';
+        break;
+      case 'bornDate':
+        message = 'Digite 2 digitos para o dia, 2 digitos para o mês e 4 digitos para o ano.';
+        break;
+      case 'bornDate':
+      case 'cel':
+      case 'cpf':
+        message = 'Digite somente 11 números.';
+        break;
+      case 'tel':
+        message = 'Digite somente 12 números.';
+        break;
+      case 'email':
+        message = 'Digite um email que contenha algo como nome@servidor.extenção ou nome@servidor.extenção.extenção';
+        break;
+      case 'salary':
+      case 'unit':
+        message = 'Digite somente números.';
+        break;
+      case 'rg':
+        message = 'Digite 8 números mais o digito se possuir, podendo ser número ou a letra m ou a letra x.';
+        break;
+      default:
+        break;
+    }
+    return message;
+  }
 }
-
-
-// ajustar erros do form
-
-

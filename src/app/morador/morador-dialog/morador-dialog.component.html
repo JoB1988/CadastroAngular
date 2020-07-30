@@ -18,60 +18,78 @@
                     <i *ngIf="!image && !showPhotoSpinner" class="fas fa-plus"></i>
                     <label *ngIf="!image && !showPhotoSpinner" for="photo" attr.aria-label="{{labelPhoto}}">Imagem do
                         Morador</label>
-                    <img *ngIf="image && !showPhotoSpinner" src="{{image}}" tabindex="0" attr.aria-label="Imagem de {{morador?.personal?.name}}" alt="Imagem de {{morador?.personal?.name}}">
+                    <img *ngIf="image && !showPhotoSpinner" src="{{image}}" tabindex="0"
+                        attr.aria-label="Imagem de {{morador?.personal?.name}}"
+                        alt="Imagem de {{morador?.personal?.name}}">
                     <mat-spinner *ngIf="showPhotoSpinner"></mat-spinner>
                 </div>
             </div>
 
             <div class="form__personal__group1">
-                <div class="form__control form__personal__name">
+                <div class="form__control form__personal__name"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'name')}">
                     <label for="name">nome</label>
-                    <input id="name" type="text" formControlName="name" #nameInput>
-                    <span role="alert">erro</span>
+                    <input id="name" type="text" formControlName="name" aria-required="true" #nameInput>
+                    <span id="span_name" role="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'name')"></span>
                 </div>
-                <div class="form__control form__personal__date">
+                <div class="form__control form__personal__date"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'bornDate')}">
                     <label for="bornDate">data de nascimento</label>
-                    <input id="bornDate" type="date" maxLength="8" formControlName="bornDate">
-                    <span roler="alert">erro</span>
+                    <input type="date" maxLength="8" formControlName="bornDate" aria-required="true">
+                    <span id="span_bornDate" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'bornDate')"></span>
                 </div>
-                <div class="form__control form__personal__cpf">
+                <div class="form__control form__personal__cpf"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'cpf')}">
                     <label for="cpf">cpf</label>
-                    <input id="cpf" type="text" mask="000.000.000-00" [dropSpecialCharacters]="true" formControlName="cpf">
-                    <span roler="alert">erro</span>
+                    <input id="cpf" type="text" mask="000.000.000-00" formControlName="cpf" aria-required="true">
+                    <span id="span_cpf" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'cpf')"></span>
                 </div>
-                <div class="form__control form__personal__rg">
+                <div class="form__control form__personal__rg"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'rg')}">
                     <label for="rg">rg</label>
-                    <input id="rg" type="text" formControlName="rg">
-                    <span roler="alert">erro</span>
+                    <input id="rg" type="text" mask="00.000.000-A" formControlName="rg" aria-required="true">
+                    <span id="span_rg" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'rg')"></span>
                 </div>
-                <div class="form__control form__personal__civil">
+                <div class="form__control form__personal__civil"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'civilStatus')}">
                     <label for="civilStatus">estado civil</label>
                     <select name="civilStatus" id="civilStatus" #civilStatus formControlName="civilStatus"
-                        (change)="civilStateChange(civilStatus.value)">
+                        aria-required="true" (change)="civilStateChange(civilStatus.value)">
                         <option value="solteiro(a)">solteiro(a)</option>
                         <option value="casado(a)">casado(a)</option>
                         <option value="divorciado(a)">divorciado(a)</option>
                         <option value="viuvo(a)">viúvo(a)</option>
                     </select>
-                    <span roler="alert">erro</span>
+                    <span id="span_civilStatus" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'civilStatus')"></span>
                 </div>
             </div>
 
             <div class="form__personal__group2">
-                <div class="form__control form__personal__tel">
+                <div class="form__control form__personal__tel"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'tel')}">
                     <label for="tel">telefone</label>
                     <input id="tel" type="tel" mask="(00) 0000-0000" formControlName="tel">
-                    <span roler="alert">erro</span>
+                    <span id="span_tel" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'tel')"></span>
                 </div>
-                <div class="form__control form__personal__cel">
+                <div class="form__control form__personal__cel"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'cel')}">
                     <label for="cel">celular</label>
                     <input id="cel" type="tel" mask="(00) 00000-0000" formControlName="cel">
-                    <span roler="alert">erro</span>
+                    <span id="span_cel" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'cel')"></span>
                 </div>
-                <div class="form__control form__personal__email">
+                <div class="form__control form__personal__email"
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'email')}">
                     <label for="email">email</label>
                     <input id="email" type="email" formControlName="email">
-                    <span roler="alert">erro</span>
+                    <span id="span_email" roler="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'email')"></span>
                 </div>
             </div>
         </section>
@@ -81,15 +99,18 @@
             <h2 id="dados_profisionais" aria-label="Nesta seção,
             você poderá cadastrar os dados profissionais do morador, tais como: profissão e salário respectivamente.">
                 Dados profisionais</h2>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('professional', 'profession')}">
                 <label for="profession">Profissão</label>
                 <input id="profession" type="text" formControlName="profession">
-                <span roler="alert">erro</span>
+                <span id="span_profession" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('professional', 'profession')"></span>
             </div>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('professional', 'salary')}">
                 <label for="salary">Salário</label>
-                <input id="salary" mask="separator.2" thousandSeparator="." prefix="R$ " type="text" formControlName="salary">
-                <span roler="alert">erro</span>
+                <input id="salary" mask="separator.2" thousandSeparator="." prefix="R$ " type="text"
+                    formControlName="salary">
+                <span id="span_salary" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('professional', 'salary')"></span>
             </div>
         </section>
 
@@ -97,15 +118,17 @@
             <h2 id="dados_comdominio" aria-label="Nesta seção,
             você poderá cadastrar os dados da unidade do morador, tais como: Bloco e Unidade respectivamente.">
                 Dados da Unidade</h2>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('condominium', 'block')}">
                 <label for="block">Bloco</label>
-                <input id="block" type="text" formControlName="block">
-                <span roler="alert">erro</span>
+                <input id="block" type="text" formControlName="block" aria-required="true">
+                <span id="span_block" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('condominium', 'block')"></span>
             </div>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('condominium', 'unit')}">
                 <label for="unit">Unidade</label>
                 <input id="unit" type="number" formControlName="unit" min="0" (keypress)="allowNumbers($event)">
-                <span roler="alert">erro</span>
+                <span id="span_unit" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('condominium', 'unit')"></span>
             </div>
         </section>
 
@@ -113,15 +136,17 @@
             <h2 id="dados_familiar" aria-label="Nesta seção,
             você poderá cadastrar os dados familiares do morador, tais como: Conjuge e Dependentes respectivamente.">
                 Dados Familiar</h2>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('familiar', 'partner')}">
                 <label for="partner">Conjuge</label>
-                <input id="partner" type="text" formControlName="partner">
-                <span roler="alert">erro</span>
+                <input id="partner" type="text" formControlName="partner" aria-required="true">
+                <span id="span_partner" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('familiar', 'partner')"></span>
             </div>
-            <div class="form__control">
+            <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('familiar', 'dependents')}">
                 <label for="dependents">Dependentes</label>
                 <input id="dependents" type="text" formControlName="dependents">
-                <span roler="alert">erro</span>
+                <span id="span_dependents" roler="alert" aria-live="polite"
+                    [innerHTML]="displayError('familiar', 'dependents')"></span>
             </div>
         </section>
 
