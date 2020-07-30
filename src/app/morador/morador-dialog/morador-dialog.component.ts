@@ -65,9 +65,6 @@ export class MoradorDialogComponent implements OnInit {
     }, { updateOn: 'blur' })
   );
 
-  private a = this.moradorForm$.value.valueChanges.subscribe((data) => {
-    console.log(this.moradorForm$.value.value)
-  })
   constructor(
     public readonly formBuilder: FormBuilder,
     public readonly elementRef: ElementRef,
@@ -235,3 +232,5 @@ export class MoradorDialogComponent implements OnInit {
     return message;
   }
 }
+
+// ajustar hint quebrado

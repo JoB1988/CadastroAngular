@@ -100,14 +100,15 @@ input[type="number"]::-webkit-inner-spin-button {
 
             span {
                 background-color: #56504c;
-                color: #fff;
                 border-radius: 5px;
+                color: #fff;
+                display: flex;
                 letter-spacing: 0.5px;
-                margin-left: 10px;
+                margin-top: 10px;
                 max-width: 230px;
                 opacity: 0;
                 padding: 15px;
-                position: absolute;
+                position: relative;
             }
         }
     }
