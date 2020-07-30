@@ -241,7 +241,19 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
-// Exportar o pdf
-// ajustar busca
-// Ajustar filtro
 
+// ajustar busca para buscar por qualquer coisa que a pessoa digitou
+// Ajustar filtro para filtrar por número mínimo e máximo de apartamentos, por bloco
+// criar paginação
+// criar quantidade de itens por tela
+// verificar acessibilidade
+// Exportar o pdf
+
+// Remover cadastro
+// Remover inventário
+// Na home colocar um vídeo institucional
+// Criar Fale conosco com um textbox que a pessoa pode estilizar a mensagem
+// Nas áreas comum, cadastrar as áreas comum do condomínio e já aproveitar para reservar uma delas. Juntar a tela de cadastro com a de reservas e log
+
+// Posteriormente, ativar uma opção que permite a table virar um card
+// Cadastro de funcionários

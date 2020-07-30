@@ -38,26 +38,26 @@
         "cpf": "12884626891",
         "rg": "111111111",
         "tel": "1141279338",
-        "cel": "232131231",
+        "cel": "23213123132",
         "email": null,
         "civilStatus": "casado(a)"
       },
       "professional": {
-        "profession": "Aposentado(a)",
+        "profession": "Aposentado",
         "salary": 1500
       },
       "condominium": {
         "block": "A",
         "unit": 201
       },
+      "id": 1,
       "familiar": {
         "partner": {
           "name": "Antonia Fernandes Benevides",
           "id": 4
         },
         "dependents": []
-      },
-      "id": 1
+      }
     },
     {
       "personal": {
