@@ -1,7 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { MoradorService } from './morador.service';
 import { Morador } from '../shared/app.model';
-import { ToastService } from '../shared/toast/toast.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MoradorDialogComponent } from './morador-dialog/morador-dialog.component';
 import { BehaviorSubject } from 'rxjs';
@@ -74,8 +73,7 @@ export class MoradorComponent implements OnDestroy {
 
   constructor(
     public readonly dialog: MatDialog,
-    private readonly moradorService: MoradorService,
-    private readonly toastService: ToastService,
+    private readonly moradorService: MoradorService
   ) { }
 
   public ngOnDestroy(): void {
@@ -241,6 +239,9 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
+// rg formato, mudar dinamicamente quando for  0.000.000 e  00.000.000-X
+// ajustar stteper em formatos pequenos
+// Ajustar componente cadastro para cadastro de funcionário
 
 // ajustar busca para buscar por qualquer coisa que a pessoa digitou
 // Ajustar filtro para filtrar por número mínimo e máximo de apartamentos, por bloco
@@ -249,8 +250,6 @@ export class MoradorComponent implements OnDestroy {
 // verificar acessibilidade
 // Exportar o pdf
 
-// Remover cadastro
-// Remover inventário
 // Na home colocar um vídeo institucional
 // Criar Fale conosco com um textbox que a pessoa pode estilizar a mensagem
 // Nas áreas comum, cadastrar as áreas comum do condomínio e já aproveitar para reservar uma delas. Juntar a tela de cadastro com a de reservas e log

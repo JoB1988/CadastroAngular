@@ -15,20 +15,16 @@ const ROUTES: Routes = [
     component: HomeComponent
   },
   {
-    path: 'cadastro',
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'funcionarios',
     loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule)
   },
   {
     path: 'areas-comum',
     loadChildren: () => import('./areas-comum/areas-comum.module').then(m => m.AreasComumModule)
-  },
-  {
-    path: 'inventario',
-    loadChildren: () => import('./inventario/inventario.module').then(m => m.InventarioModule),
-  },
-  {
-    path: 'login',
-    component: LoginComponent
   },
   {
     path: 'moradores',
@@ -45,4 +41,4 @@ const ROUTES: Routes = [
   imports: [RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

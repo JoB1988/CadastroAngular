@@ -5,7 +5,6 @@ import { AppService } from '../app.service';
 import { Router } from '@angular/router';
 import { Important } from '../shared/methods';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastService } from '../shared/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +29,8 @@ export class LoginComponent implements OnInit {
     public readonly formBuilder: FormBuilder,
     private appService: AppService,
     private router: Router,
-    private spinner: NgxSpinnerService,
-    private toast: ToastService) { }
+    private spinner: NgxSpinnerService
+  ) { }
 
   ngOnInit(): void {
     this.nameInput.nativeElement.focus();
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/home']);
     } else {
       this.spinner.hide();
-      this.toast.toast$.next({ message: 'Login ou Senha não conferem', type: 'error', show: true });
+      console.log({ message: 'Login ou Senha não conferem', type: 'error', show: true });
     }
   }
 

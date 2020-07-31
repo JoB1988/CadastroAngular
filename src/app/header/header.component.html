@@ -5,19 +5,13 @@
         <a [routerLink]="['/home']">Home</a>
       </li>
       <li *ngIf="isLogged$ | async">
-        <a [routerLink]="['/cadastro']">Cadastro</a>
+        <a [routerLink]="['/funcionarios']">Funcionarios</a>
       </li>
       <li *ngIf="isLogged$ | async">
         <a [routerLink]="['/moradores']">Moradores</a>
       </li>
       <li *ngIf="isLogged$ | async">
-        <a [routerLink]="['/areas-comum']">Areas</a>
-      </li>
-      <li *ngIf="isLogged$ | async">
-        <a [routerLink]="['/inventario']">Inventario</a>
-      </li>
-      <li *ngIf="isLogged$ | async">
-        <a [routerLink]="['/reservas']">Reservas</a>
+        <a [routerLink]="['/areas-comum']">Areas Comum</a>
       </li>
     </ul>
   </div>

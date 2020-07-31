@@ -1,8 +1,0 @@
-<div *ngIf="(toast$ | async)?.show" class="toast toast__animation" [ngClass]="bgcClass()">
-    <button (click)="close()">
-        <i class="fas fa-times"></i>
-    </button>
-    <span>
-        {{(toast$ | async)?.message}}
-    </span>
-</div>

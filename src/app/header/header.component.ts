@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AppService } from '../app.service';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from '../shared/app.model';
@@ -41,5 +41,4 @@ export class HeaderComponent implements OnDestroy {
     this.isLoggedSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
   }
-
 }

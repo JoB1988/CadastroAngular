@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { CadastroService } from './cadastro.service';
 import { debounceTime } from 'rxjs/operators';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastService } from '../shared/toast/toast.service';
 import { Cadastro } from '../shared/app.model';
 import { Important } from '../shared/methods';
 
@@ -54,8 +53,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
   constructor(
     public readonly formBuilder: FormBuilder,
     private readonly cadastroService: CadastroService,
-    private spinner: NgxSpinnerService,
-    private toast: ToastService
+    private spinner: NgxSpinnerService
   ) { }
 
   // inicia chamando o método para pegar os cadastros e focando input nome
@@ -130,14 +128,14 @@ export class CadastroComponent implements OnInit, OnDestroy {
     this.cadastroService[this.option$.getValue()](formcadastrovalue).subscribe(
       response => {
         this.spinner.hide();
-        this.toast.toast$.next({ message: 'Salvo com sucesso', show: true, type: 'success' });
+        console.log({ message: 'Salvo com sucesso', show: true, type: 'success' });
         this.updateTable(formcadastrovalue, response);
         this.cleanForm();
       },
       error => {
         console.log(error);
         this.spinner.hide();
-        this.toast.toast$.next({ message: 'Erro ao salvar', show: true, type: 'error' });
+        console.log({ message: 'Erro ao salvar', show: true, type: 'error' });
       }
     );
   }
@@ -169,13 +167,13 @@ export class CadastroComponent implements OnInit, OnDestroy {
     this.cadastroService.delete(id).subscribe(
       response => {
         this.spinner.hide();
-        this.toast.toast$.next({ message: 'Removido com sucesso', show: true, type: 'success' });
+        console.log({ message: 'Removido com sucesso', show: true, type: 'success' });
         this.cadastros$.value.splice(arrayIndex, 1);
       },
       error => {
         console.log(error);
         this.spinner.hide();
-        this.toast.toast$.next({ message: 'Erro ao remover', show: true, type: 'error' });
+        console.log({ message: 'Erro ao remover', show: true, type: 'error' });
       }
     );
   }
