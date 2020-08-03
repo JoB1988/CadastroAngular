@@ -52,15 +52,25 @@ section {
             box-sizing: border-box;
             padding-left: 0;
             width: 100%;
+
+            + span {
+              display: none;
+            }
+
             &::placeholder {
               color: $main-theme-color-green;
               font-size: 14px;
             }
+
             &:focus {
               &::placeholder {
                 color: transparent;
               }
+              + span {
+                display: block;
+              }
             }
+
             &:disabled {
               background-color: transparent;
               border-color: $unfocus-color;

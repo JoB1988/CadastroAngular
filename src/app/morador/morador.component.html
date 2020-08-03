@@ -1,11 +1,12 @@
-<section>
+<section role="main">
   <div class="banner">
     <h1>Moradores</h1>
     <div class="header__content" [ngClass]="{'header__content__empty__table': !(morador$ | async)?.length && morador?.length > 0 }">
       <div>
-        <input type="text" aria-label="digite a sua busca aqui" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
-          placeholder="digite sua busca aqui..."
-          #searchInput>
+        <label for="sua_busca" aria-label="digite sua busca aqui"></label>
+        <input id="sua_busca" type="text" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
+          placeholder="digite sua busca aqui..." aria-describedby="items__lista" #searchInput>
+          <span id="items__lista" attr.aria-label="a lista contém {{ (morador$ | async)?.length}} items"></span>
       </div>
       <div>
         <button class="btn__default" [disabled]="!(morador$ | async)" aria-label="filtrar busca">Filtrar<i class="fa fa-filter"></i></button>

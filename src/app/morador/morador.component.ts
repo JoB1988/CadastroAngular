@@ -73,13 +73,14 @@ export class MoradorComponent implements OnDestroy {
     const search = this.morador.filter(obejct => {
       return (
         obejct.personal.name.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
-        obejct.personal.cel.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
-        obejct.personal.tel.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        (obejct.personal.tel && obejct.personal.tel.toLowerCase().includes(inputValue.toLowerCase().trim())) ||
+        (obejct.personal.cel && obejct.personal.cel.toLowerCase().includes(inputValue.toLowerCase().trim())) ||
         obejct.personal.cpf.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
         obejct.condominium.block.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
         obejct.condominium.unit.toString().includes(inputValue.toLowerCase().trim())
       );
     });
+    console.log(search)
     this.morador$.next(search);
     this.progressBar$.next({ mode: 'determinate', value: 100 });
   });
