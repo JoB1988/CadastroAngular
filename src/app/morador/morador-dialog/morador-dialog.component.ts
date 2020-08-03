@@ -26,7 +26,7 @@ export class MoradorDialogComponent implements OnInit {
   public lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
   public numberRegex = new RegExp(/^[0-9]*$/);
   public cpfRegex = new RegExp(/^[0-9]{11}/);
-  public rgRegex = new RegExp(/^\d{8}([MXmx]|[0-9]{1})?$/);
+  public rgRegex = new RegExp(/^(\d{7}|\d{8})([MXmx]|[0-9]{1})?$/);
   public telRegex = new RegExp(/^[0-9]{10}/);
   public emailRegex = new RegExp(/^[a-z0-9._-]+@[a-z0-9]+\.[a-z]+(\.[a-z]{2})?$/);
   public salaryRegex = new RegExp(/^[0-9]+(\.[0-9]{2})?$/);
@@ -41,7 +41,7 @@ export class MoradorDialogComponent implements OnInit {
         bornDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
         cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.pattern(this.cpfRegex)])],
         rg: ['', Validators.compose(
-          [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern(this.rgRegex)]
+          [Validators.required, Validators.minLength(7), Validators.maxLength(9), Validators.pattern(this.rgRegex)]
         )],
         tel: ['', Validators.pattern(this.telRegex)],
         cel: ['', Validators.pattern(this.cpfRegex)],

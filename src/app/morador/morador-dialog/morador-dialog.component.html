@@ -37,21 +37,21 @@
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'bornDate')}">
                     <label for="bornDate">data de nascimento</label>
                     <input type="date" maxLength="8" formControlName="bornDate" aria-required="true">
-                    <span id="span_bornDate" roler="alert" aria-live="polite"
+                    <span id="span_bornDate" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'bornDate')"></span>
                 </div>
                 <div class="form__control form__personal__cpf"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'cpf')}">
                     <label for="cpf">cpf</label>
                     <input id="cpf" type="text" mask="000.000.000-00" formControlName="cpf" aria-required="true">
-                    <span id="span_cpf" roler="alert" aria-live="polite"
+                    <span id="span_cpf" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'cpf')"></span>
                 </div>
                 <div class="form__control form__personal__rg"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'rg')}">
                     <label for="rg">rg</label>
                     <input id="rg" type="text" mask="00.000.000-A" formControlName="rg" aria-required="true">
-                    <span id="span_rg" roler="alert" aria-live="polite"
+                    <span id="span_rg" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'rg')"></span>
                 </div>
                 <div class="form__control form__personal__civil"
@@ -64,7 +64,7 @@
                         <option value="divorciado(a)">divorciado(a)</option>
                         <option value="viuvo(a)">viúvo(a)</option>
                     </select>
-                    <span id="span_civilStatus" roler="alert" aria-live="polite"
+                    <span id="span_civilStatus" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'civilStatus')"></span>
                 </div>
             </div>
@@ -72,23 +72,23 @@
             <div class="form__personal__group2">
                 <div class="form__control form__personal__tel"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'tel')}">
-                    <label for="tel">telefone</label>
+                    <label for="tel" role="alert">telefone</label>
                     <input id="tel" type="tel" mask="(00) 0000-0000" formControlName="tel">
-                    <span id="span_tel" roler="alert" aria-live="polite"
+                    <span id="span_tel" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'tel')"></span>
                 </div>
                 <div class="form__control form__personal__cel"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'cel')}">
                     <label for="cel">celular</label>
                     <input id="cel" type="tel" mask="(00) 00000-0000" formControlName="cel">
-                    <span id="span_cel" roler="alert" aria-live="polite"
+                    <span id="span_cel" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'cel')"></span>
                 </div>
                 <div class="form__control form__personal__email"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'email')}">
                     <label for="email">email</label>
                     <input id="email" type="email" formControlName="email">
-                    <span id="span_email" roler="alert" aria-live="polite"
+                    <span id="span_email" role="alert" aria-live="polite"
                         [innerHTML]="displayError('personal', 'email')"></span>
                 </div>
             </div>
@@ -102,14 +102,14 @@
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('professional', 'profession')}">
                 <label for="profession">Profissão</label>
                 <input id="profession" type="text" formControlName="profession">
-                <span id="span_profession" roler="alert" aria-live="polite"
+                <span id="span_profession" role="alert" aria-live="polite"
                     [innerHTML]="displayError('professional', 'profession')"></span>
             </div>
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('professional', 'salary')}">
                 <label for="salary">Salário</label>
                 <input id="salary" mask="separator.2" thousandSeparator="." prefix="R$ " type="text"
                     formControlName="salary">
-                <span id="span_salary" roler="alert" aria-live="polite"
+                <span id="span_salary" role="alert" aria-live="polite"
                     [innerHTML]="displayError('professional', 'salary')"></span>
             </div>
         </section>
@@ -121,13 +121,13 @@
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('condominium', 'block')}">
                 <label for="block">Bloco</label>
                 <input id="block" type="text" formControlName="block" aria-required="true">
-                <span id="span_block" roler="alert" aria-live="polite"
+                <span id="span_block" role="alert" aria-live="polite"
                     [innerHTML]="displayError('condominium', 'block')"></span>
             </div>
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('condominium', 'unit')}">
                 <label for="unit">Unidade</label>
                 <input id="unit" type="number" formControlName="unit" min="0" (keypress)="allowNumbers($event)">
-                <span id="span_unit" roler="alert" aria-live="polite"
+                <span id="span_unit" role="alert" aria-live="polite"
                     [innerHTML]="displayError('condominium', 'unit')"></span>
             </div>
         </section>
@@ -139,13 +139,13 @@
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('familiar', 'partner')}">
                 <label for="partner">Conjuge</label>
                 <input id="partner" type="text" formControlName="partner" aria-required="true">
-                <span id="span_partner" roler="alert" aria-live="polite"
+                <span id="span_partner" role="alert" aria-live="polite"
                     [innerHTML]="displayError('familiar', 'partner')"></span>
             </div>
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('familiar', 'dependents')}">
                 <label for="dependents">Dependentes</label>
                 <input id="dependents" type="text" formControlName="dependents">
-                <span id="span_dependents" roler="alert" aria-live="polite"
+                <span id="span_dependents" role="alert" aria-live="polite"
                     [innerHTML]="displayError('familiar', 'dependents')"></span>
             </div>
         </section>

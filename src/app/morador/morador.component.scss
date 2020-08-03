@@ -33,6 +33,14 @@ section {
       @include flex-box(flex-end, space-between);
       width: 100%;
 
+      &__empty__table {
+        div {
+          input {
+            border-color: $error-color !important;
+          }
+        }
+      }
+
       div {
         &:first-child {
           width: 250px;
@@ -217,8 +225,6 @@ section {
   }
 
   tbody {
-    padding-bottom: 30px;
-
     tr {
       height: 35px;
 

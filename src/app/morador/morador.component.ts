@@ -24,7 +24,6 @@ export class MoradorComponent implements OnDestroy {
   public numbersPattern = new RegExp(/^[0-9]*$/);
 
   // Recursos da LIB ngx-mask
-  public mask = 'M{50}';
   public pattern = {
     M: {
       pattern: this.alphaNumericPattern,
@@ -62,13 +61,27 @@ export class MoradorComponent implements OnDestroy {
     }
   });
 
-  private inputValueSubscription = this.inputValue$.pipe(debounceTime(300)).subscribe((inputValue) => {
+  private inputValueSubscription = this.inputValue$.pipe(debounceTime(400)).subscribe((inputValue) => {
     if (!inputValue) {
-      this.pattern.M.pattern = this.alphaNumericPattern;
-      this.morador$.next(this.morador);
+      if (this.morador && this.morador.length > 0) {
+        this.morador$.next(this.morador);
+      }
       return;
     }
-    this.morador$.next(this.morador.filter((obejct) => obejct[this.onInputChange()].includes(inputValue)));
+    this.progressBar$.next({ mode: 'indeterminate', value: null });
+    // Busca de múltiplos atributos
+    const search = this.morador.filter(obejct => {
+      return (
+        obejct.personal.name.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        obejct.personal.cel.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        obejct.personal.tel.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        obejct.personal.cpf.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        obejct.condominium.block.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
+        obejct.condominium.unit.toString().includes(inputValue.toLowerCase().trim())
+      );
+    });
+    this.morador$.next(search);
+    this.progressBar$.next({ mode: 'determinate', value: 100 });
   });
 
   constructor(
@@ -79,16 +92,6 @@ export class MoradorComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.moradorSubscription.unsubscribe();
     this.inputValueSubscription.unsubscribe();
-  }
-
-  public onInputChange(): string {
-    if (this.numbersPattern.test(this.inputValue$.value)) {
-      this.pattern.M.pattern = this.numbersPattern;
-      return 'cpf';
-    } else {
-      this.pattern.M.pattern = this.lettersPattern;
-      return 'nome';
-    }
   }
 
   // #region sort
@@ -130,9 +133,6 @@ export class MoradorComponent implements OnDestroy {
   }
   //#endregion
 
-  public filter() {
-  }
-
   public remove(arrayPosition, moradorId) {
     this.moradorService.delete(moradorId).subscribe((data) => {
       console.log('removido com sucesso')
@@ -142,8 +142,8 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  public action(morador?: Morador, index?: any) {
-    if (index) {
+  public action(morador?: Morador, index?: number) {
+    if (index >= 0) {
       this.moradorService.getMorador(morador.id).subscribe((moradorResponse: Morador) => {
         this.showForm(morador, index);
       }, error => {
@@ -193,6 +193,8 @@ export class MoradorComponent implements OnDestroy {
 
   public downloadAsPDF(morador: Morador) {
 
+    let space = 0;
+
     const moradorPdf = new jsPDF({
       orientation: 'p',
       align: 'center',
@@ -207,52 +209,101 @@ export class MoradorComponent implements OnDestroy {
     moradorPdf.text([
       'Condomínio Start SBC'
     ], 15, 15);
+
     moradorPdf.setFontSize(12);
-    moradorPdf.text([
-      'Morador: ' + morador.personal.name
-    ], 15, 25);
+    moradorPdf.text(['Morador: ' + morador.personal.name], 15, 25);
+
+    moradorPdf.text(['Data de Nascimento: ' + this.getBornDate(morador.personal.bornDate)], 135, 25);
+
+    moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 35);
+
+    moradorPdf.text(['RG: ' + morador.personal.rg], 85, 35);
+
+    moradorPdf.text(['Estado Civil: ' + morador.personal.civilStatus], 155, 35);
+
+    if (morador.personal.civilStatus === 'casado(a)') {
+      moradorPdf.text(['Conjuguê: ' + morador.familiar.partner.name], 15, 45);
+      space += 10;
+    }
+
+    moradorPdf.text(['Telefone: ' + this.comunicationsWay(morador.personal.tel)], 15, 45 + space);
+
+    moradorPdf.text(['Celular: ' + this.comunicationsWay(morador.personal.cel)], 70, 45 + space);
+
+    moradorPdf.text(['Email: ' + this.comunicationsWay(morador.personal.email)], 125, 45 + space);
+
+    moradorPdf.text(['Profissão: ' + morador.professional.profession], 15, 55 + space);
+
+    moradorPdf.text(['Salário: R$ ' + morador.professional.salary.toFixed(2)], 160, 55 + space);
+
+    moradorPdf.text(['Bloco: ' + morador.condominium.block], 15, 65 + space);
+
+    moradorPdf.text(['Unidade: ' + morador.condominium.unit], 75, 65 + space);
+
+    // Opção 2
+
+    // moradorPdf.text(['Morador: ' + morador.personal.name], 15, 25);
+
+    // moradorPdf.text(['Data de Nascimento: ' + this.getBornDate(morador.personal.bornDate)], 15, 35);
+
+    // moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 45);
+
+    // moradorPdf.text(['RG: ' + morador.personal.rg], 15, 55);
+
+    // moradorPdf.text(['Estado Civil: ' + morador.personal.civilStatus], 15, 65);
+
+    // if (this.isMarried(morador.personal.civilStatus)) {
+    //   moradorPdf.text(['Conjuguê: ' + morador.familiar.partner.name], 15, 75);
+    // }
+
+    // moradorPdf.text(['Telefone: ' + this.comunicationsWay(morador.personal.tel)], 15, 85);
+
+    // moradorPdf.text(['Celular: ' + this.comunicationsWay(morador.personal.cel)], 15, 85);
+
+    // moradorPdf.text(['Email: ' + this.comunicationsWay(morador.personal.email)], 15, 95);
+
+    // moradorPdf.text(['Profissão: ' + morador.professional.profession], 15, 105);
+
+    // moradorPdf.text(['Salário: R$ ' + morador.professional.salary.toFixed(2)], 15, 115);
+
+    // moradorPdf.text(['Bloco: ' + morador.condominium.block], 15, 125);
+
+    // moradorPdf.text(['Unidade: ' + morador.condominium.unit], 15, 135);
 
     moradorPdf.save(`${morador.personal.name.replace(' ', '')}.pdf`);
+  }
 
-    // var doc = new jsPDF();
+  private getBornDate(bornDate: Date): string {
+    return new Date(bornDate).toLocaleDateString();
+  }
 
-    // doc.text(20, 20, 'This is the default font.');
+  private comunicationsWay(numberValue: string): string {
+    if (!numberValue) {
+      return 'N/C';
+    }
+    if (numberValue.length === 10) {
+      return '(' + numberValue.substr(0, 2) + ') ' + numberValue.substr(2, 4) + '-' + numberValue.substr(6, 4);
+    } else if (numberValue.length === 11) {
+      return '(' + numberValue.substr(0, 2) + ') ' + numberValue.substr(2, 5) + '-' + numberValue.substr(6, 4);
+    } else {
+      return numberValue;
+    }
+  }
 
-    // doc.setFont("courier");
-    // doc.setFontType("normal");
-    // doc.text(20, 30, 'This is courier normal.');
-
-    // doc.setFont("times");
-    // doc.setFontType("italic");
-    // doc.text(20, 40, 'This is times italic.');
-
-    // doc.setFont("helvetica");
-    // doc.setFontType("bold");
-    // doc.text(20, 50, 'This is helvetica bold.');
-
-    // doc.setFont("courier");
-    // doc.setFontType("bolditalic");
-    // doc.text(20, 60, 'This is courier bolditalic.');
-
-    // // Save the PDF
-    // doc.save('document.pdf');
+  private getCpf(cpf: string): string {
+    return cpf.substr(0, 3) + '.' + cpf.substr(3, 3) + '.' + cpf.substr(6, 3) + '-' + cpf.substr(9, 2);
   }
 }
 
-// rg formato, mudar dinamicamente quando for  0.000.000 e  00.000.000-X
-// ajustar stteper em formatos pequenos
-// Ajustar componente cadastro para cadastro de funcionário
-
-// ajustar busca para buscar por qualquer coisa que a pessoa digitou
 // Ajustar filtro para filtrar por número mínimo e máximo de apartamentos, por bloco
+// criar dialog para confirmar exclusão de cadastros
 // criar paginação
 // criar quantidade de itens por tela
 // verificar acessibilidade
-// Exportar o pdf
-
 // Na home colocar um vídeo institucional
+// Ajustar componente cadastro para cadastro de funcionário
 // Criar Fale conosco com um textbox que a pessoa pode estilizar a mensagem
 // Nas áreas comum, cadastrar as áreas comum do condomínio e já aproveitar para reservar uma delas. Juntar a tela de cadastro com a de reservas e log
-
 // Posteriormente, ativar uma opção que permite a table virar um card
 // Cadastro de funcionários
+// Ajustart mask do rg para quando for editar

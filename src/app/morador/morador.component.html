@@ -1,14 +1,14 @@
 <section>
   <div class="banner">
     <h1>Moradores</h1>
-    <div class="header__content">
+    <div class="header__content" [ngClass]="{'header__content__empty__table': !(morador$ | async)?.length && morador?.length > 0 }">
       <div>
-        <input type="text" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
-          (ngModelChange)="onInputChange()" [mask]="mask" [patterns]="pattern" placeholder="digite sua busca aqui..."
+        <input type="text" aria-label="digite a sua busca aqui" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
+          placeholder="digite sua busca aqui..."
           #searchInput>
       </div>
       <div>
-        <button class="btn__default" [disabled]="!(morador$ | async)">Filtrar<i class="fa fa-filter"></i></button>
+        <button class="btn__default" [disabled]="!(morador$ | async)" aria-label="filtrar busca">Filtrar<i class="fa fa-filter"></i></button>
         <button class="btn__default btn__primary" (click)="action()">Novo Morador<i
             class="fas fa-user-plus"></i></button>
       </div>
@@ -36,14 +36,14 @@
         <td>{{ morador?.condominium?.block }}</td>
         <td>{{ morador?.condominium?.unit }}</td>
         <td>
-          <button (click)="downloadAsPDF(morador)"><i class="far fa-file-pdf"></i></button>
-          <button (click)="action(morador, i)"><i class="fas fa-edit"></i></button>
-          <button (click)="remove(i, morador.id)"><i class="fas fa-trash"></i></button></td>
+          <button (click)="downloadAsPDF(morador)" attr.aria-label="exportar para o pdf os dados do morador {{morador?.name}}"><i class="far fa-file-pdf" aria-hidden="true"></i></button>
+          <button (click)="action(morador, i)" attr.aria-label="editar morador {{morador?.name}}"><i class="fas fa-edit" aria-hidden="true"></i></button>
+          <button (click)="remove(i, morador.id)" attr.aria-label="remover morador {{morador?.name}}"><i class="fas fa-trash" aria-hidden="true"></i></button></td>
       </tr>
     </tbody>
-    <div *ngIf="!(morador$ | async)">
+    <div *ngIf="(morador$ | async)?.length < 1">
       <i class="fa fa-list" aria-hidden="true"></i>
-      <span>Nenhum morador encontrado...</span>
+      <span role="alert">Nenhum morador encontrado...</span>
     </div>
   </table>
 </section>

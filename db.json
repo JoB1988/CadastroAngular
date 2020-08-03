@@ -32,13 +32,13 @@
   "morador": [
     {
       "personal": {
-        "photo": "",
+        "photo": null,
         "name": "Flávio Benevides",
         "bornDate": "1938-09-23",
         "cpf": "12884626891",
-        "rg": "111111111",
+        "rg": "5413312",
         "tel": "1141279338",
-        "cel": "23213123132",
+        "cel": "",
         "email": null,
         "civilStatus": "casado(a)"
       },
@@ -146,8 +146,8 @@
     },
     {
       "personal": {
-        "photo": "",
-        "name": "Roberto Fernandes Benevides",
+        "photo": null,
+        "name": "Roberto Benevides",
         "bornDate": "1980-05-30",
         "cpf": "12245677896",
         "rg": "123456789",
@@ -161,17 +161,17 @@
         "salary": 5000
       },
       "condominium": {
-        "block": "unico",
-        "unit": 10
+        "block": "F",
+        "unit": 128
       },
+      "id": 6,
       "familiar": {
         "partner": {
-          "name": "",
+          "name": null,
           "id": null
         },
         "dependents": []
-      },
-      "id": 6
+      }
     }
   ]
 }
