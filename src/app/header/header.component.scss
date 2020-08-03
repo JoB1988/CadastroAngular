@@ -1,35 +1,52 @@
 .navbar {
-    z-index: 1;
-    top: 0;
-    min-height: 50px;
-    width: 100%;
+    align-items: unset;
     background-color: #a9a9a9;
-    padding: 0;
-    position: fixed;
     display: flex;
     justify-content: space-between;
-    align-items: unset;
+    min-height: 50px;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
+    button {
+        margin-left: 20px;
+        padding: 0 10px;
+        i {
+            color: white;
+            font-size: 1.5rem;
+        }
+        &:hover {
+            background-color: rgba($color: #000000, $alpha: 0.1);
+        }
+    }
+
     div {
         display: flex;
+
         ul {
-            display: flex;
             align-items: center;
+            display: flex;
             list-style-type: none;
-            padding: 0 20px;
             margin: 0;
+            padding: 0 20px;
+
             li {
                 height: 100%;
+
                 a {
-                    min-width: 100px;
                     align-items: center;
-                    height: 100%;
-                    padding: 0 10px;
+                    color: white;
                     display: flex;
-                    justify-content: center;
-                    text-transform: uppercase;
                     font-family: Arial, Helvetica, sans-serif;
                     font-weight: 500;
-                    color: white;
+                    height: 100%;
+                    justify-content: center;
+                    min-width: 100px;
+                    padding: 0 10px;
+                    text-transform: uppercase;
+
                     &:hover {
                         background-color: rgba($color: #000000, $alpha: 0.1);
                     }
@@ -37,16 +54,17 @@
             }
         }
     }
+
     &__login__user {
+        align-items: center;
+        display: flex;
+        padding: 0 20px 0 0;
+
         &:before {
-            content: '|';
-            margin-right: 20px;
+            content: "|";
             font-size: 30px;
+            margin-right: 20px;
             margin-top: -5px;
         }
-        padding: 0 20px 0 0;
-        display: flex;
-        align-items: center;
     }
-    // margin: 1px solid gray;
 }

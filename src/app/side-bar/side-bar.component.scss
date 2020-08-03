@@ -1,0 +1,99 @@
+@import "../shared/colors.scss";
+@import "../shared/mixins.scss";
+
+nav {
+    align-content: flex-start;
+    background-color: #a9a9a9;
+    height: calc(100% - 50px);
+    overflow: hidden;
+    position: absolute;
+    top: 50px;
+    z-index: 1;
+    @include flex-box();
+
+    div {
+        width: 100%;
+        @include flex-box();
+
+        ul {
+            list-style-type: none;
+            margin-bottom: 0;
+            padding: 0;
+            @include flex-box();
+
+            li {
+                width: 100%;
+                @include flex-box();
+
+                &:hover {
+                    background-color: rgba($color: #000000, $alpha: 0.1);
+                }
+
+                a {
+                    color: white;
+                    padding: 10px 20px;
+                    white-space: nowrap;
+                    width: 100%;
+                }
+            }
+        }
+
+        span {
+            color: white;
+            height: 20px;
+            padding: 10px 20px;
+        }
+
+        ul,
+        span {
+            width: 100%;
+        }
+    }
+}
+
+.navbar__out {
+    animation: 1s cubic-bezier(0.25, 0.8, 0.25, 1) slideOutToLeft;
+    width: 0;
+}
+
+.navbar__in {
+    animation: 1s cubic-bezier(0.25, 0.8, 0.25, 1) slideInFromLeft;
+    width: 50%;
+}
+
+@keyframes slideOutToLeft {
+    0% {
+        width: 50%;
+    }
+    100% {
+        width: 0px;
+    }
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        width: 0px;
+    }
+    100% {
+        width: 50%;
+    }
+}
+
+button {
+    border: 2px solid white;
+    border-radius: 15px;
+    height: 30px;
+    left: calc(100% - 50px);
+    position: absolute;
+    top: calc(100% - 150px);
+    width: 30px;
+
+    i {
+        color: white;
+        font-size: 1.2rem;
+    }
+
+    &:hover {
+        background-color: rgba($color: #000000, $alpha: 0.1);
+    }
+}

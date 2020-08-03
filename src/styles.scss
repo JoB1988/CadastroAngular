@@ -97,7 +97,8 @@ a,
 h1,
 h2,
 h3,
-button {
+button,
+div {
     font-family: "roboto-medium" !important;
 }
 
@@ -118,7 +119,6 @@ h3 {
 .mat-spinner circle {
     stroke: $main-theme-color-orange1;
 }
-
 
 .spinner-msg {
     margin-top: 40px;

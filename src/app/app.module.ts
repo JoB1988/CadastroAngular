@@ -7,9 +7,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { SideBarComponent } from './side-bar/side-bar.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SideBarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
