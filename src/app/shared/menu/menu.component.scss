@@ -1,0 +1,48 @@
+@import "../colors.scss";
+@import "../mixins.scss";
+
+.menu {
+    margin-top: 45px;
+    position: absolute;
+    background-color: white;
+    z-index: 1;
+    border-radius: 2px;
+    width: 200px;
+    min-height: 75px;
+    border: 2px solid;
+    padding: 15px;
+
+    div {
+        margin: 10px 0;
+        @include flex-box(center, space-between);
+        input[type="range"] {
+            width: 100%;
+            padding: 0;
+        }
+        label {
+            line-height: 25px;
+            &::first-letter {
+                text-transform: uppercase;
+            }
+            width: 50%;
+        }
+        &:nth-child(2) {
+            margin-top: 18px !important;
+        }
+    }
+    // botão após o div
+    div ~ button {
+        width: 100%;
+        border: none;
+        @include btn__color__theme($white, $main-theme-color-green);
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+    // primeiro child do botão
+    > button {
+        float: right;
+        clear: both;
+        margin-bottom: -8px;
+        color: $error-color;
+    }
+}

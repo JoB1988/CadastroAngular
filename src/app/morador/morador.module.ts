@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AppGuardService } from '../app.guard.service';
 import { Routes, RouterModule } from '@angular/router';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { MenuModule } from '../shared/menu/menu.module';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = undefined;
 
@@ -22,7 +23,10 @@ const routes: Routes = [
     MoradorComponent,
     MoradorDialogComponent
   ],
-  imports: [SharedModule, RouterModule.forChild(routes), NgxMaskModule.forRoot()],
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes), NgxMaskModule.forRoot(),
+    MenuModule],
   exports: [MoradorComponent],
   providers: [MoradorService]
 })

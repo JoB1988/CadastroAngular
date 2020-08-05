@@ -1,0 +1,11 @@
+<section class="menu" (click)="$event.stopPropagation()">
+    <button aria-label="fechar modal" (click)="close.emit(false)"><i class="fas fa-times"></i></button>
+    <div *ngFor="let option of options, let i = index">
+        <label
+            for="input__{{option?.elementName}}__{{i}}">{{ option?.elementNameTranslate ? option?.elementNameTranslate : option?.elementName }}
+            {{ option?.value && option?.inputType === 'checkbox' ? option?.value: '' }}</label>
+        <input *ngIf="option?.inputType !== 'checkbox'" id="input__{{option?.elementName}}__{{i}}" type="{{option?.inputType}}" (change)="change($event)">
+        <input *ngIf="option?.inputType === 'checkbox'" id="input__{{option?.elementName}}__{{option?.value}}" type="{{option?.inputType}}" (change)="change($event)">
+    </div>
+    <button class="btn__default" (click)="filter()">Aplicar filtro</button>
+</section>

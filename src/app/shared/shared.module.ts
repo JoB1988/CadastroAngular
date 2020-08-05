@@ -20,11 +20,11 @@ const OTHER_MODULES = [
     MatDialogModule,
     MatProgressBarModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
 ];
 
 @NgModule({
-    imports: [...ANGULAR_MODULES, ...OTHER_MODULES],
+    imports: [...ANGULAR_MODULES, ...OTHER_MODULES, ],
     exports: [...ANGULAR_MODULES, ...OTHER_MODULES]
 })
 export class SharedModule { }

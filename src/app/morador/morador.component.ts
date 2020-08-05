@@ -44,10 +44,16 @@ export class MoradorComponent implements OnDestroy {
     { name: '...' }
   ];
 
+  public options = [
+    { value: { min: 0, max: 100 }, inputType: 'range', elementName: 'unit', elementNameTranslate: 'unidade' },
+    { value: ['A', 'B', 'C'], inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' }
+  ];
+
   public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
   public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
   public morador = undefined;
+  public openMenu = false;
 
   private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
     if (!data) {
@@ -80,7 +86,6 @@ export class MoradorComponent implements OnDestroy {
         obejct.condominium.unit.toString().includes(inputValue.toLowerCase().trim())
       );
     });
-    console.log(search)
     this.morador$.next(search);
     this.progressBar$.next({ mode: 'determinate', value: 100 });
   });
@@ -192,6 +197,15 @@ export class MoradorComponent implements OnDestroy {
     this.morador$.next(value);
   }
 
+  public openFilter(event) {
+    event.stopPropagation();
+    this.openMenu = !this.openMenu;
+  }
+
+  public filter(event) {
+    console.log(event)
+  }
+
   public downloadAsPDF(morador: Morador) {
 
     let space = 0;
@@ -296,6 +310,7 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
+// Criar componente de menu que vai ser usado para filtrar
 // Ajustar filtro para filtrar por número mínimo e máximo de apartamentos, por bloco
 // criar dialog para confirmar exclusão de cadastros
 // criar paginação
