@@ -6,6 +6,8 @@ import { MoradorDialogComponent } from './morador-dialog/morador-dialog.componen
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import * as jsPDF from 'jspdf';
+import { IFilter } from './morador';
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'app-morador',
@@ -44,9 +46,11 @@ export class MoradorComponent implements OnDestroy {
     { name: '...' }
   ];
 
-  public options = [
-    { value: { min: 0, max: 100 }, inputType: 'range', elementName: 'unit', elementNameTranslate: 'unidade' },
-    { value: ['A', 'B', 'C'], inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' }
+  public options: IFilter[] = [
+    { values: { min: 110, max: 2040, actual: 0 }, inputType: 'range', elementName: 'unit', elementNameTranslate: 'unidade' },
+    { values: { value: 'A', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' },
+    { values: { value: 'B', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' },
+    { values: { value: 'C', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' }
   ];
 
   public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
@@ -202,8 +206,9 @@ export class MoradorComponent implements OnDestroy {
     this.openMenu = !this.openMenu;
   }
 
-  public filter(event) {
-    console.log(event)
+  public filter(options: IFilter[]) {
+    this.options = options;
+    console.log(this.options);
   }
 
   public downloadAsPDF(morador: Morador) {
@@ -310,12 +315,13 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
-// Criar componente de menu que vai ser usado para filtrar
-// Ajustar filtro para filtrar por número mínimo e máximo de apartamentos, por bloco
+// filtrar o componente morador
+// ajustar acessibilidade do componente de filtrar
+// ajustar acessibilidade do componente de sidebar
+// ajustar acessibilidade do componente de header
 // criar dialog para confirmar exclusão de cadastros
 // criar paginação
 // criar quantidade de itens por tela
-// verificar acessibilidade
 // Na home colocar um vídeo institucional
 // Ajustar componente cadastro para cadastro de funcionário
 // Criar Fale conosco com um textbox que a pessoa pode estilizar a mensagem

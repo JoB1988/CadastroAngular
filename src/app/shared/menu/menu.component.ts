@@ -1,67 +1,45 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, AfterViewInit, ElementRef } from '@angular/core';
+import { IFilter } from 'src/app/morador/morador';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements AfterViewInit {
 
-  @Input() options;
+  @Input() options: IFilter[];
   @Output() close = new EventEmitter(false);
   @Output() filterValues = new EventEmitter();
 
-  public form: any[] = [];
+  constructor(public elementRef: ElementRef) { }
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.optionsFormated();
+  ngAfterViewInit(): void {
+    this.options.forEach(element => {
+      if (element.inputType === 'range') {
+        this.elementRef.nativeElement.querySelector(`#input__${element.elementName}`).valueAsNumber = element.values['actual'];
+      }
+    });
   }
 
   public filter() {
-    this.filterValues.emit(this.form);
+    this.filterValues.emit(this.options);
+    this.close.emit(false);
   }
 
   public change(event) {
-    if (event.target.type === 'checkbox') {
-      this.form.forEach(element => {
-        if (element.key === event.target.id.replace('input__', '')) {
-          element.value = event.target.checked;
-        }
-      });
-    } else {
-      console.log(event)
-    }
-
-  }
-
-  public optionsFormated() {
-    const newOptions = [];
-    this.options.forEach(option => {
-      if (option.value.length) {
-        option.value.forEach((element, index) => {
-          newOptions.push(
-            {
-              value: element,
-              inputType: option.inputType,
-              elementName: option.elementName,
-              elementNameTranslate: option.elementNameTranslate
-            }
-          );
-          this.form.push({ key: option.elementName + '__' + option.value[index], value: false });
-        });
-      } else {
-        newOptions.push(option);
-        this.form.push({ key: option.elementName, value: '' });
+    this.options.forEach(element => {
+      if (event.target.id.replace('input__', '') === element.elementName) {
+        element.values['actual'] = event.target.valueAsNumber;
+      } else if (event.target.id.replace('input__', '') === `${element.elementName}__${element.values['value']}`) {
+        element.values['actual'] = event.target.checked;
       }
     });
-    this.options = newOptions;
   }
 
   //  Ao dar resize, ele verifica a necessidade de mostrar o hamburguer
   @HostListener('window:click', ['$event']) onClickPage() {
     this.close.emit(false);
   }
-
 }
