@@ -165,12 +165,13 @@ section {
         &:nth-child(2),
         &:nth-child(3),
         &:nth-child(4),
-        &:nth-child(5) {
+        &:nth-child(5),
+        &:nth-child(6) {
           max-width: 200px;
           min-width: 125px;
         }
 
-        &:nth-child(6) {
+        &:nth-child(7) {
           max-width: 100px;
           min-width: 100px;
         }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ɵConsole } from '@angular/core';
 import { MoradorService } from './morador.service';
 import { Morador } from '../shared/app.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import * as jsPDF from 'jspdf';
 import { IFilter } from './morador';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-morador',
@@ -38,6 +38,7 @@ export class MoradorComponent implements OnDestroy {
   // Header
   public thead = [
     { name: 'nome', object: 'personal', attribute: 'name', arrowType: 'fa-circle' },
+    { name: 'idade', object: 'personal', attribute: 'age', arrowType: 'fa-circle' },
     { name: 'cpf', object: 'personal', attribute: 'cpf', arrowType: 'fa-circle' },
     { name: 'tel', object: 'personal', attribute: 'tel', arrowType: 'fa-circle' },
     { name: 'cel', object: 'personal', attribute: 'cel', arrowType: 'fa-circle' },
@@ -46,18 +47,19 @@ export class MoradorComponent implements OnDestroy {
     { name: '...' }
   ];
 
-  public options: IFilter[] = [
-    { values: { min: 110, max: 2040, actual: 0 }, inputType: 'range', elementName: 'unit', elementNameTranslate: 'unidade' },
-    { values: { value: 'A', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' },
-    { values: { value: 'B', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' },
-    { values: { value: 'C', checked: false }, inputType: 'checkbox', elementName: 'block', elementNameTranslate: 'bloco' }
-  ];
+  public options: IFilter[] = [];
 
   public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
   public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
-  public morador = undefined;
+  public morador: Morador[];
+  // public morador = undefined;
   public openMenu = false;
+  public moradorSearch: Morador[];
+  public blocks = [];
+  public ages = [];
+  public units = [];
+  public = true;
 
   private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
     if (!data) {
@@ -195,10 +197,35 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  private setArray(value) {
+  private setArray(moradores: Morador[]) {
+    this.morador = this.setAge(moradores);
+    this.options = this.getFiltersLabel();
+    this.morador$.next(moradores);
     this.progressBar$.next({ mode: 'determinate', value: 100 });
-    this.morador = value;
-    this.morador$.next(value);
+  }
+
+  private setAge(moradores: Morador[]): Morador[] {
+    const today = new Date();
+    moradores.forEach(morador => {
+      const moradorBirthday = new Date(morador.personal.bornDate);
+      if (today.getMonth() > moradorBirthday.getMonth()) {
+        morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear();
+      } else {
+        if (today.getMonth() === moradorBirthday.getMonth()) {
+          if (today.getDate() < moradorBirthday.getDate()) {
+            morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear() - 1;
+          } else {
+            morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear();
+          }
+        } else {
+          morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear() - 1;
+        }
+      }
+      this.ages.push(morador.personal['age']);
+      this.units.push(morador.condominium.unit);
+      this.blocks.push(morador.condominium.block);
+    });
+    return moradores;
   }
 
   public openFilter(event) {
@@ -206,9 +233,97 @@ export class MoradorComponent implements OnDestroy {
     this.openMenu = !this.openMenu;
   }
 
-  public filter(options: IFilter[]) {
-    this.options = options;
-    console.log(this.options);
+  // rever foreachs
+  private getFiltersLabel(): IFilter[] {
+    const IFILTER: IFilter[] = [];
+    // retorna um array sem nomes/números repetidos
+    this.blocks = this.sortFiltersLabel(this.blocks.filter((v, i, a) => a.indexOf(v) === i));
+    this.ages = this.sortFiltersLabel(this.ages.filter((v, i, a) => a.indexOf(v) === i));
+    this.units = this.sortFiltersLabel(this.units.filter((v, i, a) => a.indexOf(v) === i));
+    this.blocks.forEach(block => {
+      IFILTER.push({
+        elementName: 'block_' + block,
+        actualValue: false,
+        inputType: 'checkbox',
+        elementNameTranslate: 'Bloco ' + block
+      });
+    });
+    IFILTER.push({
+      elementName: 'unit',
+      minValue: this.units[0],
+      maxValue: this.units[this.units.length - 1],
+      actualValue: [this.units[0], this.units[this.units.length - 1]],
+      inputType: 'number',
+      elementNameTranslate: 'Unidade'
+    });
+    IFILTER.push({
+      elementName: 'age',
+      minValue: this.ages[0],
+      maxValue: this.ages[this.units.length],
+      actualValue: this.ages[0],
+      inputType: 'range',
+      elementNameTranslate: 'Idade'
+    });
+    return IFILTER;
+  }
+
+  private sortFiltersLabel(anyArray: any[]): any[] {
+    return anyArray.sort((a, b) => {
+      if (a < b) {
+        return -1;
+      }
+      return 1;
+    });
+  }
+
+  public filter(event) {
+    if (event === 'limpar') {
+      this.options = this.getFiltersLabel();
+      return;
+    } else if (event === 'sair') {
+      return;
+    }
+    const simpleFilter = {
+      unit: {
+        minValue: 100,
+        maxValue: 300
+      },
+      block: [{ key: 'B', value: true }, { key: 'A', value: false }],
+      personal: {
+        minAge: 10,
+        maxAge: 90
+      }
+    };
+    const search = this.morador.filter((value, index, array) => {
+      console.log(simpleFilter)
+      return (
+        value.personal.age >= simpleFilter.personal.minAge
+        &&
+        value.personal.age <= simpleFilter.personal.maxAge
+        &&
+        value.condominium.unit >= simpleFilter.unit.minValue
+        &&
+        value.condominium.unit <= simpleFilter.unit.maxValue
+        &&
+        this.multiplusValidation(value.condominium.block, simpleFilter.block)
+        // (this.multiplusValidation(value.condominium.block, simpleFilter.block))
+        // (value.condominium.block.includes("A") || value.condominium.block.includes("F") || value.condominium.block.includes("B"))
+        // &&
+      );
+    });
+    console.log(search)
+    // this.morador$.next(search);
+  }
+
+  private multiplusValidation(value: any, block: any[] = []): any[] {
+    return block.filter(b => {
+      return value.includes(b.key) && b.value ? value : undefined;
+    });
+  }
+
+
+  public compareModification(): number {
+    return 0;
   }
 
   public downloadAsPDF(morador: Morador) {
@@ -316,10 +431,11 @@ export class MoradorComponent implements OnDestroy {
 }
 
 // filtrar o componente morador
+// ajustar css do componente de filter
+
 // ajustar acessibilidade do componente de filtrar
 // ajustar acessibilidade do componente de sidebar
 // ajustar acessibilidade do componente de header
-// criar hint no botão filtrar
 // adicionar à acessibilidade quantos valores o botão filtrar tem
 // criar dialog para confirmar exclusão de cadastros
 // criar paginação
@@ -331,3 +447,7 @@ export class MoradorComponent implements OnDestroy {
 // Posteriormente, ativar uma opção que permite a table virar um card
 // Cadastro de funcionários
 // Ajustart mask do rg para quando for editar
+// ajustar form min e max value da buscar
+// criar hint no botão filtrar
+// rever foreachs
+// validar campos do filtro

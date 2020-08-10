@@ -34,6 +34,7 @@
     <tbody *ngIf="(morador$ | async)">
       <tr *ngFor="let morador of (morador$ | async), let i = index ">
         <td>{{ morador?.personal?.name }}</td>
+        <td>{{ morador?.personal?.age }}</td>
         <td>{{ morador?.personal?.cpf | mask: '000.000.000-00'}}</td>
         <td>{{ morador?.personal?.tel ? (morador?.personal?.tel | mask: '(00) 0000-0000') : 'N/A' }}</td>
         <td>{{ morador?.personal?.cel ? (morador?.personal?.cel| mask: '(00) 90000-0000') : 'N/A' }}</td>

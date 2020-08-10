@@ -39,6 +39,7 @@ export class MoradorDialogComponent implements OnInit {
         photo: [''],
         name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.pattern(this.lettersRegex)])],
         bornDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
+        age: [''],
         cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.pattern(this.cpfRegex)])],
         rg: ['', Validators.compose(
           [Validators.required, Validators.minLength(7), Validators.maxLength(9), Validators.pattern(this.rgRegex)]
@@ -78,6 +79,7 @@ export class MoradorDialogComponent implements OnInit {
       this.moradorForm$.value.controls.personal['controls'].photo.setValue(this.morador.personal.photo);
       this.moradorForm$.value.controls.personal['controls'].name.setValue(this.morador.personal.name);
       this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.bornDate);
+      this.moradorForm$.value.controls.personal['controls'].age.setValue(this.morador.personal.bornDate);
       this.moradorForm$.value.controls.personal['controls'].cpf.setValue(this.morador.personal.cpf);
       this.moradorForm$.value.controls.personal['controls'].rg.setValue(this.morador.personal.rg);
       this.moradorForm$.value.controls.personal['controls'].civilStatus.setValue(this.morador.personal.civilStatus);
@@ -158,24 +160,8 @@ export class MoradorDialogComponent implements OnInit {
     this.moradorForm$.value.controls.familiar['controls'].partner.disable();
   }
 
-  public allowNumbers($event) {
-    switch ($event.keyCode) {
-      case 48:
-      case 49:
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-        break;
-      default:
-        $event.preventDefault();
-        break;
-    }
+  public allowNumbers(event) {
+    Important.allowNumbers(event);
   }
 
   public displayError(formControl: string, formControlName: string): string {

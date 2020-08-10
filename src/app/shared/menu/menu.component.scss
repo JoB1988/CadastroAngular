@@ -1,23 +1,45 @@
 @import "../colors.scss";
 @import "../mixins.scss";
 
+// Remove botão de aumentar/diminuir
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 .menu {
     margin-top: 45px;
     position: absolute;
     background-color: white;
     z-index: 1;
     border-radius: 2px;
-    width: 200px;
+    width: 220px;
     min-height: 75px;
     border: 2px solid;
     padding: 15px;
-
-    div {
-        margin: 10px 0;
+    @include flex-box(center, flex-end);
+    &__min__max {
+        @include flex-box(center, flex-end);
+        width: calc(50% - 10px) !important;
+        label {
+            width: 100% !important;
+        }
+    }
+    form {
+        margin-top: 10px;
         @include flex-box(center, space-between);
+    }
+    div {
+        @include flex-box(center, space-between);
+        width: 100%;
+        &:not(:last-child) {
+            margin: 10px 0;
+        }
         input[type="range"] {
             width: 100%;
             padding: 0;
+        }
+        input[type="number"] {
+            width: 100%;
         }
         label {
             line-height: 25px;
@@ -26,18 +48,21 @@
             }
             width: 50%;
         }
-        &:nth-child(2) {
-            margin-top: 18px !important;
+    }
+    &__buttons {
+        button {
+            width: calc(50% - 7.5px);
+            border: none;
+            margin-top: 10px;
+            &:first-of-type {
+                @include btn__color__theme($white, $main-theme-color-orange1);
+            }
+            &:last-of-type {
+                @include btn__color__theme($white, $main-theme-color-green);
+            }
         }
     }
     // botão após o div
-    div ~ button {
-        width: 100%;
-        border: none;
-        @include btn__color__theme($white, $main-theme-color-green);
-        margin-top: 10px;
-        margin-bottom: 0px;
-    }
     // primeiro child do botão
     > button {
         float: right;
