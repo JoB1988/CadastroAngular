@@ -55,8 +55,8 @@ export class MoradorService {
     );
   }
 
-  public deleteMorador(id: string): Observable<any> {
-    return this.http.delete<any>(`${URLMORADOR}/${id}`).pipe(
+  public deleteMorador(moradorId: string): Observable<any> {
+    return this.http.delete<any>(`${URLMORADOR}/${moradorId}`).pipe(
       map((response: any) => {
         return response;
       }),

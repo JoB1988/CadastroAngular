@@ -36,17 +36,17 @@ export class MoradorComponent implements OnDestroy {
 
   // Header
   public thead = [
-    { name: 'nome', object: 'personal', attribute: 'name', arrowType: 'fa-circle' },
-    { name: 'idade', object: 'personal', attribute: 'age', arrowType: 'fa-circle' },
-    { name: 'cpf', object: 'personal', attribute: 'cpf', arrowType: 'fa-circle' },
-    { name: 'tel', object: 'personal', attribute: 'tel', arrowType: 'fa-circle' },
-    { name: 'cel', object: 'personal', attribute: 'cel', arrowType: 'fa-circle' },
-    { name: 'bloco', object: 'condominium', attribute: 'block', arrowType: 'fa-circle' },
-    { name: 'unidade', object: 'condominium', attribute: 'unit', arrowType: 'fa-circle' },
+    { name: 'nome', group: 'personal', attribute: 'name', arrowType: 'fa-circle' },
+    { name: 'idade', group: 'personal', attribute: 'age', arrowType: 'fa-circle' },
+    { name: 'cpf', group: 'personal', attribute: 'cpf', arrowType: 'fa-circle' },
+    { name: 'tel', group: 'personal', attribute: 'tel', arrowType: 'fa-circle' },
+    { name: 'cel', group: 'personal', attribute: 'cel', arrowType: 'fa-circle' },
+    { name: 'bloco', group: 'condominium', attribute: 'block', arrowType: 'fa-circle' },
+    { name: 'unidade', group: 'condominium', attribute: 'unit', arrowType: 'fa-circle' },
     { name: '...' }
   ];
 
-  public filter: IFilter[] = [];
+  public filterOptions: IFilter[] = [];
 
   public searchInput$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
@@ -62,12 +62,12 @@ export class MoradorComponent implements OnDestroy {
   private moradoresSubscription = this.moradorService.moradores$.subscribe((moradores) => {
     if (!moradores) {
       this.moradorService.getMorador().subscribe((response) => {
-        this.setArray(response);
+        this.adjustArray(response);
       }, (error) => {
         this.progressBar$.next({ mode: 'determinate', value: 100 });
       });
     } else {
-      this.setArray(moradores);
+      this.adjustArray(moradores);
     }
   });
 
@@ -105,35 +105,32 @@ export class MoradorComponent implements OnDestroy {
   }
 
   // #region sort
-  /* Método que ordena de forma decrescente */
-  private sortDec(object, attribute) {
+  private sortMoradorByDecreasing(group, attribute) {
     this.moradores$.value.sort((a, b) => {
-      if (a[object][attribute] < b[object][attribute]) {
+      if (a[group][attribute] < b[group][attribute]) {
         return -1;
       }
       return 1;
     });
   }
 
-  /* Método que ordena de forma crescente */
-  private sortAsc(object, attribute) {
+  private sortMoradorByGrowing(group, attribute) {
     this.moradores$.value.sort((a, b) => {
-      if (a[object][attribute] > b[object][attribute]) {
+      if (a[group][attribute] > b[group][attribute]) {
         return -1;
       }
       return 1;
     });
   }
 
-  /* Método que ajusta as setas da table */
-  public onSort(th: any) {
+  public onMoradorSort(thead: any) {
     this.thead.forEach(theadeElement => {
-      if (theadeElement.name === th.name) {
+      if (theadeElement.name === thead.name) {
         if (theadeElement.arrowType === 'fa-circle' || theadeElement.arrowType === 'fa-arrow-down') {
-          this.sortDec(th.object, th.attribute);
+          this.sortMoradorByDecreasing(thead.group, thead.attribute);
           theadeElement.arrowType = 'fa-arrow-up';
         } else {
-          this.sortAsc(th.object, th.attribute);
+          this.sortMoradorByGrowing(thead.group, thead.attribute);
           theadeElement.arrowType = 'fa-arrow-down';
         }
       } else {
@@ -143,7 +140,8 @@ export class MoradorComponent implements OnDestroy {
   }
   //#endregion
 
-  public remove(arrayPosition, moradorId) {
+  //#region crud
+  public deleteMorador(arrayPosition, moradorId) {
     this.moradorService.deleteMorador(moradorId).subscribe(() => {
       console.log('removido com sucesso')
       this.moradores$.value.splice(arrayPosition, 1);
@@ -152,19 +150,20 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  public action(morador?: Morador, index?: number) {
-    if (index >= 0) {
-      this.moradorService.getMorador(morador.id).subscribe(() => {
-        this.showForm(morador, index);
-      }, () => {
-        console.log('Um erro ocorreu ao buscar o morador');
-      });
-    } else {
-      this.showForm(morador);
-    }
+  public newMorador() {
+    this.showMoradorForm();
   }
 
-  public showForm(morador: Morador, index?) {
+  public editMorador(morador: Morador, index: number) {
+    this.moradorService.getMorador(morador.id).subscribe(() => {
+      this.showMoradorForm(morador, index);
+    }, () => {
+      console.log('Um erro ocorreu ao buscar o morador');
+    });
+  }
+  //#endregion
+
+  private showMoradorForm(morador?: Morador, index?) {
     const dialogRef = this.dialog.open(MoradorDialogComponent, {
       minWidth: 250,
       maxWidth: 800,
@@ -195,69 +194,69 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  private setArray(moradores: Morador[]) {
-    this.moradores = this.setAge(moradores);
-    this.filter = this.getFiltersLabel();
+  private adjustArray(moradores: Morador[]) {
+    this.moradores = this.addAgeToArray(moradores);
     this.moradores$.next(moradores);
+    this.filterOptions = this.getFilterOptions();
     this.progressBar$.next({ mode: 'determinate', value: 100 });
   }
 
-  private setAge(moradores: Morador[]): Morador[] {
+  private addAgeToArray(moradores: Morador[]): Morador[] {
     const today = new Date();
     moradores.forEach(morador => {
-      const moradorBirthday = new Date(morador.personal.bornDate);
+      const moradorBirthday = new Date(morador.personal.birthDate);
       if (today.getMonth() > moradorBirthday.getMonth()) {
-        morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear();
+        morador.personal.age = today.getFullYear() - moradorBirthday.getFullYear();
       } else {
         if (today.getMonth() === moradorBirthday.getMonth()) {
           if (today.getDate() < moradorBirthday.getDate()) {
-            morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear() - 1;
+            morador.personal.age = today.getFullYear() - moradorBirthday.getFullYear() - 1;
           } else {
-            morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear();
+            morador.personal.age = today.getFullYear() - moradorBirthday.getFullYear();
           }
         } else {
-          morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear() - 1;
+          morador.personal.age = today.getFullYear() - moradorBirthday.getFullYear() - 1;
         }
       }
-      this.moradoresAges.push(morador.personal['age']);
+      this.moradoresAges.push(morador.personal.age);
       this.condominiumUnits.push(morador.condominium.unit);
       this.condominiumBlockNames.push(morador.condominium.block);
     });
     return moradores;
   }
 
-  public openFilter(event) {
+  public openFilterMenu(event) {
     event.stopPropagation();
     this.openNavBar = !this.openNavBar;
   }
 
   // rever foreachs
-  private getFiltersLabel(): IFilter[] {
-    const IFILTER: IFilter[] = [];
+  private getFilterOptions(): IFilter[] {
+    const filterOptions: IFilter[] = [];
     // retorna um array sem nomes/números repetidos
-    this.condominiumBlockNames = this.sortFiltersLabel(
+    this.condominiumBlockNames = this.sortArrayByGrowing(
       this.condominiumBlockNames.filter(
         (blockName, index, condominiumBlockNames) => condominiumBlockNames.indexOf(blockName) === index
       )
     );
-    this.moradoresAges = this.sortFiltersLabel(
+    this.moradoresAges = this.sortArrayByGrowing(
       this.moradoresAges.filter(
         (age, index, moradoresAges) => moradoresAges.indexOf(age) === index
       )
     );
-    this.condominiumUnits = this.sortFiltersLabel(
+    this.condominiumUnits = this.sortArrayByGrowing(
       this.condominiumUnits.filter((unit, index, condominiumUnits) => condominiumUnits.indexOf(unit) === index
       )
     );
     this.condominiumBlockNames.forEach(block => {
-      IFILTER.push({
+      filterOptions.push({
         elementName: 'block_' + block,
         actualValue: false,
         inputType: 'checkbox',
         elementNameTranslate: 'Bloco ' + block
       });
     });
-    IFILTER.push({
+    filterOptions.push({
       elementName: 'unit',
       minValue: this.condominiumUnits[0],
       maxValue: this.condominiumUnits[this.condominiumUnits.length - 1],
@@ -265,7 +264,7 @@ export class MoradorComponent implements OnDestroy {
       inputType: 'number',
       elementNameTranslate: 'Unidade'
     });
-    IFILTER.push({
+    filterOptions.push({
       elementName: 'age',
       minValue: this.moradoresAges[0],
       maxValue: this.moradoresAges[this.condominiumUnits.length],
@@ -273,10 +272,10 @@ export class MoradorComponent implements OnDestroy {
       inputType: 'range',
       elementNameTranslate: 'Idade'
     });
-    return IFILTER;
+    return filterOptions;
   }
 
-  private sortFiltersLabel(anyArray: any[]): any[] {
+  private sortArrayByGrowing(anyArray: any[]): any[] {
     return anyArray.sort((a, b) => {
       if (a < b) {
         return -1;
@@ -287,7 +286,7 @@ export class MoradorComponent implements OnDestroy {
 
   public filterTable(event) {
     if (event === 'limpar') {
-      this.filter = this.getFiltersLabel();
+      this.filterOptions = this.getFilterOptions();
       return;
     } else if (event === 'sair') {
       return;
@@ -313,24 +312,23 @@ export class MoradorComponent implements OnDestroy {
         &&
         value.condominium.unit <= simpleFilter.unit.maxValue
         &&
-        value.condominium.block === this.blocksValidation(value.condominium.block, simpleFilter.block)
+        value.condominium.block === this.verifyBlock(value.condominium.block, simpleFilter.block)
       );
     });
     // this.moradores$.next(search);
   }
 
-  private blocksValidation(block: any, blocks: any[] = []): string | undefined {
-    let vcb;
+  private verifyBlock(block: string, blocks: any[] = []): string | undefined {
+    let blockName;
     blocks.forEach((b) => {
       if (block.includes(b.key) && b.value) {
-        vcb = block;
+        blockName = block;
       }
     });
-    return vcb;
+    return blockName;
   }
 
-
-  public compareModification(): number {
+  public numberOfFiltersUsed(): number {
     return 0;
   }
 
@@ -358,7 +356,7 @@ export class MoradorComponent implements OnDestroy {
     moradorPdf.text(['_____________________________________________________________________________'], 15, 28);
     moradorPdf.text(['Morador: ' + morador.personal.name], 15, 38);
 
-    moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.bornDate)], 135, 38);
+    moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.birthDate)], 135, 38);
 
     moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 48);
 
@@ -395,7 +393,7 @@ export class MoradorComponent implements OnDestroy {
 
     // moradorPdf.text(['Morador: ' + morador.personal.name], 15, 25);
 
-    // moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.bornDate)], 15, 35);
+    // moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.birthDate)], 15, 35);
 
     // moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 45);
 
@@ -428,16 +426,16 @@ export class MoradorComponent implements OnDestroy {
     return new Date(birthDate).toLocaleDateString();
   }
 
-  private comunicationsWay(phoneValue: string): string {
-    if (!phoneValue) {
+  private comunicationsWay(phoneNumber: string): string {
+    if (!phoneNumber) {
       return 'N/C';
     }
-    if (phoneValue.length === 10) {
-      return '(' + phoneValue.substr(0, 2) + ') ' + phoneValue.substr(2, 4) + '-' + phoneValue.substr(6, 4);
-    } else if (phoneValue.length === 11) {
-      return '(' + phoneValue.substr(0, 2) + ') ' + phoneValue.substr(2, 5) + '-' + phoneValue.substr(6, 4);
+    if (phoneNumber.length === 10) {
+      return '(' + phoneNumber.substr(0, 2) + ') ' + phoneNumber.substr(2, 4) + '-' + phoneNumber.substr(6, 4);
+    } else if (phoneNumber.length === 11) {
+      return '(' + phoneNumber.substr(0, 2) + ') ' + phoneNumber.substr(2, 5) + '-' + phoneNumber.substr(6, 4);
     } else {
-      return phoneValue;
+      return phoneNumber;
     }
   }
 

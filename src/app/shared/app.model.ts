@@ -27,7 +27,7 @@ export interface Morador {
 
 interface IPersonal {
     name: string;
-    bornDate: Date;
+    birthDate: Date;
     age?: number;
     cpf: string;
     rg: string;
