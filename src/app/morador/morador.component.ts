@@ -53,6 +53,7 @@ export class MoradorComponent implements OnDestroy {
   public moradores: Array<Morador>;
   // public moradores = undefined;
   public openNavBar = false;
+  public numberOfFiltersUsed = 0;
   public moradorSearch: Array<Morador>;
   public condominiumBlockNames = [];
   public moradoresAges = [];
@@ -249,9 +250,10 @@ export class MoradorComponent implements OnDestroy {
     this.condominiumBlockNames.forEach(block => {
       filterOptions.push({
         elementName: 'block_' + block,
-        actualValue: false,
+        actualValue: true,
         inputType: 'checkbox',
-        elementNameTranslate: 'Bloco ' + block
+        elementNameTranslate: 'Bloco ' + block,
+        originalValue: true
       });
     });
     filterOptions.push({
@@ -260,15 +262,17 @@ export class MoradorComponent implements OnDestroy {
       maxValue: this.condominiumUnits[this.condominiumUnits.length - 1],
       actualValue: [this.condominiumUnits[0], this.condominiumUnits[this.condominiumUnits.length - 1]],
       inputType: 'number',
-      elementNameTranslate: 'Unidade'
+      elementNameTranslate: 'Unidade',
+      originalValue: [this.condominiumUnits[0], this.condominiumUnits[this.condominiumUnits.length - 1]]
     });
     filterOptions.push({
       elementName: 'age',
       minValue: this.moradoresAges[0],
       maxValue: this.moradoresAges[this.condominiumUnits.length],
-      actualValue: this.moradoresAges[0],
+      actualValue: this.moradoresAges[this.condominiumUnits.length],
       inputType: 'range',
-      elementNameTranslate: 'Idade'
+      elementNameTranslate: 'Idade',
+      originalValue: this.moradoresAges[this.condominiumUnits.length]
     });
     return filterOptions;
   }
@@ -284,36 +288,48 @@ export class MoradorComponent implements OnDestroy {
 
   public filterTable(event) {
     if (event === 'limpar') {
+      this.numberOfFiltersUsed = 0;
       this.filterOptions = this.getFilterOptions();
       return;
     } else if (event === 'sair') {
       return;
     }
-    const simpleFilter = {
-      unit: {
-        minValue: 100,
-        maxValue: 2000
-      },
-      block: [{ key: 'B', value: false }, { key: 'F', value: true }, { key: 'A', value: true }],
-      personal: {
-        minAge: 10,
-        maxAge: 90
-      }
-    };
+    const filter = this.filterObject();
     const search = this.moradores.filter((value) => {
       return (
-        value.personal.age >= simpleFilter.personal.minAge
+        value.personal.age >= filter['age'].minValue
         &&
-        value.personal.age <= simpleFilter.personal.maxAge
+        value.personal.age <= filter['age'].maxValue
         &&
-        value.condominium.unit >= simpleFilter.unit.minValue
+        value.condominium.unit >= filter['unit'].minValue
         &&
-        value.condominium.unit <= simpleFilter.unit.maxValue
+        value.condominium.unit <= filter['unit'].maxValue
         &&
-        value.condominium.block === this.verifyBlock(value.condominium.block, simpleFilter.block)
+        value.condominium.block === this.verifyBlock(value.condominium.block, filter['block'])
       );
     });
-    // this.moradores$.next(search);
+    this.moradores$.next(search);
+  }
+
+  private filterObject(): any {
+    const filterObject = {
+      block: []
+    };
+    this.numberOfFiltersUsed = 0;
+    this.filterOptions.forEach(filterOption => {
+      if (filterOption.originalValue !== filterOption.actualValue) {
+        this.numberOfFiltersUsed++;
+      }
+      if (filterOption.actualValue.length) {
+        filterObject[filterOption.elementName] = { minValue: filterOption.actualValue[0], maxValue: filterOption.actualValue[1] };
+      } else if (filterOption.inputType === 'checkbox') {
+        filterObject.block
+          .push({ key: filterOption.elementName.substr(6, filterOption.elementName.length), value: filterOption.actualValue });
+      } else {
+        filterObject[filterOption.elementName] = { minValue: filterOption.minValue, maxValue: filterOption.actualValue };
+      }
+    });
+    return filterObject;
   }
 
   private verifyBlock(block: string, blocks: any[] = []): string | undefined {
@@ -324,10 +340,6 @@ export class MoradorComponent implements OnDestroy {
       }
     });
     return blockName;
-  }
-
-  public numberOfFiltersUsed(): number {
-    return 0;
   }
 
   public downloadAsPDF(morador: Morador) {

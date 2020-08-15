@@ -19,13 +19,13 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .close__area {
-    @include flex-box(center, flex-end);
     background-color: $main-theme-color-orange1;
     height: 30px;
     max-width: 800px;
     position: absolute;
     width: 100%;
     z-index: 2;
+    @include flex-box(center, flex-end);
 
     button {
         i {
@@ -55,9 +55,9 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     &__control {
-        @include flex-box();
         align-content: space-between;
         height: 90px !important;
+        @include flex-box();
 
         &__error {
             input {
@@ -189,8 +189,8 @@ input[type="number"]::-webkit-inner-spin-button {
         }
 
         &__group2 {
-            @include flex-box(flex-start, space-between);
             width: 100%;
+            @include flex-box(flex-start, space-between);
         }
 
         &__tel,
@@ -263,9 +263,9 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     &__buttons {
+        margin-top: 20px;
         @include flex-box(center, flex-end);
         @include form-buttons();
-        margin-top: 20px;
     }
 }
 

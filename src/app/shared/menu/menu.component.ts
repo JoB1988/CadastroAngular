@@ -55,8 +55,8 @@ export class MenuComponent implements AfterViewInit, OnInit {
           filterOption.actualValue = this.filterForm.value[filterOption.elementName];
         } else {
           if (filterOption.actualValue.length > 0) {
-            filterOption.actualValue[0] = this.filterForm.value[filterOption.elementName + '0'];
-            filterOption.actualValue[1] = this.filterForm.value[filterOption.elementName + '1'];
+            filterOption.actualValue[0] = parseInt(this.filterForm.value[filterOption.elementName + '0'], 0);
+            filterOption.actualValue[1] = parseInt(this.filterForm.value[filterOption.elementName + '1'], 0);
           } else {
             filterOption.actualValue = parseInt(this.filterForm.value[filterOption.elementName], 0);
           }

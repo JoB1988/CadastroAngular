@@ -1,3 +1,4 @@
+@import "~@angular/material/theming";
 @import "../colors.scss";
 @import "../mixins.scss";
 
@@ -7,19 +8,21 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .menu {
-    margin-top: 45px;
-    position: absolute;
     background-color: white;
-    z-index: 1;
     border-radius: 2px;
-    width: 220px;
+    margin-top: 45px;
     min-height: 75px;
-    border: 2px solid;
     padding: 15px;
+    position: absolute;
+    width: 220px;
+    z-index: 1;
+    @include mat-elevation(8, #303030, 0.9);
     @include flex-box(center, flex-end);
+
     &__min__max {
-        @include flex-box(center, flex-end);
         width: calc(50% - 10px) !important;
+        @include flex-box(center, flex-end);
+
         label {
             width: 100% !important;
         }
@@ -29,8 +32,8 @@ input[type="number"]::-webkit-inner-spin-button {
         @include flex-box(center, space-between);
     }
     div {
-        @include flex-box(center, space-between);
         width: 100%;
+        @include flex-box(center, space-between);
         &:not(:last-child) {
             margin: 10px 0;
         }
@@ -51,9 +54,10 @@ input[type="number"]::-webkit-inner-spin-button {
     }
     &__buttons {
         button {
-            width: calc(50% - 7.5px);
             border: none;
             margin-top: 10px;
+            width: calc(50% - 7.5px);
+
             &:first-of-type {
                 @include btn__color__theme($white, $main-theme-color-orange1);
             }
@@ -65,9 +69,9 @@ input[type="number"]::-webkit-inner-spin-button {
     // botão após o div
     // primeiro child do botão
     > button {
-        float: right;
         clear: both;
-        margin-bottom: -8px;
         color: $error-color;
+        float: right;
+        margin-bottom: -8px;
     }
 }
