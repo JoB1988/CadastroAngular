@@ -11,8 +11,8 @@ import { EmbeddedTemplateAst } from '@angular/compiler';
 })
 export class MenuComponent implements AfterViewInit, OnInit {
 
-  @Input() options: IFilter[];
-  @Output() close = new EventEmitter(false);
+  @Input() filterOptions: IFilter[];
+  @Output() closeMenu = new EventEmitter(false);
   @Output() filterValues = new EventEmitter();
 
   public filterForm: FormGroup;
@@ -21,21 +21,21 @@ export class MenuComponent implements AfterViewInit, OnInit {
 
   public ngOnInit(): void {
     this.filterForm = this.formBuilder.group({});
-    this.options.forEach(element => {
-      if (element.actualValue.length) {
-        element.actualValue.forEach((value, i) => {
-          this.filterForm.addControl(element.elementName + i, this.formBuilder.control(value));
+    this.filterOptions.forEach(filterOption => {
+      if (filterOption.actualValue.length) {
+        filterOption.actualValue.forEach((value, i) => {
+          this.filterForm.addControl(filterOption.elementName + i, this.formBuilder.control(value));
         });
       } else {
-        this.filterForm.addControl(element.elementName, this.formBuilder.control(element.actualValue));
+        this.filterForm.addControl(filterOption.elementName, this.formBuilder.control(filterOption.actualValue));
       }
     });
   }
 
   public ngAfterViewInit(): void {
-    this.options.forEach(element => {
-      if (element.inputType === 'range') {
-        this.elementRef.nativeElement.querySelector(`#${element.elementName}`).valueAsNumber = element.actualValue;
+    this.filterOptions.forEach(filterOption => {
+      if (filterOption.inputType === 'range') {
+        this.elementRef.nativeElement.querySelector(`#${filterOption.elementName}`).valueAsNumber = filterOption.actualValue;
       }
     });
   }
@@ -50,25 +50,25 @@ export class MenuComponent implements AfterViewInit, OnInit {
 
   public filter(value?: string) {
     if (value !== 'sair') {
-      this.options.forEach(element => {
-        if (element.inputType === 'checkbox') {
-          element.actualValue = this.filterForm.value[element.elementName];
+      this.filterOptions.forEach(filterOption => {
+        if (filterOption.inputType === 'checkbox') {
+          filterOption.actualValue = this.filterForm.value[filterOption.elementName];
         } else {
-          if (element.actualValue.length > 0) {
-            element.actualValue[0] = this.filterForm.value[element.elementName + '0'];
-            element.actualValue[1] = this.filterForm.value[element.elementName + '1'];
+          if (filterOption.actualValue.length > 0) {
+            filterOption.actualValue[0] = this.filterForm.value[filterOption.elementName + '0'];
+            filterOption.actualValue[1] = this.filterForm.value[filterOption.elementName + '1'];
           } else {
-            element.actualValue = parseInt(this.filterForm.value[element.elementName]);
+            filterOption.actualValue = parseInt(this.filterForm.value[filterOption.elementName], 0);
           }
         }
       });
     }
     this.filterValues.emit(value);
-    this.close.emit(false);
+    this.closeMenu.emit(false);
   }
 
   //  Ao dar resize, ele verifica a necessidade de mostrar o hamburguer
   @HostListener('window:click', ['$event']) public onClickPage() {
-    this.close.emit(false);
+    this.closeMenu.emit(false);
   }
 }

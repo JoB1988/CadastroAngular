@@ -64,7 +64,7 @@ export class SideBarComponent implements OnDestroy {
     private readonly navigation: NavigationService
   ) { }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.hamburguerSubscription.unsubscribe();
     this.isLoggedSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
@@ -76,7 +76,7 @@ export class SideBarComponent implements OnDestroy {
     this.close();
   }
 
-  close() {
+  public close() {
     this.navigation.openSideBar$.next(false);
   }
 }

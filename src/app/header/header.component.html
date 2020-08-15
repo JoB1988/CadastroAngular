@@ -26,7 +26,7 @@
         {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
       </div>
     </div>
-    <button *ngIf="(hamburguer$ | async)" (click)="open($event)">
+    <button *ngIf="(hamburguer$ | async)" (click)="openSideBar($event)">
       <i class="fas fa-bars"></i>
     </button>
   </nav>

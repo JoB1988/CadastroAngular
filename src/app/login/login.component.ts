@@ -13,6 +13,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoginComponent implements OnInit {
 
+  // variáveis do DOM
+  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
+  @ViewChild('myForm', { static: true }) form: NgForm;
+
   // formulário com a composição dos validadores
   public loginForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
@@ -21,10 +25,6 @@ export class LoginComponent implements OnInit {
     })
   );
 
-  // variáveis do DOM
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
-  @ViewChild('myForm', { static: true }) form: NgForm;
-
   constructor(
     public readonly formBuilder: FormBuilder,
     private appService: AppService,
@@ -32,12 +32,12 @@ export class LoginComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.nameInput.nativeElement.focus();
   }
 
   // método que envia o formulário para o back-end e após isso redireciona para a página 'home'
-  public onSubmit() {
+  public login() {
     this.spinner.show();
     if (this.loginForm$.value.value.user === 'a' && this.loginForm$.value.value.password === 'a') {
       this.spinner.hide();
@@ -52,6 +52,4 @@ export class LoginComponent implements OnInit {
   public cleanForm() {
     Important.cleanForm(this.nameInput, this.form);
   }
-
-
 }

@@ -13,9 +13,9 @@ import { Morador } from 'src/app/shared/app.model';
 })
 export class MoradorDialogComponent implements OnInit {
 
-  public image = null;
-  public showPhotoSpinner = false;
-  public labelPhoto = 'clique e escolha a imagem do morador';
+  public moradorImage = null;
+  public showImageSpinner = false;
+  public labelImage = 'clique e escolha a imagem do morador';
 
   // variáveis do DOM
   @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
@@ -73,13 +73,13 @@ export class MoradorDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public morador: Morador
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (this.morador) {
-      this.image = this.morador.personal.photo;
+      this.moradorImage = this.morador.personal.photo;
       this.moradorForm$.value.controls.personal['controls'].photo.setValue(this.morador.personal.photo);
       this.moradorForm$.value.controls.personal['controls'].name.setValue(this.morador.personal.name);
-      this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.bornDate);
-      this.moradorForm$.value.controls.personal['controls'].age.setValue(this.morador.personal.bornDate);
+      this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.birthDate);
+      this.moradorForm$.value.controls.personal['controls'].age.setValue(this.morador.personal.age);
       this.moradorForm$.value.controls.personal['controls'].cpf.setValue(this.morador.personal.cpf);
       this.moradorForm$.value.controls.personal['controls'].rg.setValue(this.morador.personal.rg);
       this.moradorForm$.value.controls.personal['controls'].civilStatus.setValue(this.morador.personal.civilStatus);
@@ -94,39 +94,39 @@ export class MoradorDialogComponent implements OnInit {
       this.moradorForm$.value.controls.familiar['controls'].partnerId.setValue(this.morador.familiar.partner.id);
       this.moradorForm$.value.controls.id.setValue(this.morador.id);
       // this.moradorForm$.value.controls.familiar['controls'].dependents
-      this.civilStateChange(this.morador.personal.civilStatus);
+      this.civilStatusChange(this.morador.personal.civilStatus);
     }
   }
 
   public getInputFile(event) {
-    this.showPhotoSpinner = true;
-    this.labelPhoto = 'carregando';
+    this.showImageSpinner = true;
+    this.labelImage = 'carregando';
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]); // Read file as data url
       reader.onloadend = (e) => { // function call once readAsDataUrl is completed
         if (event.target.files[0].size < 5000000) {
-          this.image = e.target.result;
+          this.moradorImage = e.target.result;
         } else {
           console.log('imagem maior que 5MB');
         }
-        this.labelPhoto = 'clique e escolha a imagem do morador';
-        this.showPhotoSpinner = false;
+        this.labelImage = 'clique e escolha a imagem do morador';
+        this.showImageSpinner = false;
       };
     }
   }
 
-  public endModal(save?: boolean) {
+  public closeModal(save?: boolean) {
     if (!save) {
       this.dialogRef.close();
     } else {
       const morador: any = {};
       morador.personal = this.moradorForm$.value.value.personal;
-      morador.personal.photo = this.image;
+      morador.personal.photo = this.moradorImage;
       morador.professional = this.moradorForm$.value.value.professional;
-      morador.professional.salary = parseInt(morador.professional.salary);
+      morador.professional.salary = parseInt(morador.professional.salary, 0);
       morador.condominium = this.moradorForm$.value.value.condominium;
-      morador.condominium.unit = parseInt(morador.condominium.unit);
+      morador.condominium.unit = parseInt(morador.condominium.unit, 0);
       morador.id = this.moradorForm$.value.value.id;
       morador.familiar = {
         partner: { name: '', id: null },
@@ -140,18 +140,18 @@ export class MoradorDialogComponent implements OnInit {
     }
   }
 
-  public cleanForm(value) {
-    if (value.toLowerCase() === 'limpar') {
+  public cleanForm(btnName: string) {
+    if (btnName.toLowerCase() === 'limpar') {
       this.fileInput.nativeElement.value = '';
-      this.image = '';
+      this.moradorImage = '';
       Important.cleanForm(this.nameInput, this.form);
     } else {
-      this.endModal();
+      this.closeModal();
     }
   }
 
-  public civilStateChange(value) {
-    if (value.toLowerCase() === 'casado(a)') {
+  public civilStatusChange(civilStatus: string) {
+    if (civilStatus.toLowerCase() === 'casado(a)') {
       this.moradorForm$.value.controls.familiar['controls'].partner.setValidators(Validators.required);
       this.moradorForm$.value.controls.familiar['controls'].partner.enable();
       return;
@@ -174,7 +174,7 @@ export class MoradorDialogComponent implements OnInit {
       return 'Campo obrigatório';
     } else if (error.minlength || error.pattern) {
       if ((error.minlength && error.pattern) || error.pattern) {
-        return `Valor incorreto <i aria-hidden="true" class="fa fa-question"></i><span>${this.checkRegex(formControlName)}</span>`;
+        return `Valor incorreto <i aria-hidden="true" class="fa fa-question"></i><span>${this.regexMessages(formControlName)}</span>`;
       }
       if (error.minlength) {
         return 'Campo mínimo de ' + error.minlength.requiredLength + ' caracteres';
@@ -182,7 +182,7 @@ export class MoradorDialogComponent implements OnInit {
     }
   }
 
-  private checkRegex(formControl: string): string {
+  private regexMessages(formControl: string): string {
     let message = '';
     switch (formControl) {
       case 'name':

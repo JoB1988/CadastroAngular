@@ -1,5 +1,5 @@
 <div>
-    <form class="form" [formGroup]="loginForm$ | async" #myForm="ngForm" (ngSubmit)="onSubmit()">
+    <form class="form" [formGroup]="loginForm$ | async" #myForm="ngForm" (ngSubmit)="login()">
         <div class="form__inputs">
             <label for="user">Usuário</label>
             <input type="text" #nameInput id="user" formControlName="user">

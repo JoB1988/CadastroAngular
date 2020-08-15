@@ -12,7 +12,7 @@
       <div>
         <button class="btn__default" [disabled]="!(moradores$ | async)" aria-label="filtrar busca"
           (click)="openFilterMenu($event)">Filtrar<i class="fa fa-filter"></i></button>
-        <app-menu *ngIf="openNavBar" [options]="options" (close)="openNavBar=$event" (filterValues)="filter($event)"></app-menu>
+        <app-menu *ngIf="openNavBar" [filterOptions]="filterOptions" (closeMenu)="openNavBar=$event" (filterValues)="filterTable($event)"></app-menu>
         <button class="btn__default btn__primary" (click)="newMorador()">Novo Morador<i
             class="fas fa-user-plus"></i></button>
       </div>

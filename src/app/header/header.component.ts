@@ -41,7 +41,7 @@ export class HeaderComponent implements OnDestroy {
 
   /*observador da variável hamburguer$ da navigation, quando houver alguma alteração, ele
   mostra ou esconde o hamburguer*/
-  public hamburguerSubscription = this.navigation.hamburguer$.subscribe((value: boolean) => {
+  public hamburguerSubscription = this.navigation.hamburguer$.subscribe(value => {
     this.hamburguer$.next(value);
   });
 
@@ -51,13 +51,13 @@ export class HeaderComponent implements OnDestroy {
   ) { }
 
   // desinscreve-se
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.isLoggedSubscription.unsubscribe();
     this.userSubscription.unsubscribe();
     this.hamburguerSubscription.unsubscribe();
   }
 
-  open(event) {
+  public openSideBar(event) {
     event.stopPropagation();
     this.navigation.openSideBar$.pipe(take(1)).subscribe(value => {
       this.navigation.openSideBar$.next(!value);

@@ -1,8 +1,8 @@
 <div class="close__area">
-    <button (click)="endModal()" aria-label="fechar modal"><i class="fas fa-times"></i></button>
+    <button (click)="closeModal()" aria-label="fechar modal"><i class="fas fa-times"></i></button>
 </div>
 <section class="section__main" role="main">
-    <form [formGroup]="moradorForm$ | async" class="form" #myForm="ngForm" role="form" (ngSubmit)="endModal(true)">
+    <form [formGroup]="moradorForm$ | async" class="form" #myForm="ngForm" role="form" (ngSubmit)="closeModal(true)">
         <section formGroupName="personal" aria-describedby="dados_pessoais" class="form__personal" tabindex="0"
             role="group">
 
@@ -12,16 +12,16 @@
                  estado civil, telefone, celular e email respectivamente.">
                 Dados pessoais</h2>
             <div style="display: flex;">
-                <input *ngIf="!image" id="photo" type="file" class="form__personal__image" formControlName="photo"
+                <input *ngIf="!moradorImage" id="photo" type="file" class="form__personal__image" formControlName="photo"
                     accept="image/*" (change)="getInputFile($event)" role="document" #fileInput>
-                <div class="form__personal__image__fake" [ngStyle]="{'margin-left': image ? '0' : null }">
-                    <i *ngIf="!image && !showPhotoSpinner" class="fas fa-plus"></i>
-                    <label *ngIf="!image && !showPhotoSpinner" for="photo" attr.aria-label="{{labelPhoto}}">Imagem do
+                <div class="form__personal__image__fake" [ngStyle]="{'margin-left': moradorImage ? '0' : null }">
+                    <i *ngIf="!moradorImage && !showImageSpinner" class="fas fa-plus"></i>
+                    <label *ngIf="!moradorImage && !showImageSpinner" for="photo" attr.aria-label="{{labelImage}}">Imagem do
                         Morador</label>
-                    <img *ngIf="image && !showPhotoSpinner" src="{{image}}" tabindex="0"
+                    <img *ngIf="moradorImage && !showImageSpinner" src="{{moradorImage}}" tabindex="0"
                         attr.aria-label="Imagem de {{morador?.personal?.name}}"
                         alt="Imagem de {{morador?.personal?.name}}">
-                    <mat-spinner *ngIf="showPhotoSpinner"></mat-spinner>
+                    <mat-spinner *ngIf="showImageSpinner"></mat-spinner>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'civilStatus')}">
                     <label for="civilStatus">estado civil</label>
                     <select name="civilStatus" id="civilStatus" #civilStatus formControlName="civilStatus"
-                        aria-required="true" (change)="civilStateChange(civilStatus.value)">
+                        aria-required="true" (change)="civilStatusChange(civilStatus.value)">
                         <option value="solteiro(a)">solteiro(a)</option>
                         <option value="casado(a)">casado(a)</option>
                         <option value="divorciado(a)">divorciado(a)</option>

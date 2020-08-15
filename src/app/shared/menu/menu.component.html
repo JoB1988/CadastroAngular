@@ -1,37 +1,37 @@
 <section class="menu" (click)="$event.stopPropagation()">
     <button aria-label="fechar modal" (click)="filter('sair')"><i class="fas fa-times"></i></button>
     <form [formGroup]="filterForm" role="form">
-        <div *ngFor="let option of options">
+        <div *ngFor="let filterOption of filterOptions">
 
-            <label *ngIf="!option?.maxValue && !option?.minValue"
-                for="{{option?.elementName}}">{{option?.elementNameTranslate}}</label>
-            <label *ngIf="option?.inputType === 'range'"
-                for="{{option?.elementName}}">{{option?.elementNameTranslate}}</label>
+            <label *ngIf="!filterOption?.maxValue && !filterOption?.minValue"
+                for="{{filterOption?.elementName}}">{{filterOption?.elementNameTranslate}}</label>
+            <label *ngIf="filterOption?.inputType === 'range'"
+                for="{{filterOption?.elementName}}">{{filterOption?.elementNameTranslate}}</label>
 
-            <input *ngIf="option?.inputType === 'number' && (!option?.maxValue && !option?.minValue)"
-                id="{{option?.elementName}}" type="{{option?.inputType}}" [formControlName]="option?.elementName">
+            <input *ngIf="filterOption?.inputType === 'number' && (!filterOption?.maxValue && !filterOption?.minValue)"
+                id="{{filterOption?.elementName}}" type="{{filterOption?.inputType}}" [formControlName]="filterOption?.elementName">
 
             <!-- Essa label aparece se tiver valor máximo, usado em filtro de valor mínimo e máximo. -->
-            <div *ngIf="option?.inputType === 'number' && option?.actualValue.length > 0" class="menu__min__max">
-                <label for="{{option?.elementName}}-maxValue">unid. mín.</label>
-                <input *ngIf="option?.inputType === 'number' && option?.maxValue" id="{{option?.elementName}}-maxValue"
-                    [max]="option?.maxValue" type="{{option?.inputType}}" [formControlName]="option?.elementName+0"
+            <div *ngIf="filterOption?.inputType === 'number' && filterOption?.actualValue.length > 0" class="menu__min__max">
+                <label for="{{filterOption?.elementName}}-maxValue">unid. mín.</label>
+                <input *ngIf="filterOption?.inputType === 'number' && filterOption?.maxValue" id="{{filterOption?.elementName}}-maxValue"
+                    [max]="filterOption?.maxValue" type="{{filterOption?.inputType}}" [formControlName]="filterOption?.elementName+0"
                     (keypress)="allowNumbers($event)">
             </div>
 
-            <div *ngIf="option?.inputType === 'number' && option?.actualValue.length > 0" class="menu__min__max">
+            <div *ngIf="filterOption?.inputType === 'number' && filterOption?.actualValue.length > 0" class="menu__min__max">
                 <!-- Essa label aparece se tiver valor mínimo, usado em filtro de valor mínimo e máximo. -->
-                <label for="{{option?.elementName}}-minValue">unid. máx.</label>
-                <input *ngIf="option?.inputType === 'number' && option?.minValue" id="{{option?.elementName}}-minValue"
-                    [min]="option?.minValue" type="{{option?.inputType}}" [formControlName]="option?.elementName+1"
+                <label for="{{filterOption?.elementName}}-minValue">unid. máx.</label>
+                <input *ngIf="filterOption?.inputType === 'number' && filterOption?.minValue" id="{{filterOption?.elementName}}-minValue"
+                    [min]="filterOption?.minValue" type="{{filterOption?.inputType}}" [formControlName]="filterOption?.elementName+1"
                     (keypress)="allowNumbers($event)">
             </div>
 
-            <input *ngIf="option?.inputType === 'range'" id="{{option?.elementName}}" [min]="option?.minValue"
-                [max]="option?.maxValue" type="{{option?.inputType}}" step="1" [formControlName]="option?.elementName">
+            <input *ngIf="filterOption?.inputType === 'range'" id="{{filterOption?.elementName}}" [min]="filterOption?.minValue"
+                [max]="filterOption?.maxValue" type="{{filterOption?.inputType}}" step="1" [formControlName]="filterOption?.elementName">
 
-            <input *ngIf="option?.inputType === 'checkbox'" id="{{option?.elementName}}" type="{{option?.inputType}}"
-                [checked]="option?.actualValue" [formControlName]="option?.elementName"
+            <input *ngIf="filterOption?.inputType === 'checkbox'" id="{{filterOption?.elementName}}" type="{{filterOption?.inputType}}"
+                [checked]="filterOption?.actualValue" [formControlName]="filterOption?.elementName"
                 (change)="changeCheckbox($event)">
 
 
