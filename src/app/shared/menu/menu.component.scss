@@ -24,6 +24,10 @@ input[type="number"]::-webkit-inner-spin-button {
         left: calc(50% - 125px);
     }
 
+    @media (min-width: 380px) and (max-width: 604px) {
+        left: 40px;
+    }
+
     &__min__max {
         width: calc(50% - 10px) !important;
         @include flex-box(center, flex-end);
