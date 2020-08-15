@@ -12,14 +12,12 @@ export class AppComponent implements OnInit {
     private navigation: NavigationService
   ) { }
 
-  // Ao iniciar, mostrar o hamburguer ou não
   ngOnInit(): void {
     if (window.innerWidth < 651) {
       this.navigation.hamburguer$.next(true);
     }
   }
 
-  //  Ao dar resize, ele verifica a necessidade de mostrar o hamburguer
   @HostListener('window:resize', ['$event']) onResize(event) {
     if (event.target.innerWidth < 651) {
       this.navigation.hamburguer$.next(true);

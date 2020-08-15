@@ -67,7 +67,6 @@ export class MenuComponent implements AfterViewInit, OnInit {
     this.closeMenu.emit(false);
   }
 
-  //  Ao dar resize, ele verifica a necessidade de mostrar o hamburguer
   @HostListener('window:click', ['$event']) public onClickPage() {
     this.closeMenu.emit(false);
   }

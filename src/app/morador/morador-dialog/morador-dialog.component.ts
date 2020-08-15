@@ -17,12 +17,10 @@ export class MoradorDialogComponent implements OnInit {
   public showImageSpinner = false;
   public labelImage = 'clique e escolha a imagem do morador';
 
-  // variáveis do DOM
   @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
   @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
   @ViewChild('myForm', { static: false }) form: NgForm;
 
-  // Patterns
   public lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
   public numberRegex = new RegExp(/^[0-9]*$/);
   public cpfRegex = new RegExp(/^[0-9]{11}/);
@@ -32,7 +30,6 @@ export class MoradorDialogComponent implements OnInit {
   public salaryRegex = new RegExp(/^[0-9]+(\.[0-9]{2})?$/);
   public dateRegex = new RegExp(/^\d{4}\-\d{2}\-\d{2}$/);
 
-  // formulário com a composição dos validadores
   public moradorForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
     this.formBuilder.group({
       personal: this.formBuilder.group({
@@ -218,5 +215,3 @@ export class MoradorDialogComponent implements OnInit {
     return message;
   }
 }
-
-// ajustar hint quebrado

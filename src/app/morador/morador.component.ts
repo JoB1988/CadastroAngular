@@ -34,7 +34,6 @@ export class MoradorComponent implements OnDestroy {
 
   //#endregion mascara
 
-  // Header
   public thead = [
     { name: 'nome', group: 'personal', attribute: 'name', arrowType: 'fa-circle' },
     { name: 'idade', group: 'personal', attribute: 'age', arrowType: 'fa-circle' },
@@ -79,7 +78,6 @@ export class MoradorComponent implements OnDestroy {
       return;
     }
     this.progressBar$.next({ mode: 'indeterminate', value: null });
-    // Busca de múltiplos atributos
     const search = this.moradores.filter(morador => {
       return (
         morador.personal.name.toLowerCase().includes(typedValue.toLowerCase().trim()) ||

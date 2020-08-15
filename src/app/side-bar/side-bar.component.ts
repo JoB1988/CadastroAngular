@@ -71,7 +71,6 @@ export class SideBarComponent implements OnDestroy {
     this.menuSubscription.unsubscribe();
   }
 
-  //  Ao dar resize, ele verifica a necessidade de mostrar o hamburguer
   @HostListener('window:click', ['$event']) onClickPage() {
     this.close();
   }
