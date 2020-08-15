@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ɵConsole } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MoradorService } from './morador.service';
 import { Morador } from '../shared/app.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import * as jsPDF from 'jspdf';
 import { IFilter } from './morador';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-morador',
@@ -47,52 +46,51 @@ export class MoradorComponent implements OnDestroy {
     { name: '...' }
   ];
 
-  public options: IFilter[] = [];
+  public filter: IFilter[] = [];
 
-  public inputValue$: BehaviorSubject<string> = new BehaviorSubject('');
+  public searchInput$: BehaviorSubject<string> = new BehaviorSubject('');
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
-  public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
-  public morador: Morador[];
-  // public morador = undefined;
-  public openMenu = false;
-  public moradorSearch: Morador[];
-  public blocks = [];
-  public ages = [];
-  public units = [];
-  public = true;
+  public moradores$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
+  public moradores: Array<Morador>;
+  // public moradores = undefined;
+  public openNavBar = false;
+  public moradorSearch: Array<Morador>;
+  public condominiumBlockNames = [];
+  public moradoresAges = [];
+  public condominiumUnits = [];
 
-  private moradorSubscription = this.moradorService.morador$.subscribe((data) => {
-    if (!data) {
+  private moradoresSubscription = this.moradorService.moradores$.subscribe((moradores) => {
+    if (!moradores) {
       this.moradorService.getMorador().subscribe((response) => {
         this.setArray(response);
       }, (error) => {
         this.progressBar$.next({ mode: 'determinate', value: 100 });
       });
     } else {
-      this.setArray(data);
+      this.setArray(moradores);
     }
   });
 
-  private inputValueSubscription = this.inputValue$.pipe(debounceTime(400)).subscribe((inputValue) => {
-    if (!inputValue) {
-      if (this.morador && this.morador.length > 0) {
-        this.morador$.next(this.morador);
+  private searchInputSubscription = this.searchInput$.pipe(debounceTime(400)).subscribe((typedValue) => {
+    if (!typedValue) {
+      if (this.moradores && this.moradores.length > 0) {
+        this.moradores$.next(this.moradores);
       }
       return;
     }
     this.progressBar$.next({ mode: 'indeterminate', value: null });
     // Busca de múltiplos atributos
-    const search = this.morador.filter(obejct => {
+    const search = this.moradores.filter(morador => {
       return (
-        obejct.personal.name.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
-        (obejct.personal.tel && obejct.personal.tel.toLowerCase().includes(inputValue.toLowerCase().trim())) ||
-        (obejct.personal.cel && obejct.personal.cel.toLowerCase().includes(inputValue.toLowerCase().trim())) ||
-        obejct.personal.cpf.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
-        obejct.condominium.block.toLowerCase().includes(inputValue.toLowerCase().trim()) ||
-        obejct.condominium.unit.toString().includes(inputValue.toLowerCase().trim())
+        morador.personal.name.toLowerCase().includes(typedValue.toLowerCase().trim()) ||
+        (morador.personal.tel && morador.personal.tel.toLowerCase().includes(typedValue.toLowerCase().trim())) ||
+        (morador.personal.cel && morador.personal.cel.toLowerCase().includes(typedValue.toLowerCase().trim())) ||
+        morador.personal.cpf.toLowerCase().includes(typedValue.toLowerCase().trim()) ||
+        morador.condominium.block.toLowerCase().includes(typedValue.toLowerCase().trim()) ||
+        morador.condominium.unit.toString().includes(typedValue.toLowerCase().trim())
       );
     });
-    this.morador$.next(search);
+    this.moradores$.next(search);
     this.progressBar$.next({ mode: 'determinate', value: 100 });
   });
 
@@ -102,14 +100,14 @@ export class MoradorComponent implements OnDestroy {
   ) { }
 
   public ngOnDestroy(): void {
-    this.moradorSubscription.unsubscribe();
-    this.inputValueSubscription.unsubscribe();
+    this.moradoresSubscription.unsubscribe();
+    this.searchInputSubscription.unsubscribe();
   }
 
   // #region sort
   /* Método que ordena de forma decrescente */
   private sortDec(object, attribute) {
-    this.morador$.value.sort((a, b) => {
+    this.moradores$.value.sort((a, b) => {
       if (a[object][attribute] < b[object][attribute]) {
         return -1;
       }
@@ -119,7 +117,7 @@ export class MoradorComponent implements OnDestroy {
 
   /* Método que ordena de forma crescente */
   private sortAsc(object, attribute) {
-    this.morador$.value.sort((a, b) => {
+    this.moradores$.value.sort((a, b) => {
       if (a[object][attribute] > b[object][attribute]) {
         return -1;
       }
@@ -129,36 +127,36 @@ export class MoradorComponent implements OnDestroy {
 
   /* Método que ajusta as setas da table */
   public onSort(th: any) {
-    this.thead.forEach(element => {
-      if (element.name === th.name) {
-        if (element.arrowType === 'fa-circle' || element.arrowType === 'fa-arrow-down') {
+    this.thead.forEach(theadeElement => {
+      if (theadeElement.name === th.name) {
+        if (theadeElement.arrowType === 'fa-circle' || theadeElement.arrowType === 'fa-arrow-down') {
           this.sortDec(th.object, th.attribute);
-          element.arrowType = 'fa-arrow-up';
+          theadeElement.arrowType = 'fa-arrow-up';
         } else {
           this.sortAsc(th.object, th.attribute);
-          element.arrowType = 'fa-arrow-down';
+          theadeElement.arrowType = 'fa-arrow-down';
         }
       } else {
-        element.arrowType = 'fa-circle';
+        theadeElement.arrowType = 'fa-circle';
       }
     });
   }
   //#endregion
 
   public remove(arrayPosition, moradorId) {
-    this.moradorService.delete(moradorId).subscribe((data) => {
+    this.moradorService.deleteMorador(moradorId).subscribe(() => {
       console.log('removido com sucesso')
-      this.morador$.value.splice(arrayPosition, 1);
-    }, (error) => {
+      this.moradores$.value.splice(arrayPosition, 1);
+    }, () => {
       console.log('erro')
     });
   }
 
   public action(morador?: Morador, index?: number) {
     if (index >= 0) {
-      this.moradorService.getMorador(morador.id).subscribe((moradorResponse: Morador) => {
+      this.moradorService.getMorador(morador.id).subscribe(() => {
         this.showForm(morador, index);
-      }, error => {
+      }, () => {
         console.log('Um erro ocorreu ao buscar o morador');
       });
     } else {
@@ -180,15 +178,15 @@ export class MoradorComponent implements OnDestroy {
       }
       console.log(moradorForm)
       if (moradorForm.id) {
-        this.moradorService.updateForm(moradorForm).subscribe((moradorResponse: Morador) => {
-          this.morador$.value[index] = moradorResponse;
+        this.moradorService.updateMorador(moradorForm).subscribe((moradorResponse: Morador) => {
+          this.moradores$.value[index] = moradorResponse;
           console.log('Atualizado com sucesso')
         }, (error) => {
           console.log(error)
         });
       } else {
-        this.moradorService.saveForm(moradorForm).subscribe((moradorResponse: Morador) => {
-          this.morador$.value.push(moradorResponse);
+        this.moradorService.createMorador(moradorForm).subscribe((moradorResponse: Morador) => {
+          this.moradores$.value.push(moradorResponse);
           console.log('Salvo com sucesso')
         }, (error) => {
           console.log(error)
@@ -198,9 +196,9 @@ export class MoradorComponent implements OnDestroy {
   }
 
   private setArray(moradores: Morador[]) {
-    this.morador = this.setAge(moradores);
-    this.options = this.getFiltersLabel();
-    this.morador$.next(moradores);
+    this.moradores = this.setAge(moradores);
+    this.filter = this.getFiltersLabel();
+    this.moradores$.next(moradores);
     this.progressBar$.next({ mode: 'determinate', value: 100 });
   }
 
@@ -221,26 +219,37 @@ export class MoradorComponent implements OnDestroy {
           morador.personal['age'] = today.getFullYear() - moradorBirthday.getFullYear() - 1;
         }
       }
-      this.ages.push(morador.personal['age']);
-      this.units.push(morador.condominium.unit);
-      this.blocks.push(morador.condominium.block);
+      this.moradoresAges.push(morador.personal['age']);
+      this.condominiumUnits.push(morador.condominium.unit);
+      this.condominiumBlockNames.push(morador.condominium.block);
     });
     return moradores;
   }
 
   public openFilter(event) {
     event.stopPropagation();
-    this.openMenu = !this.openMenu;
+    this.openNavBar = !this.openNavBar;
   }
 
   // rever foreachs
   private getFiltersLabel(): IFilter[] {
     const IFILTER: IFilter[] = [];
     // retorna um array sem nomes/números repetidos
-    this.blocks = this.sortFiltersLabel(this.blocks.filter((v, i, a) => a.indexOf(v) === i));
-    this.ages = this.sortFiltersLabel(this.ages.filter((v, i, a) => a.indexOf(v) === i));
-    this.units = this.sortFiltersLabel(this.units.filter((v, i, a) => a.indexOf(v) === i));
-    this.blocks.forEach(block => {
+    this.condominiumBlockNames = this.sortFiltersLabel(
+      this.condominiumBlockNames.filter(
+        (blockName, index, condominiumBlockNames) => condominiumBlockNames.indexOf(blockName) === index
+      )
+    );
+    this.moradoresAges = this.sortFiltersLabel(
+      this.moradoresAges.filter(
+        (age, index, moradoresAges) => moradoresAges.indexOf(age) === index
+      )
+    );
+    this.condominiumUnits = this.sortFiltersLabel(
+      this.condominiumUnits.filter((unit, index, condominiumUnits) => condominiumUnits.indexOf(unit) === index
+      )
+    );
+    this.condominiumBlockNames.forEach(block => {
       IFILTER.push({
         elementName: 'block_' + block,
         actualValue: false,
@@ -250,17 +259,17 @@ export class MoradorComponent implements OnDestroy {
     });
     IFILTER.push({
       elementName: 'unit',
-      minValue: this.units[0],
-      maxValue: this.units[this.units.length - 1],
-      actualValue: [this.units[0], this.units[this.units.length - 1]],
+      minValue: this.condominiumUnits[0],
+      maxValue: this.condominiumUnits[this.condominiumUnits.length - 1],
+      actualValue: [this.condominiumUnits[0], this.condominiumUnits[this.condominiumUnits.length - 1]],
       inputType: 'number',
       elementNameTranslate: 'Unidade'
     });
     IFILTER.push({
       elementName: 'age',
-      minValue: this.ages[0],
-      maxValue: this.ages[this.units.length],
-      actualValue: this.ages[0],
+      minValue: this.moradoresAges[0],
+      maxValue: this.moradoresAges[this.condominiumUnits.length],
+      actualValue: this.moradoresAges[0],
       inputType: 'range',
       elementNameTranslate: 'Idade'
     });
@@ -276,9 +285,9 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  public filter(event) {
+  public filterTable(event) {
     if (event === 'limpar') {
-      this.options = this.getFiltersLabel();
+      this.filter = this.getFiltersLabel();
       return;
     } else if (event === 'sair') {
       return;
@@ -286,16 +295,15 @@ export class MoradorComponent implements OnDestroy {
     const simpleFilter = {
       unit: {
         minValue: 100,
-        maxValue: 300
+        maxValue: 2000
       },
-      block: [{ key: 'B', value: true }, { key: 'A', value: false }],
+      block: [{ key: 'B', value: false }, { key: 'F', value: true }, { key: 'A', value: true }],
       personal: {
         minAge: 10,
         maxAge: 90
       }
     };
-    const search = this.morador.filter((value, index, array) => {
-      console.log(simpleFilter)
+    const search = this.moradores.filter((value) => {
       return (
         value.personal.age >= simpleFilter.personal.minAge
         &&
@@ -305,20 +313,20 @@ export class MoradorComponent implements OnDestroy {
         &&
         value.condominium.unit <= simpleFilter.unit.maxValue
         &&
-        this.multiplusValidation(value.condominium.block, simpleFilter.block)
-        // (this.multiplusValidation(value.condominium.block, simpleFilter.block))
-        // (value.condominium.block.includes("A") || value.condominium.block.includes("F") || value.condominium.block.includes("B"))
-        // &&
+        value.condominium.block === this.blocksValidation(value.condominium.block, simpleFilter.block)
       );
     });
-    console.log(search)
-    // this.morador$.next(search);
+    // this.moradores$.next(search);
   }
 
-  private multiplusValidation(value: any, block: any[] = []): any[] {
-    return block.filter(b => {
-      return value.includes(b.key) && b.value ? value : undefined;
+  private blocksValidation(block: any, blocks: any[] = []): string | undefined {
+    let vcb;
+    blocks.forEach((b) => {
+      if (block.includes(b.key) && b.value) {
+        vcb = block;
+      }
     });
+    return vcb;
   }
 
 
@@ -346,40 +354,48 @@ export class MoradorComponent implements OnDestroy {
     ], 15, 15);
 
     moradorPdf.setFontSize(12);
-    moradorPdf.text(['Morador: ' + morador.personal.name], 15, 25);
+    moradorPdf.text(['Dados pessoais'], 15, 25);
+    moradorPdf.text(['_____________________________________________________________________________'], 15, 28);
+    moradorPdf.text(['Morador: ' + morador.personal.name], 15, 38);
 
-    moradorPdf.text(['Data de Nascimento: ' + this.getBornDate(morador.personal.bornDate)], 135, 25);
+    moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.bornDate)], 135, 38);
 
-    moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 35);
+    moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 48);
 
-    moradorPdf.text(['RG: ' + morador.personal.rg], 85, 35);
+    moradorPdf.text(['RG: ' + morador.personal.rg], 85, 48);
 
-    moradorPdf.text(['Estado Civil: ' + morador.personal.civilStatus], 155, 35);
+    moradorPdf.text(['Estado Civil: ' + morador.personal.civilStatus], 155, 48);
 
     if (morador.personal.civilStatus === 'casado(a)') {
-      moradorPdf.text(['Conjuguê: ' + morador.familiar.partner.name], 15, 45);
+      moradorPdf.text(['Conjuguê: ' + morador.familiar.partner.name], 15, 58);
       space += 10;
     }
 
-    moradorPdf.text(['Telefone: ' + this.comunicationsWay(morador.personal.tel)], 15, 45 + space);
+    moradorPdf.text(['Telefone: ' + this.comunicationsWay(morador.personal.tel)], 15, 60 + space);
 
-    moradorPdf.text(['Celular: ' + this.comunicationsWay(morador.personal.cel)], 70, 45 + space);
+    moradorPdf.text(['Celular: ' + this.comunicationsWay(morador.personal.cel)], 70, 60 + space);
 
-    moradorPdf.text(['Email: ' + this.comunicationsWay(morador.personal.email)], 125, 45 + space);
+    moradorPdf.text(['Email: ' + this.comunicationsWay(morador.personal.email)], 125, 60 + space);
 
-    moradorPdf.text(['Profissão: ' + morador.professional.profession], 15, 55 + space);
+    moradorPdf.text(['Dados profissionais'], 15, 70 + space);
+    moradorPdf.text(['_____________________________________________________________________________'], 15, 73 + space);
 
-    moradorPdf.text(['Salário: R$ ' + morador.professional.salary.toFixed(2)], 160, 55 + space);
+    moradorPdf.text(['Profissão: ' + morador.professional.profession], 15, 83 + space);
 
-    moradorPdf.text(['Bloco: ' + morador.condominium.block], 15, 65 + space);
+    moradorPdf.text(['Salário: R$ ' + morador.professional.salary.toFixed(2)], 160, 83 + space);
 
-    moradorPdf.text(['Unidade: ' + morador.condominium.unit], 75, 65 + space);
+    moradorPdf.text(['Dados condominial'], 15, 95 + space);
+    moradorPdf.text(['_____________________________________________________________________________'], 15, 98 + space);
+
+    moradorPdf.text(['Bloco: ' + morador.condominium.block], 15, 108 + space);
+
+    moradorPdf.text(['Unidade: ' + morador.condominium.unit], 75, 108 + space);
 
     // Opção 2
 
     // moradorPdf.text(['Morador: ' + morador.personal.name], 15, 25);
 
-    // moradorPdf.text(['Data de Nascimento: ' + this.getBornDate(morador.personal.bornDate)], 15, 35);
+    // moradorPdf.text(['Data de Nascimento: ' + this.getBirthDate(morador.personal.bornDate)], 15, 35);
 
     // moradorPdf.text(['CPF: ' + this.getCpf(morador.personal.cpf)], 15, 45);
 
@@ -408,20 +424,20 @@ export class MoradorComponent implements OnDestroy {
     moradorPdf.save(`${morador.personal.name.replace(' ', '')}.pdf`);
   }
 
-  private getBornDate(bornDate: Date): string {
-    return new Date(bornDate).toLocaleDateString();
+  private getBirthDate(birthDate: Date): string {
+    return new Date(birthDate).toLocaleDateString();
   }
 
-  private comunicationsWay(numberValue: string): string {
-    if (!numberValue) {
+  private comunicationsWay(phoneValue: string): string {
+    if (!phoneValue) {
       return 'N/C';
     }
-    if (numberValue.length === 10) {
-      return '(' + numberValue.substr(0, 2) + ') ' + numberValue.substr(2, 4) + '-' + numberValue.substr(6, 4);
-    } else if (numberValue.length === 11) {
-      return '(' + numberValue.substr(0, 2) + ') ' + numberValue.substr(2, 5) + '-' + numberValue.substr(6, 4);
+    if (phoneValue.length === 10) {
+      return '(' + phoneValue.substr(0, 2) + ') ' + phoneValue.substr(2, 4) + '-' + phoneValue.substr(6, 4);
+    } else if (phoneValue.length === 11) {
+      return '(' + phoneValue.substr(0, 2) + ') ' + phoneValue.substr(2, 5) + '-' + phoneValue.substr(6, 4);
     } else {
-      return numberValue;
+      return phoneValue;
     }
   }
 
@@ -451,3 +467,37 @@ export class MoradorComponent implements OnDestroy {
 // criar hint no botão filtrar
 // rever foreachs
 // validar campos do filtro
+
+
+// let a = [
+//   { personal: { age: 1 }, condominium: { block: 'A', unit: 110 } },
+//   { personal: { age: 1 }, condominium: { block: 'B', unit: 540 } },
+//   { personal: { age: 2 }, condominium: { block: 'C', unit: 390 } },
+//   { personal: { age: 3 }, condominium: { block: 'D', unit: 220 } },
+//   { personal: { age: 5 }, condominium: { block: 'A', unit: 450 } },
+//   { personal: { age: 8 }, condominium: { block: 'B', unit: 670 } },
+//   { personal: { age: 13 }, condominium: { block: 'C', unit: 790 } },
+//   { personal: { age: 21 }, condominium: { block: 'D', unit: 810 } },
+//   { personal: { age: 34 }, condominium: { block: 'A', unit: 930 } },
+//   { personal: { age: 55 }, condominium: { block: 'A', unit: 1060 } },
+//   { personal: { age: 89 }, condominium: { block: 'B', unit: 180 } },
+//   { personal: { age: 143 }, condominium: { block: 'B', unit: 240 } },
+//   { personal: { age: 2 }, condominium: { block: 'C', unit: 320 } },
+//   { personal: { age: 4 }, condominium: { block: 'C', unit: 430 } },
+//   { personal: { age: 6 }, condominium: { block: 'D', unit: 590 } },
+//   { personal: { age: 10 }, condominium: { block: 'D', unit: 650 } },
+//   { personal: { age: 16 }, condominium: { block: 'A', unit: 760 } },
+//   { personal: { age: 26 }, condominium: { block: 'B', unit: 880 } },
+//   { personal: { age: 42 }, condominium: { block: 'C', unit: 970 } },
+//   { personal: { age: 1 }, condominium: { block: 'D', unit: 1010 } }
+// ]
+
+// multipluValidation = (block, array) => {
+//   let newArray;
+//   array.foreach(value => {
+//     if (block === value) {
+//       newArray.push(block);
+//     }
+//   })
+//   return newArray
+// }

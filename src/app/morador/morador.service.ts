@@ -23,7 +23,7 @@ const HEADERS = new HttpHeaders({
 })
 export class MoradorService {
 
-  public morador$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
+  public moradores$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
 
   constructor(private http: HttpClient) { }
 
@@ -36,7 +36,7 @@ export class MoradorService {
       .pipe(map((response: any) => response), catchError((error: HttpErrorResponse) => throwError(error)));
   }
 
-  public saveForm(morador: Morador): Observable<any> {
+  public createMorador(morador: Morador): Observable<any> {
     console.log(morador)
     return this.http.post<Morador>(URLMORADOR, morador).pipe(
       map((response: any) => response),
@@ -46,7 +46,7 @@ export class MoradorService {
     );
   }
 
-  public updateForm(morador: Morador): Observable<any> {
+  public updateMorador(morador: Morador): Observable<any> {
     return this.http.put<Morador>(`${URLMORADOR}/${morador.id}`, morador).pipe(
       map((response: any) => response),
       catchError((error: HttpErrorResponse) => {
@@ -55,7 +55,7 @@ export class MoradorService {
     );
   }
 
-  public delete(id: string): Observable<any> {
+  public deleteMorador(id: string): Observable<any> {
     return this.http.delete<any>(`${URLMORADOR}/${id}`).pipe(
       map((response: any) => {
         return response;

@@ -2,17 +2,17 @@
   <div class="banner">
     <h1>Moradores</h1>
     <div class="header__content"
-      [ngClass]="{'header__content__empty__table': !(morador$ | async)?.length && morador?.length > 0 }">
+      [ngClass]="{'header__content__empty__table': !(moradores$ | async)?.length && moradores?.length > 0 }">
       <div>
         <label for="sua_busca" aria-label="digite sua busca aqui"></label>
-        <input id="sua_busca" type="text" [disabled]="!(morador$ | async)" (input)="inputValue$.next(searchInput.value)"
+        <input id="sua_busca" type="text" [disabled]="!(moradores$ | async)" (input)="searchInput$.next(searchInput.value)"
           placeholder="digite sua busca aqui..." aria-describedby="items__lista" #searchInput>
-        <span id="items__lista" attr.aria-label="a lista contém {{ (morador$ | async)?.length}} items"></span>
+        <span id="items__lista" attr.aria-label="a lista contém {{ (moradores$ | async)?.length}} items"></span>
       </div>
       <div>
-        <button class="btn__default" [disabled]="!(morador$ | async)" aria-label="filtrar busca"
+        <button class="btn__default" [disabled]="!(moradores$ | async)" aria-label="filtrar busca"
           (click)="openFilter($event)">Filtrar<i class="fa fa-filter"></i></button>
-        <app-menu *ngIf="openMenu" [options]="options" (close)="openMenu=$event" (filterValues)="filter($event)"></app-menu>
+        <app-menu *ngIf="openNavBar" [options]="options" (close)="openNavBar=$event" (filterValues)="filter($event)"></app-menu>
         <button class="btn__default btn__primary" (click)="action()">Novo Morador<i
             class="fas fa-user-plus"></i></button>
       </div>
@@ -20,10 +20,10 @@
   </div>
   <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">
   </mat-progress-bar>
-  <table class="table" [ngClass]="{ 'table__empty' : !(morador$ | async) }">
-    <thead [attr.disabled]="!(morador$ | async)">
-      <tr [ngClass]="{ 'table__th__disabled' : !(morador$ | async) }">
-        <th *ngFor="let th of thead, let i = index">{{th?.name}}<button *ngIf="i !== 6 && (morador$ | async)"
+  <table class="table" [ngClass]="{ 'table__empty' : !(moradores$ | async) }">
+    <thead [attr.disabled]="!(moradores$ | async)">
+      <tr [ngClass]="{ 'table__th__disabled' : !(moradores$ | async) }">
+        <th *ngFor="let th of thead, let i = index">{{th?.name}}<button *ngIf="i !== 6 && (moradores$ | async)"
             [ngStyle]="{'opacity': th.arrowType !== 'fa-circle' ? '1' : null}" (click)="onSort(th)">
             <i class="fa {{th.arrowType}}" [ngStyle]="{'font-size': th.arrowType === 'fa-circle' ? '12px' : '14px' }"
               aria-hidden="true"></i>
@@ -31,8 +31,8 @@
         </th>
       </tr>
     </thead>
-    <tbody *ngIf="(morador$ | async)">
-      <tr *ngFor="let morador of (morador$ | async), let i = index ">
+    <tbody *ngIf="(moradores$ | async)">
+      <tr *ngFor="let morador of (moradores$ | async), let i = index ">
         <td>{{ morador?.personal?.name }}</td>
         <td>{{ morador?.personal?.age }}</td>
         <td>{{ morador?.personal?.cpf | mask: '000.000.000-00'}}</td>
@@ -50,7 +50,7 @@
               class="fas fa-trash" aria-hidden="true"></i></button></td>
       </tr>
     </tbody>
-    <div *ngIf="(morador$ | async)?.length < 1">
+    <div *ngIf="(moradores$ | async)?.length < 1">
       <i class="fa fa-list" aria-hidden="true"></i>
       <span role="alert">Nenhum morador encontrado...</span>
     </div>
