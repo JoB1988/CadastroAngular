@@ -14,10 +14,15 @@ input[type="number"]::-webkit-inner-spin-button {
     min-height: 75px;
     padding: 15px;
     position: absolute;
+    right: 40px;
     width: 220px;
     z-index: 1;
     @include mat-elevation(8, #303030, 0.9);
     @include flex-box(center, flex-end);
+
+    @media (max-width: 379px) {
+        left: calc(50% - 125px);
+    }
 
     &__min__max {
         width: calc(50% - 10px) !important;

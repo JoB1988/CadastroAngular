@@ -290,6 +290,7 @@ export class MoradorComponent implements OnDestroy {
     if (event === 'limpar') {
       this.numberOfFiltersUsed = 0;
       this.filterOptions = this.getFilterOptions();
+      this.moradores$.next(this.moradores);
       return;
     } else if (event === 'sair') {
       return;
@@ -454,9 +455,6 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
-// filtrar o componente morador
-// ajustar css do componente de filter
-
 // ajustar acessibilidade do componente de filtrar
 // ajustar acessibilidade do componente de sidebar
 // ajustar acessibilidade do componente de header
@@ -475,37 +473,4 @@ export class MoradorComponent implements OnDestroy {
 // criar hint no botão filtrar
 // rever foreachs
 // validar campos do filtro
-
-
-// let a = [
-//   { personal: { age: 1 }, condominium: { block: 'A', unit: 110 } },
-//   { personal: { age: 1 }, condominium: { block: 'B', unit: 540 } },
-//   { personal: { age: 2 }, condominium: { block: 'C', unit: 390 } },
-//   { personal: { age: 3 }, condominium: { block: 'D', unit: 220 } },
-//   { personal: { age: 5 }, condominium: { block: 'A', unit: 450 } },
-//   { personal: { age: 8 }, condominium: { block: 'B', unit: 670 } },
-//   { personal: { age: 13 }, condominium: { block: 'C', unit: 790 } },
-//   { personal: { age: 21 }, condominium: { block: 'D', unit: 810 } },
-//   { personal: { age: 34 }, condominium: { block: 'A', unit: 930 } },
-//   { personal: { age: 55 }, condominium: { block: 'A', unit: 1060 } },
-//   { personal: { age: 89 }, condominium: { block: 'B', unit: 180 } },
-//   { personal: { age: 143 }, condominium: { block: 'B', unit: 240 } },
-//   { personal: { age: 2 }, condominium: { block: 'C', unit: 320 } },
-//   { personal: { age: 4 }, condominium: { block: 'C', unit: 430 } },
-//   { personal: { age: 6 }, condominium: { block: 'D', unit: 590 } },
-//   { personal: { age: 10 }, condominium: { block: 'D', unit: 650 } },
-//   { personal: { age: 16 }, condominium: { block: 'A', unit: 760 } },
-//   { personal: { age: 26 }, condominium: { block: 'B', unit: 880 } },
-//   { personal: { age: 42 }, condominium: { block: 'C', unit: 970 } },
-//   { personal: { age: 1 }, condominium: { block: 'D', unit: 1010 } }
-// ]
-
-// multipluValidation = (block, array) => {
-//   let newArray;
-//   array.foreach(value => {
-//     if (block === value) {
-//       newArray.push(block);
-//     }
-//   })
-//   return newArray
-// }
+// criar double range
