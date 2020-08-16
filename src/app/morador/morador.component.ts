@@ -455,9 +455,9 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
-// ajustar acessibilidade do componente de filtrar
 // ajustar acessibilidade do componente de sidebar
 // ajustar acessibilidade do componente de header
+// ajustar acessibilidade do componente de filtrar
 // adicionar à acessibilidade quantos valores o botão filtrar tem
 // criar dialog para confirmar exclusão de cadastros
 // criar paginação

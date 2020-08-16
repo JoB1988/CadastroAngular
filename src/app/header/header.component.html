@@ -1,8 +1,8 @@
-<header>
+<header aria-hidden="true">
   <nav class="navbar">
     <div *ngIf="!(hamburguer$ | async)">
       <ul>
-        <li>
+        <li role="link">
           <a [routerLink]="['/home']">Home</a>
         </li>
         <li *ngIf="isLogged$ | async">
@@ -18,17 +18,18 @@
     </div>
     <div *ngIf="!(hamburguer$ | async)">
       <ul *ngIf="!(isLogged$ | async)">
-        <li>
+        <li role="link">
           <a [routerLink]="['/login']">Login</a>
         </li>
       </ul>
       <div class="navbar__login__user">
-        {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
+        <span>
+          {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
+        </span>
       </div>
     </div>
-    <button *ngIf="(hamburguer$ | async)" (click)="openSideBar($event)">
+    <button *ngIf="(hamburguer$ | async)" (click)="openSideBar($event)" aria-label="clique aqui para abrir as opções de navegação">
       <i class="fas fa-bars"></i>
     </button>
   </nav>
-
 </header>

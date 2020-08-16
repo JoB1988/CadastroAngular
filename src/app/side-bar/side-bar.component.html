@@ -1,25 +1,23 @@
 <nav [ngClass]="{'navbar__out': !(menu$ | async), 'navbar__in': (menu$ | async)}" (click)="$event.stopPropagation()">
-    <div>
-        <ul>
-            <li>
-                <a [routerLink]="['/home']">Home</a>
-            </li>
-            <li *ngIf="isLogged$ | async">
-                <a [routerLink]="['/funcionarios']">Funcionarios</a>
-            </li>
-            <li *ngIf="isLogged$ | async">
-                <a [routerLink]="['/moradores']">Moradores</a>
-            </li>
-            <li *ngIf="isLogged$ | async">
-                <a [routerLink]="['/areas-comum']">Areas Comum</a>
-            </li>
-            <li *ngIf="!(isLogged$ | async)">
-                <a [routerLink]="['/login']">Login</a>
-            </li>
-        </ul>
-        <span>
-            {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
-        </span>
-    </div>
-    <button (click)="close()"><i class="fas fa-angle-left"></i></button>
+    <ul>
+        <li>
+            <a [routerLink]="['/home']" aria-label="navega para tela home">Home</a>
+        </li>
+        <li *ngIf="isLogged$ | async">
+            <a [routerLink]="['/funcionarios']" aria-label="navega para tela de funcionários">Funcionarios</a>
+        </li>
+        <li *ngIf="isLogged$ | async">
+            <a [routerLink]="['/moradores']" aria-label="navega para tela de moradores">Moradores</a>
+        </li>
+        <li *ngIf="isLogged$ | async">
+            <a [routerLink]="['/areas-comum']" aria-label="navega para tela de areas comum">Areas Comum</a>
+        </li>
+        <li *ngIf="!(isLogged$ | async)" >
+            <a [routerLink]="['/login']" aria-label="navega para tela de login">Login</a>
+        </li>
+    </ul>
+    <span>
+        {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
+    </span>
+    <button aria-hidden="true" (click)="close()"><i class="fas fa-angle-left"></i></button>
 </nav>
