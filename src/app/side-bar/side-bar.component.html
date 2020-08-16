@@ -1,23 +1,24 @@
-<nav [ngClass]="{'navbar__out': !(menu$ | async), 'navbar__in': (menu$ | async)}" (click)="$event.stopPropagation()">
-    <ul>
-        <li>
-            <a [routerLink]="['/home']" aria-label="navega para tela home">Home</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-            <a [routerLink]="['/funcionarios']" aria-label="navega para tela de funcionários">Funcionarios</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-            <a [routerLink]="['/moradores']" aria-label="navega para tela de moradores">Moradores</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-            <a [routerLink]="['/areas-comum']" aria-label="navega para tela de areas comum">Areas Comum</a>
-        </li>
-        <li *ngIf="!(isLogged$ | async)" >
-            <a [routerLink]="['/login']" aria-label="navega para tela de login">Login</a>
-        </li>
-    </ul>
-    <span>
-        {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
-    </span>
-    <button aria-hidden="true" (click)="close()"><i class="fas fa-angle-left"></i></button>
-</nav>
+
+    <nav [ngClass]="{'navbar__out': !(menu$ | async), 'navbar__in': (menu$ | async)}" attr.aria-hidden="{{!(hamburguer$ | async)}}" role="navigation" (click)="$event.stopPropagation()">
+        <ul>
+            <li>
+                <a [routerLink]="['/home']" aria-label="navega para tela home">Home</a>
+            </li>
+            <li *ngIf="isLogged$ | async">
+                <a [routerLink]="['/funcionarios']" aria-label="navega para tela de funcionários">Funcionarios</a>
+            </li>
+            <li *ngIf="isLogged$ | async">
+                <a [routerLink]="['/moradores']" aria-label="navega para tela de moradores">Moradores</a>
+            </li>
+            <li *ngIf="isLogged$ | async">
+                <a [routerLink]="['/areas-comum']" aria-label="navega para tela de areas comum">Areas Comum</a>
+            </li>
+            <li *ngIf="!(isLogged$ | async)" >
+                <a [routerLink]="['/login']" aria-label="navega para tela de login">Login</a>
+            </li>
+        </ul>
+        <span role="complementary" aria-live="polite" aria-label="Usuário logado:"  >
+            {{ (user$ | async)?.nome ? (user$ | async).nome : 'Ninguém' }}
+        </span>
+        <button aria-hidden="true" (click)="close()"><i class="fas fa-angle-left"></i></button>
+    </nav>

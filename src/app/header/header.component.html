@@ -1,35 +1,25 @@
-<header aria-hidden="true">
-  <nav class="navbar">
-    <div *ngIf="!(hamburguer$ | async)">
-      <ul>
-        <li role="link">
-          <a [routerLink]="['/home']">Home</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-          <a [routerLink]="['/funcionarios']">Funcionarios</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-          <a [routerLink]="['/moradores']">Moradores</a>
-        </li>
-        <li *ngIf="isLogged$ | async">
-          <a [routerLink]="['/areas-comum']">Areas Comum</a>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="!(hamburguer$ | async)">
-      <ul *ngIf="!(isLogged$ | async)">
-        <li role="link">
-          <a [routerLink]="['/login']">Login</a>
-        </li>
-      </ul>
-      <div class="navbar__login__user">
-        <span>
-          {{ (user$ | async)?.nome ? (user$ | async).nome : 'Usuário' }}
-        </span>
-      </div>
-    </div>
-    <button *ngIf="(hamburguer$ | async)" (click)="openSideBar($event)" aria-label="clique aqui para abrir as opções de navegação">
+  <nav class="navbar" attr.aria-hidden="{{hamburguer$ | async}}" role="navigation">
+    <ul *ngIf="!(hamburguer$ | async)">
+      <li>
+        <a [routerLink]="['/home']" aria-label="ir para tela home">Home</a>
+      </li>
+      <li *ngIf="isLogged$ | async">
+        <a [routerLink]="['/funcionarios']" aria-label="ir para tela Funcionarios">Funcionarios</a>
+      </li>
+      <li *ngIf="isLogged$ | async">
+        <a [routerLink]="['/moradores']" aria-label="ir para tela Moradores">Moradores</a>
+      </li>
+      <li *ngIf="isLogged$ | async">
+        <a [routerLink]="['/areas-comum']" aria-label="ir para tela Areas Comum">Areas Comum</a>
+      </li>
+      <li *ngIf="!(isLogged$ | async)">
+        <a [routerLink]="['/login']" style="padding:0;" aria-label="ir para tela Login">Login</a>
+      </li>
+    </ul>
+    <span *ngIf="!(hamburguer$ | async)" class="navbar__login__user" role="complementary" aria-live="polite" aria-label="Usuário logado:">
+      {{ (user$ | async)?.nome ? (user$ | async).nome : 'Ninguém' }}
+    </span>
+    <button *ngIf="(hamburguer$ | async)" (click)="openSideBar($event)" aria-hidden="true">
       <i class="fas fa-bars"></i>
     </button>
   </nav>
-</header>

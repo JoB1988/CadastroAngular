@@ -13,13 +13,15 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (window.innerWidth < 651) {
+    if (window.innerWidth < 683) {
       this.navigation.hamburguer$.next(true);
+    } else {
+      this.navigation.hamburguer$.next(false);
     }
   }
 
   @HostListener('window:resize', ['$event']) onResize(event) {
-    if (event.target.innerWidth < 651) {
+    if (event.target.innerWidth < 683) {
       this.navigation.hamburguer$.next(true);
     } else {
       this.navigation.hamburguer$.next(false);

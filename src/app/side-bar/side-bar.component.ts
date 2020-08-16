@@ -13,7 +13,7 @@ import { Usuario } from '../shared/app.model';
 export class SideBarComponent implements OnDestroy {
 
   /*variável que permite abrir side bar*/
-  public hambuguer$ = new BehaviorSubject(false);
+  public hamburguer$ = new BehaviorSubject(false);
 
   /*variável que mostra o hambuger*/
   public menu$ = new BehaviorSubject(false);
@@ -27,7 +27,7 @@ export class SideBarComponent implements OnDestroy {
   /*observador da variável openSideBar$ da navigation, quando houver alguma alteração, ele
   mostra ou esconde o menu lateral*/
   public menuSubscription = this.navigation.openSideBar$.subscribe(value => {
-    if (this.hambuguer$.value) {
+    if (this.hamburguer$.value) {
       this.menu$.next(value);
     }
   });
@@ -35,7 +35,7 @@ export class SideBarComponent implements OnDestroy {
   /*observador da variável hamburguer$ da navigation, quando houver alguma alteração, ele
   mostra ou esconde o menu lateral*/
   public hamburguerSubscription = this.navigation.hamburguer$.subscribe(value => {
-    this.hambuguer$.next(value);
+    this.hamburguer$.next(value);
     if (!value) {
       this.menu$.next(value);
     }
