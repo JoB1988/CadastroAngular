@@ -117,8 +117,6 @@ export class MoradorDialogComponent implements OnInit {
     if (!save) {
       this.dialogRef.close();
     } else {
-      debugger
-      // ajustar depois
       const morador = this.moradorForm$.value.getRawValue() as Morador;
       morador.professional.salary = morador.professional.salary && parseFloat(morador.professional.salary.toString());
       morador.familiar = {
