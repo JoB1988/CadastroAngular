@@ -34,11 +34,11 @@
                         [innerHTML]="displayError('personal', 'name')"></span>
                 </div>
                 <div class="form__control form__personal__date"
-                    [ngClass]="{ 'form__control__error' : displayError('personal', 'bornDate')}">
-                    <label for="bornDate">data de nascimento</label>
-                    <input type="date" maxLength="8" formControlName="bornDate" aria-required="true">
-                    <span id="span_bornDate" role="alert" aria-live="polite"
-                        [innerHTML]="displayError('personal', 'bornDate')"></span>
+                    [ngClass]="{ 'form__control__error' : displayError('personal', 'birthDate')}">
+                    <label for="birthDate">data de nascimento</label>
+                    <input type="date" maxLength="8" formControlName="birthDate" aria-required="true">
+                    <span id="span_birthDate" role="alert" aria-live="polite"
+                        [innerHTML]="displayError('personal', 'birthDate')"></span>
                 </div>
                 <div class="form__control form__personal__cpf"
                     [ngClass]="{ 'form__control__error' : displayError('personal', 'cpf')}">

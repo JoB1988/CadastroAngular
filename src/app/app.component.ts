@@ -1,5 +1,6 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { NavigationService } from './shared/services/navigation.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,9 @@ import { NavigationService } from './shared/services/navigation.service';
 export class AppComponent implements OnInit {
 
   constructor(
-    private navigation: NavigationService
+    private navigation: NavigationService,
+    // para checar a plataforma
+    @Inject(PLATFORM_ID) private platformId: string
   ) { }
 
   ngOnInit(): void {
@@ -18,6 +21,8 @@ export class AppComponent implements OnInit {
     } else {
       this.navigation.hamburguer$.next(false);
     }
+    // para checar a plataforma
+    console.log(isPlatformBrowser(this.platformId));
   }
 
   @HostListener('window:resize', ['$event']) onResize(event) {

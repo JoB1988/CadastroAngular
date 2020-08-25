@@ -184,7 +184,8 @@ export class MoradorComponent implements OnDestroy {
         });
       } else {
         this.moradorService.createMorador(moradorForm).subscribe((moradorResponse: Morador) => {
-          this.moradores$.value.push(moradorResponse);
+          debugger
+          this.moradores$.value.push(this.addAgeToArray([moradorResponse])[0]);
           console.log('Salvo com sucesso')
         }, (error) => {
           console.log(error)
@@ -455,8 +456,7 @@ export class MoradorComponent implements OnDestroy {
   }
 }
 
-// ajustar acessibilidade do componente de sidebar
-// ajustar acessibilidade do componente de header
+
 // ajustar acessibilidade do componente de filtrar
 // adicionar à acessibilidade quantos valores o botão filtrar tem
 // criar dialog para confirmar exclusão de cadastros

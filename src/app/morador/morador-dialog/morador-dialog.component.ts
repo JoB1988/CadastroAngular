@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FormBuilder, Validators, FormGroup, NgForm } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, NgForm, AbstractControl } from '@angular/forms';
 import { Important } from 'src/app/shared/methods';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Morador } from 'src/app/shared/app.model';
@@ -17,8 +17,8 @@ export class MoradorDialogComponent implements OnInit {
   public showImageSpinner = false;
   public labelImage = 'clique e escolha a imagem do morador';
 
-  @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
-  @ViewChild('fileInput', { static: false }) fileInput: ElementRef;
+  @ViewChild('nameInput', { static: false }) nameInput: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInput', { static: false }) fileInput: ElementRef<HTMLInputElement>;
   @ViewChild('myForm', { static: false }) form: NgForm;
 
   public lettersRegex = new RegExp(/^[a-zA-ZÁÉÍÓÚÝÀÈÌÒÙÂÊÎÔÛÄËÏÖÜàèìòùáéíóúýâêîôûäëïöüãõñçÇ. ]*$/);
@@ -35,11 +35,11 @@ export class MoradorDialogComponent implements OnInit {
       personal: this.formBuilder.group({
         photo: [''],
         name: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.pattern(this.lettersRegex)])],
-        bornDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
+        birthDate: ['', Validators.compose([Validators.required, Validators.pattern(this.dateRegex)])],
         age: [''],
         cpf: ['', Validators.compose([Validators.required, Validators.minLength(11), Validators.pattern(this.cpfRegex)])],
         rg: ['', Validators.compose(
-          [Validators.required, Validators.minLength(7), Validators.maxLength(9), Validators.pattern(this.rgRegex)]
+          [Validators.required, this.minMaxValidator, Validators.pattern(this.rgRegex)]
         )],
         tel: ['', Validators.pattern(this.telRegex)],
         cel: ['', Validators.pattern(this.cpfRegex)],
@@ -75,7 +75,7 @@ export class MoradorDialogComponent implements OnInit {
       this.moradorImage = this.morador.personal.photo;
       this.moradorForm$.value.controls.personal['controls'].photo.setValue(this.morador.personal.photo);
       this.moradorForm$.value.controls.personal['controls'].name.setValue(this.morador.personal.name);
-      this.moradorForm$.value.controls.personal['controls'].bornDate.setValue(this.morador.personal.birthDate);
+      this.moradorForm$.value.controls.personal['controls'].birthDate.setValue(this.morador.personal.birthDate);
       this.moradorForm$.value.controls.personal['controls'].age.setValue(this.morador.personal.age);
       this.moradorForm$.value.controls.personal['controls'].cpf.setValue(this.morador.personal.cpf);
       this.moradorForm$.value.controls.personal['controls'].rg.setValue(this.morador.personal.rg);
@@ -117,17 +117,13 @@ export class MoradorDialogComponent implements OnInit {
     if (!save) {
       this.dialogRef.close();
     } else {
-      const morador: any = {};
-      morador.personal = this.moradorForm$.value.value.personal;
-      morador.personal.photo = this.moradorImage;
-      morador.professional = this.moradorForm$.value.value.professional;
-      morador.professional.salary = parseInt(morador.professional.salary, 0);
-      morador.condominium = this.moradorForm$.value.value.condominium;
-      morador.condominium.unit = parseInt(morador.condominium.unit, 0);
-      morador.id = this.moradorForm$.value.value.id;
+      debugger
+      // ajustar depois
+      const morador = this.moradorForm$.value.getRawValue() as Morador;
+      morador.professional.salary = morador.professional.salary && parseFloat(morador.professional.salary.toString());
       morador.familiar = {
         partner: { name: '', id: null },
-        dependents: []
+        dependents: undefined
       };
       if (morador.personal.civilStatus === 'casado(a)') {
         morador.familiar.partner.name = this.moradorForm$.value.value.familiar.partner;
@@ -169,7 +165,7 @@ export class MoradorDialogComponent implements OnInit {
     }
     if (error.required) {
       return 'Campo obrigatório';
-    } else if (error.minlength || error.pattern) {
+    } else if (error.minlength || error.outOfLength || error.pattern) {
       if ((error.minlength && error.pattern) || error.pattern) {
         return `Valor incorreto <i aria-hidden="true" class="fa fa-question"></i><span>${this.regexMessages(formControlName)}</span>`;
       }
@@ -188,10 +184,10 @@ export class MoradorDialogComponent implements OnInit {
       case 'partner':
         message = 'Digite somente letras.';
         break;
-      case 'bornDate':
+      case 'birthDate':
         message = 'Digite 2 digitos para o dia, 2 digitos para o mês e 4 digitos para o ano.';
         break;
-      case 'bornDate':
+      case 'birthDate':
       case 'cel':
       case 'cpf':
         message = 'Digite somente 11 números.';
@@ -213,5 +209,12 @@ export class MoradorDialogComponent implements OnInit {
         break;
     }
     return message;
+  }
+
+  public minMaxValidator(control: AbstractControl) {
+    if (control.value.length < 7 || control.value.length > 9) {
+      return { outOfLength: true };
+    }
+    return null;
   }
 }

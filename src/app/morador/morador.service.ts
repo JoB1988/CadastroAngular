@@ -5,7 +5,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Morador } from '../shared/app.model';
 
 const PRAGMA = `pragma`;
@@ -32,12 +32,15 @@ export class MoradorService {
     if (id) {
       urlget += `/${id}`;
     }
-    return this.http.get<any>(urlget, { headers: HEADERS })
-      .pipe(map((response: any) => response), catchError((error: HttpErrorResponse) => throwError(error)));
+    return this.http.get<any>(urlget, { headers: HEADERS, observe: 'response' })
+      .pipe(
+        tap(res => { console.log(res); }),
+        map((response: any) => response.body),
+        catchError((error: HttpErrorResponse) => throwError(error))
+      );
   }
 
   public createMorador(morador: Morador): Observable<any> {
-    console.log(morador)
     return this.http.post<Morador>(URLMORADOR, morador).pipe(
       map((response: any) => response),
       catchError((error: HttpErrorResponse) => {

@@ -28,7 +28,6 @@ export class BreadcrumbComponent implements OnDestroy {
         stepName: event.snapshot.data.stepName
       };
       this.breadCrumbStep$.value.push(stepUrl);
-      console.log(this.breadCrumbStep$.value);
     }
   });
 

@@ -42,7 +42,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
   public cadastros$ = new BehaviorSubject([]);
   public option$: BehaviorSubject<string> = new BehaviorSubject('saveForm');
 
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
+  @ViewChild('nameInput', { static: true }) nameInput: ElementRef<HTMLInputElement>;
   @ViewChild('myForm', { static: true }) form: NgForm;
 
   constructor(
@@ -122,7 +122,7 @@ export class CadastroComponent implements OnInit, OnDestroy {
     if (this.option$.getValue() === 'updateForm') {
       let arrayPosition;
       this.cadastros$.value.filter((cadastro, index) => {
-        cadastro.id === oldValue.id ? arrayPosition = index : null;
+        cadastro.id === oldValue.id ? arrayPosition = index : undefined;
       });
       this.cadastros$.value[arrayPosition] = newCadastro;
     } else {

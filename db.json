@@ -172,6 +172,38 @@
         },
         "dependents": []
       }
+    },
+    {
+      "personal": {
+        "photo": "",
+        "name": "José de Arimatéia",
+        "birthDate": "1910-10-10",
+        "age": "",
+        "cpf": "26941268163",
+        "rg": "861632686",
+        "tel": "",
+        "cel": "",
+        "email": "",
+        "civilStatus": "viuvo(a)"
+      },
+      "professional": {
+        "profession": "Aposentado",
+        "salary": 1999.53
+      },
+      "condominium": {
+        "block": "F",
+        "unit": 630
+      },
+      "familiar": {
+        "partner": {
+          "name": "",
+          "id": null
+        },
+        "dependents": [
+          null
+        ]
+      },
+      "id": 7
     }
   ]
 }

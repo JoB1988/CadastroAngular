@@ -13,7 +13,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class LoginComponent implements OnInit {
 
-  @ViewChild('nameInput', { static: true }) nameInput: ElementRef;
+  @ViewChild('nameInput', { static: true }) nameInput: ElementRef<HTMLInputElement>;
   @ViewChild('myForm', { static: true }) form: NgForm;
 
   public loginForm$: BehaviorSubject<FormGroup> = new BehaviorSubject(
