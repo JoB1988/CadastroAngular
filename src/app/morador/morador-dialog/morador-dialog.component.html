@@ -126,7 +126,7 @@
             </div>
             <div class="form__control" [ngClass]="{ 'form__control__error' : displayError('condominium', 'unit')}">
                 <label for="unit">Unidade</label>
-                <input id="unit" type="number" formControlName="unit" min="0" (keypress)="allowNumbers($event)">
+                <input id="unit" type="number" formControlName="unit" min="0" appAllowOnlyNumbers>
                 <span id="span_unit" role="alert" aria-live="polite"
                     [innerHTML]="displayError('condominium', 'unit')"></span>
             </div>

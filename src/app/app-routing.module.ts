@@ -34,11 +34,22 @@ const ROUTES: Routes = [
     path: 'reservas',
     loadChildren: () => import('./reservas/reservas.module').then(m => m.ReservasModule)
   },
-  { path: '**', component: NotFoundComponent }
+  {
+    path: '**',
+    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule)
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })],
+  imports: [
+    RouterModule.forRoot(
+      ROUTES,
+      {
+        preloadingStrategy: PreloadAllModules,
+        useHash: true
+      }
+    )
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -18,7 +18,7 @@
       </div>
     </div>
   </div>
-  <mat-progress-bar color="accent" [mode]="(progressBar$ | async)?.mode" [value]="(progressBar$ | async)?.value">
+  <mat-progress-bar color="accent" [mode]="progressBar?.mode" [value]="progressBar?.value">
   </mat-progress-bar>
   <table class="table" [ngClass]="{ 'table__empty' : !(moradores$ | async) }">
     <thead [attr.disabled]="!(moradores$ | async)">

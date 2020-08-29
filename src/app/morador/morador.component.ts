@@ -48,9 +48,9 @@ export class MoradorComponent implements OnDestroy {
   public filterOptions: IFilter[] = [];
 
   public searchInput$: BehaviorSubject<string> = new BehaviorSubject('');
-  public progressBar$: BehaviorSubject<any> = new BehaviorSubject({ mode: 'indeterminate', value: null });
   public moradores$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
   public moradores: Array<Morador>;
+  public progressBar: any;
   // public moradores = undefined;
   public openNavBar = false;
   public numberOfFiltersUsed = 0;
@@ -64,11 +64,15 @@ export class MoradorComponent implements OnDestroy {
       this.moradorService.getMorador().subscribe((response) => {
         this.adjustArray(response);
       }, (error) => {
-        this.progressBar$.next({ mode: 'determinate', value: 100 });
+
       });
     } else {
       this.adjustArray(moradores);
     }
+  });
+
+  private progressBarSubscription = this.moradorService.progressBar$.subscribe((value) => {
+    this.progressBar = value;
   });
 
   private searchInputSubscription = this.searchInput$.pipe(debounceTime(400)).subscribe((typedValue) => {
@@ -78,7 +82,7 @@ export class MoradorComponent implements OnDestroy {
       }
       return;
     }
-    this.progressBar$.next({ mode: 'indeterminate', value: null });
+    this.moradorService.progressBar$.next({ mode: 'indeterminate', value: null });
     const search = this.moradores.filter(morador => {
       return (
         morador.personal.name.toLowerCase().includes(typedValue.toLowerCase().trim()) ||
@@ -90,7 +94,7 @@ export class MoradorComponent implements OnDestroy {
       );
     });
     this.moradores$.next(search);
-    this.progressBar$.next({ mode: 'determinate', value: 100 });
+    this.moradorService.progressBar$.next({ mode: 'determinate', value: 100 });
   });
 
   constructor(
@@ -198,7 +202,6 @@ export class MoradorComponent implements OnDestroy {
     this.moradores = this.addAgeToArray(moradores);
     this.moradores$.next(moradores);
     this.filterOptions = this.getFilterOptions();
-    this.progressBar$.next({ mode: 'determinate', value: 100 });
   }
 
   private addAgeToArray(moradores: Morador[]): Morador[] {

@@ -2,9 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Usuario } from './shared/app.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AppService implements OnDestroy {
 
   public islogged$: BehaviorSubject<boolean> = new BehaviorSubject(false);

@@ -14,10 +14,9 @@ import { SideBarComponent } from './side-bar/side-bar.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     RouterModule,
     AppRoutingModule,
-    ApplicationModule.forRoot(),
+    ApplicationModule.forRoot()
   ],
   providers: [AppGuardService],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import {
   HttpHeaders,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Morador } from '../shared/app.model';
 
@@ -18,11 +18,10 @@ const HEADERS = new HttpHeaders({
   PRAGMA: NO_CACHE
 });
 
-@Injectable({
-  providedIn: `root`
-})
+@Injectable({ providedIn: `root` })
 export class MoradorService {
 
+  public progressBar$: BehaviorSubject<any> = new BehaviorSubject(undefined);
   public moradores$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
 
   constructor(private http: HttpClient) { }

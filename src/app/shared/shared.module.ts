@@ -7,12 +7,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AllowOnlyNumbersDirective } from './directives/allow-only-numbers.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 const ANGULAR_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule
 ];
 
 const OTHER_MODULES = [
@@ -21,6 +24,7 @@ const OTHER_MODULES = [
     MatProgressBarModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    // AllowOnlyNumbersDirective
 ];
 
 @NgModule({

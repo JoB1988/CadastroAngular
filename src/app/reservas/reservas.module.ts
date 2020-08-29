@@ -5,8 +5,6 @@ import { LogReservasComponent } from './log-reservas/log-reservas.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AppGuardService } from '../app.guard.service';
 
-
-
 const routes: Routes = [
   {
     path: '',
