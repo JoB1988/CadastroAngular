@@ -101,7 +101,7 @@ export class MoradorDialogComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]); // Read file as data url
-      reader.onloadend = (e) => { // function call once readAsDataUrl is completed
+      reader.onloadend = (e: any) => { // function call once readAsDataUrl is completed
         if (event.target.files[0].size < 5000000) {
           this.moradorImage = e.target.result;
         } else {

@@ -205,5 +205,31 @@
       },
       "id": 7
     }
+  ],
+  "logs": [
+    {
+      "id": 1,
+      "morador":"Jonathan Fernandes Benevides",
+      "bloco": "B",
+      "apto": 1110,
+      "espaco": "Churrasqueira",
+      "data": "Tue Sep 01 2020 21:43:14 GMT-0300 (Horário Padrão de Brasília)"
+    },
+    {
+      "id": 1,
+      "morador":"Flávio Benevides",
+      "bloco": "A",
+      "apto": 201,
+      "espaco": "Salão de Festa",
+      "data": "Tue Sep 01 2020 21:43:14 GMT-0300 (Horário Padrão de Brasília)"
+    },
+    {
+      "id": 1,
+      "morador":"Roberto Benevides",
+      "bloco": "F",
+      "apto": 128,
+      "espaco": "Cinema",
+      "data": "Tue Sep 01 2020 21:43:14 GMT-0300 (Horário Padrão de Brasília)"
+    }
   ]
 }

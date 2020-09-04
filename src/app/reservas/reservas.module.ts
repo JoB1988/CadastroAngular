@@ -20,7 +20,7 @@ const routes: Routes = [
         component: LogReservasComponent,
         canActivate: [AppGuardService],
         data: { stepName: 'historico', stepUrl: '/historico', lastPath: '/reservas' }
-      }
+      },
     ]
   }
 ];

@@ -28,7 +28,6 @@ export class MoradorInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       tap((event) => {
-        debugger
         if (event instanceof HttpResponse) {
           this.moradorService.progressBar$.next({ mode: 'determinate', value: 100 });
         } else {

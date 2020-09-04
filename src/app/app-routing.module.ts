@@ -3,6 +3,7 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
+import { ReservasResolve } from './reservas/reservas.resolver.service';
 
 const ROUTES: Routes = [
   {
@@ -32,7 +33,10 @@ const ROUTES: Routes = [
   },
   {
     path: 'reservas',
-    loadChildren: () => import('./reservas/reservas.module').then(m => m.ReservasModule)
+    loadChildren: () => import('./reservas/reservas.module').then(m => m.ReservasModule),
+    resolve: {
+      logs: ReservasResolve
+    }
   },
   {
     path: '**',
