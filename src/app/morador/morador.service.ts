@@ -18,7 +18,8 @@ const HEADERS = new HttpHeaders({
   PRAGMA: NO_CACHE
 });
 
-@Injectable({ providedIn: `root` })
+// providedin root quano o serviço for global
+@Injectable()
 export class MoradorService {
 
   public progressBar$: BehaviorSubject<any> = new BehaviorSubject(undefined);
@@ -32,9 +33,7 @@ export class MoradorService {
       urlget += `/${id}`;
     }
     return this.http.get<any>(urlget, { headers: HEADERS, observe: 'response' })
-      .pipe(
-        tap(res => { console.log(res); }),
-        map((response: any) => response.body),
+      .pipe(map((response: any) => response.body),
         catchError((error: HttpErrorResponse) => throwError(error))
       );
   }

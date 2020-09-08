@@ -7,8 +7,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AllowOnlyNumbersDirective } from './directives/allow-only-numbers.directive';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 const ANGULAR_MODULES = [
     CommonModule,
@@ -24,11 +24,11 @@ const OTHER_MODULES = [
     MatProgressBarModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    // AllowOnlyNumbersDirective
+    MatSnackBarModule
 ];
 
 @NgModule({
-    imports: [...ANGULAR_MODULES, ...OTHER_MODULES, ],
+    imports: [...ANGULAR_MODULES, ...OTHER_MODULES,],
     exports: [...ANGULAR_MODULES, ...OTHER_MODULES]
 })
 export class SharedModule { }

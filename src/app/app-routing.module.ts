@@ -40,6 +40,10 @@ const ROUTES: Routes = [
   },
   {
     path: '**',
+    redirectTo: 'not-found'
+  },
+  {
+    path: 'not-found',
     loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule)
   }
 ];

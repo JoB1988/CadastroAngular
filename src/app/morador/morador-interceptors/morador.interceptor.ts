@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
-  HttpEvent,
   HttpInterceptor,
   HttpSentEvent,
   HttpHeaderResponse,
@@ -13,11 +12,12 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MoradorService } from '../morador.service';
+import { ToastService } from 'src/app/shared/toast/toast.service';
 
 @Injectable()
 export class MoradorInterceptor implements HttpInterceptor {
 
-  constructor(private moradorService: MoradorService) { }
+  constructor(private moradorService: MoradorService, private toastService: ToastService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<
     HttpSentEvent |
@@ -30,8 +30,10 @@ export class MoradorInterceptor implements HttpInterceptor {
       tap((event) => {
         if (event instanceof HttpResponse) {
           this.moradorService.progressBar$.next({ mode: 'determinate', value: 100 });
+          this.toastService.toast$.next({ message: 'Sucesso!', show: true, type: 'success' });
         } else {
           this.moradorService.progressBar$.next({ mode: 'indeterminate', value: null });
+          this.toastService.toast$.next({ message: 'Erro!', show: true, type: 'error' });
         }
       })
     );
