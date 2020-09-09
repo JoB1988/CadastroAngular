@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     component: ReservasComponent,
     canActivate: [AppGuardService],
-    data: { stepName: 'reservas', stepUrl: '/reservas', lastStepUrl: '' }
+    data: { title: 'Reservas', stepName: 'reservas', stepUrl: '/reservas', lastStepUrl: '' }
   },
   {
     path: 'historico',
@@ -19,7 +19,12 @@ const routes: Routes = [
         path: '',
         component: LogReservasComponent,
         canActivate: [AppGuardService],
-        data: { stepName: 'historico', stepUrl: '/historico', lastPath: '/reservas' }
+        data: {
+          title: 'Historico de Reservas',
+          stepName: 'historico',
+          stepUrl: '/historico',
+          lastPath: '/reservas'
+        }
       },
     ]
   }

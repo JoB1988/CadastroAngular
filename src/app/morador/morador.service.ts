@@ -32,15 +32,16 @@ export class MoradorService {
     if (id) {
       urlget += `/${id}`;
     }
-    return this.http.get<any>(urlget, { headers: HEADERS, observe: 'response' })
+    return this.http.get<any>(urlget, { headers: HEADERS })
       .pipe(map((response: any) => response.body),
         catchError((error: HttpErrorResponse) => throwError(error))
       );
   }
 
   public createMorador(morador: Morador): Observable<any> {
-    return this.http.post<Morador>(URLMORADOR, morador).pipe(
-      map((response: any) => response),
+    return this.http.post<Morador>(
+      URLMORADOR, morador, { observe: 'response', reportProgress: true }
+    ).pipe(map((response: any) => response),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       })
@@ -48,8 +49,9 @@ export class MoradorService {
   }
 
   public updateMorador(morador: Morador): Observable<any> {
-    return this.http.put<Morador>(`${URLMORADOR}/${morador.id}`, morador).pipe(
-      map((response: any) => response),
+    return this.http.put<Morador>(
+      `${URLMORADOR}/${morador.id}`, morador, { observe: 'response', reportProgress: true }
+    ).pipe(map((response: any) => response),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       })

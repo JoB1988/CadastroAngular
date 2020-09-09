@@ -13,23 +13,28 @@ const ROUTES: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    data: { title: 'Home' }
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: { title: 'Sign In' }
   },
   {
     path: 'funcionarios',
-    loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule)
+    loadChildren: () => import('./cadastro/cadastro.module').then(m => m.CadastroModule),
+    data: { title: 'Funcionários' }
   },
   {
     path: 'areas-comum',
-    loadChildren: () => import('./areas-comum/areas-comum.module').then(m => m.AreasComumModule)
+    loadChildren: () => import('./areas-comum/areas-comum.module').then(m => m.AreasComumModule),
+    data: { title: 'Áreas Comum' }
   },
   {
     path: 'moradores',
-    loadChildren: () => import('./morador/morador.module').then(m => m.MoradorModule)
+    loadChildren: () => import('./morador/morador.module').then(m => m.MoradorModule),
+    data: { title: 'Moradores' }
   },
   {
     path: 'reservas',
@@ -44,7 +49,8 @@ const ROUTES: Routes = [
   },
   {
     path: 'not-found',
-    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule)
+    loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule),
+    data: { title: 'Não Encontrado' }
   }
 ];
 
