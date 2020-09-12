@@ -47,7 +47,6 @@ export class MoradorComponent implements OnDestroy {
   ];
 
   public filterOptions: IFilter[] = [];
-
   public searchInput$: BehaviorSubject<string> = new BehaviorSubject('');
   public moradores$: BehaviorSubject<Array<Morador>> = new BehaviorSubject(undefined);
   public moradores: Array<Morador>;
@@ -64,9 +63,7 @@ export class MoradorComponent implements OnDestroy {
     if (!moradores) {
       this.moradorService.getMorador().subscribe((response) => {
         this.adjustArray(response);
-      }, (error) => {
-
-      });
+      }, () => { });
     } else {
       this.adjustArray(moradores);
     }
@@ -161,10 +158,6 @@ export class MoradorComponent implements OnDestroy {
     });
   }
 
-  public newMorador() {
-    this.showMoradorForm();
-  }
-
   public editMorador(morador: Morador, index: number) {
     this.moradorService.getMorador(morador.id).subscribe(() => {
       this.showMoradorForm(morador, index);
@@ -172,9 +165,34 @@ export class MoradorComponent implements OnDestroy {
       console.log('Um erro ocorreu ao buscar o morador');
     });
   }
+
+  public updateMorador(moradorForm: Morador, index: number) {
+    this.moradorService.updateMorador(moradorForm)
+      .subscribe((moradorResponse: Morador) => {
+        this.moradores$.value[index] = moradorResponse;
+        console.log('Atualizado com sucesso')
+      }, (error) => {
+        console.log(error)
+      });
+  }
+
+  public createMorador(moradorForm: Morador) {
+    this.moradorService.createMorador(moradorForm)
+      .subscribe((moradorResponse: Morador) => {
+        this.moradores$.value.push(this.addAgeToArray([moradorResponse])[0]);
+        console.log('Salvo com sucesso')
+      }, (error) => {
+        console.log(error);
+      });
+  }
+
   //#endregion
 
-  private showMoradorForm(morador?: Morador, index?) {
+  public newMorador() {
+    this.showMoradorForm();
+  }
+
+  private showMoradorForm(morador?: Morador, index?: number) {
     const dialogRef = this.dialog.open(MoradorDialogComponent, {
       minWidth: 250,
       maxWidth: 800,
@@ -186,22 +204,10 @@ export class MoradorComponent implements OnDestroy {
       if (!moradorForm) {
         return;
       }
-      console.log(moradorForm)
       if (moradorForm.id) {
-        this.moradorService.updateMorador(moradorForm).subscribe((moradorResponse: Morador) => {
-          this.moradores$.value[index] = moradorResponse;
-          console.log('Atualizado com sucesso')
-        }, (error) => {
-          console.log(error)
-        });
+        this.updateMorador(moradorForm, index);
       } else {
-        this.moradorService.createMorador(moradorForm).subscribe((moradorResponse: Morador) => {
-          debugger
-          this.moradores$.value.push(this.addAgeToArray([moradorResponse])[0]);
-          console.log('Salvo com sucesso')
-        }, (error) => {
-          console.log(error)
-        });
+        this.createMorador(moradorForm);
       }
     });
   }

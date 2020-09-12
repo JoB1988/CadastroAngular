@@ -5,14 +5,16 @@
       [ngClass]="{'header__content__empty__table': !(moradores$ | async)?.length && moradores?.length > 0 }">
       <div>
         <label for="sua_busca" aria-label="digite sua busca aqui"></label>
-        <input id="sua_busca" type="text" [disabled]="!(moradores$ | async)" (input)="searchInput$.next(searchInput.value)"
-          placeholder="digite sua busca aqui..." aria-describedby="items__lista" #searchInput>
+        <input id="sua_busca" type="text" [disabled]="!(moradores$ | async)"
+          (input)="searchInput$.next(searchInput.value)" placeholder="digite sua busca aqui..."
+          aria-describedby="items__lista" #searchInput>
         <span id="items__lista" attr.aria-label="a lista contém {{ (moradores$ | async)?.length}} items"></span>
       </div>
       <div>
         <button class="btn__default" [disabled]="!(moradores$ | async)" aria-label="filtrar busca"
           (click)="openFilterMenu($event)">Filtrar<i class="fa fa-filter"></i></button>
-        <app-menu *ngIf="openNavBar" [filterOptions]="filterOptions" (closeMenu)="openNavBar=$event" (filterValues)="filterTable($event)"></app-menu>
+        <app-menu *ngIf="openNavBar" [filterOptions]="filterOptions" (closeMenu)="openNavBar=$event"
+          (filterValues)="filterTable($event)"></app-menu>
         <button class="btn__default btn__primary" (click)="newMorador()">Novo Morador<i
             class="fas fa-user-plus"></i></button>
       </div>
@@ -44,8 +46,8 @@
           <button (click)="downloadAsPDF(morador)"
             attr.aria-label="exportar para o pdf os dados do morador {{morador?.name}}"><i class="far fa-file-pdf"
               aria-hidden="true"></i></button>
-          <button (click)="editMorador(morador, i)" attr.aria-label="editar morador {{morador?.name}}"><i class="fas fa-edit"
-              aria-hidden="true"></i></button>
+          <button (click)="editMorador(morador, i)" attr.aria-label="editar morador {{morador?.name}}"><i
+              class="fas fa-edit" aria-hidden="true"></i></button>
           <button (click)="deleteMorador(i, morador.id)" attr.aria-label="remover morador {{morador?.name}}"><i
               class="fas fa-trash" aria-hidden="true"></i></button></td>
       </tr>

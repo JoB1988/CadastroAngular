@@ -7,7 +7,9 @@ import {
   HttpHeaderResponse,
   HttpResponse,
   HttpProgressEvent,
-  HttpUserEvent
+  HttpUserEvent,
+  HttpErrorResponse,
+  HttpEventType
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -28,7 +30,15 @@ export class MoradorInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       tap((event) => {
-        if (event instanceof HttpResponse) {
+        // Quando estiver fazendo upload de dados
+        if (event.type === HttpEventType.UploadProgress) {
+          const progress = Math.round(100 * event.loaded / event.total);
+          this.moradorService.progressBar$.next({ mode: 'determinate', value: progress });
+          return;
+        }
+
+        // Response
+        if (event instanceof HttpResponse || event instanceof HttpErrorResponse) {
           this.moradorService.progressBar$.next({ mode: 'determinate', value: 100 });
           this.toastService.toast$.next({ message: 'Sucesso!', show: true, type: 'success' });
         } else {

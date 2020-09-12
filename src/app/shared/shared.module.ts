@@ -28,7 +28,7 @@ const OTHER_MODULES = [
 ];
 
 @NgModule({
-    imports: [...ANGULAR_MODULES, ...OTHER_MODULES,],
+    imports: [...ANGULAR_MODULES, ...OTHER_MODULES],
     exports: [...ANGULAR_MODULES, ...OTHER_MODULES]
 })
 export class SharedModule { }

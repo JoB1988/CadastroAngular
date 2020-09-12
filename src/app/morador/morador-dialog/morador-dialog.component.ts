@@ -127,6 +127,7 @@ export class MoradorDialogComponent implements OnInit {
         morador.familiar.partner.name = this.moradorForm$.value.value.familiar.partner;
         morador.familiar.partner.id = this.moradorForm$.value.value.familiar.partnerId;
       }
+      morador.personal.photo = this.moradorImage;
       this.dialogRef.close(morador);
     }
   }

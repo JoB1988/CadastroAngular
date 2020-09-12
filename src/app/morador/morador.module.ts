@@ -11,7 +11,6 @@ import { AllowOnlyNumbersDirective } from '../shared/directives/allow-only-numbe
 import { MoradorInterceptor } from './morador-interceptors/morador.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = undefined;
 
 const routes: Routes = [

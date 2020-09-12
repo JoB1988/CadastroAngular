@@ -33,7 +33,7 @@ export class MoradorService {
       urlget += `/${id}`;
     }
     return this.http.get<any>(urlget, { headers: HEADERS })
-      .pipe(map((response: any) => response.body),
+      .pipe(map((response: any) => response),
         catchError((error: HttpErrorResponse) => throwError(error))
       );
   }
@@ -48,10 +48,10 @@ export class MoradorService {
     );
   }
 
-  public updateMorador(morador: Morador): Observable<any> {
+  public updateMorador(morador: Morador): Observable<Morador> {
     return this.http.put<Morador>(
       `${URLMORADOR}/${morador.id}`, morador, { observe: 'response', reportProgress: true }
-    ).pipe(map((response: any) => response),
+    ).pipe(map((response: any) => response.body),
       catchError((error: HttpErrorResponse) => {
         return throwError(error);
       })
